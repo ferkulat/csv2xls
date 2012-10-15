@@ -1,0 +1,52 @@
+.TH csv2xls 1 2012-10-03
+.SH NAME 
+csv2xls
+.SH SYNOPSIS 
+csv2xls [OPTIONS] INPUT_FILE
+.SH DESCRIPTION
+Reads csv file INPUT_FILE and writes its contents into one or several Excel(TM) file(s).
+.SH OPTIONS
+.TP 7
+\fB-b N\fP
+set input buffer size for parsing csv to N bytes.
+Defaults to 1048576 (1 MB).
+.TP 7
+\fB-d C\fP
+set csv tab delimiter to C. Default: ';'
+.TP 7
+\fB-h\fP
+print help and exit.
+.TP 7
+\fB-H\fP
+Take first line from csv file as head line for each
+produced Excel(TM) file.
+.TP 7
+\fB-l N\fP
+break xls output into files with maximum N lines.
+Defaults to 30000. Starting with the second file the file name will be expanded with a number.
+.TP 7
+\fB-o name\fP
+Set output file name to 'name'. If this option is not set,
+take csv input file name and replace '.csv' with '.xls'.
+If 'name' does not end with '.xls', it will be added by program.
+.TP 7
+\fB-w name\fP
+Set the excel worksheet name to 'name'. Defaults to 'Table 1'.
+.SH EXAMPLES
+.TP 7
+\fBcsv2xls data.csv\fP
+results into data.xls.
+If data.csv has more than DEFAULT_MAX_LINES the result will be data.xls and data0001.xls.
+.TP 7
+\fBcsv2xls -l 200 data.csv\fP
+Like before but sets DEFAULT_MAX_LINES to 200.
+.TP 7
+\fBcsv2xls -o addresses.xls data.csv\fP
+results into addresses.xls.
+If data.csv has more than DEFAULT_MAX_LINES the result will be addresses.xls and addresses0001.xls.
+.SH ISSUES
+.TP 7
+\fBDEFAULT_MAX_LINES is set to 30000\fP
+because xls output gets broken if line count ecxeeds 30000. It needs more research to get the reason of this behavior.
+ 
+ 
