@@ -23,7 +23,7 @@ produced Excel(TM) file.
 .TP 7
 \fB-l N\fP
 break xls output into files with maximum N lines.
-Defaults to 30000. Starting with the second file the file name will be expanded with a number.
+Defaults to 65535. Starting with the second file the file name will be expanded with a number.
 .TP 7
 \fB-o name\fP
 Set output file name to 'name'. If this option is not set,
@@ -44,9 +44,5 @@ Like before but sets DEFAULT_MAX_LINES to 200.
 \fBcsv2xls -o addresses.xls data.csv\fP
 results into addresses.xls.
 If data.csv has more than DEFAULT_MAX_LINES the result will be addresses.xls and addresses0001.xls.
-.SH ISSUES
-.TP 7
-\fBDEFAULT_MAX_LINES is set to 30000\fP
-because xls output gets broken if line count ecxeeds 30000. It needs more research to get the reason of this behavior.
  
  

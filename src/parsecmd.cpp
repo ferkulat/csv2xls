@@ -26,12 +26,8 @@
 #include <iostream>
 
 #include <strings.h>
-/**
- * something gets broken with DEFAULT_XLS_MAX_LINES > 30000
- * there has to be more research done whether it depends on number of lines 
- * or with the file size at all
- */
-#define DEFAULT_XLS_MAX_LINES     30000 
+
+#define DEFAULT_XLS_MAX_LINES     65535 
 #define DEFAULT_CSV_TAB_DELIMITER 59 /** ';' */
 #define DEFAULT_CSV_BUFFER_SIZE   1024*1024
 
