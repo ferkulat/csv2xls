@@ -52,6 +52,8 @@ using namespace csv2xls;
 void csv_cb_end_of_field (void *s, size_t len, void *data);
 
 /**
+ * \fn void csv_cb_end_of_row (int c, void *data)
+ *
  * \brief Call back function if csv parser reaches end of a row.
  * 
  * The csv parser sets the parameters.
@@ -62,6 +64,8 @@ void csv_cb_end_of_field (void *s, size_t len, void *data);
 void csv_cb_end_of_row (int c, void *data);
 
 /**
+ * \fn void csv_cb_headline_field(void *s, size_t len, void *data)
+ *
  * \brief Call back function if csv parser reaches end of a field in the head line
  * 
  * The head line needs special handling. Additionaly to writng the field into
