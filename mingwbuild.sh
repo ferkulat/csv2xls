@@ -3,8 +3,8 @@
 # you will have to type following lines
 # maybe with some changes for your specific paths
 
-  LDFLAGS=''
-  CXXFLAGS=''
-  CFLAGS=''
+  export LDFLAGS='-static'
+  export CXXFLAGS=''
+  export CFLAGS=''
   ./configure --host=i486-mingw32 --build=i686-linux --prefix=/usr/i486-mingw32
-  make check
+  make -C src
