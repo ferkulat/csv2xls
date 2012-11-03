@@ -33,22 +33,24 @@
 #include <vector>
 #include <stdint.h>
 
-using namespace std;
-//#define xls xlslib_core
 namespace csv2xls 
 {
+#define XLS_MAX_ROWS    65536U    
+#define XLS_MAX_COLUMNS 256U    
 using namespace xlslib_core;
 using namespace std;
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
-typedef struct{
-  unsigned16_t   current_column;
-  unsigned16_t   current_row;
+typedef struct
+{
+  unsigned long  current_column;
+  unsigned long  current_row;
   workbook       *wbook ;
   worksheet      *sheet;
-  int	     page_number;
-  unsigned16_t   xls_row_limit;                     
+  unsigned long  page_number;
+  unsigned long  xls_row_limit;                     
+  unsigned long  digit_count;                     
   string         sheet_name;
   string         filename;
   vector<string> headline;

@@ -24,12 +24,7 @@
 #include <unistd.h>     /* To parse command line options. */
 #include <stdlib.h>
 #include <iostream>
-
 #include <strings.h>
-
-#define DEFAULT_XLS_MAX_LINES     65535 
-#define DEFAULT_CSV_TAB_DELIMITER 59 /** ';' */
-#define DEFAULT_CSV_BUFFER_SIZE   1024*1024
 
 namespace csv2xls
 {
@@ -42,6 +37,7 @@ parsecmd_init(cmd_opts_t &opts)
     opts.csv_tab_delimiter      = DEFAULT_CSV_TAB_DELIMITER;
     opts.xls_row_limit          = DEFAULT_XLS_MAX_LINES;
     opts.input_buffer_size      = DEFAULT_CSV_BUFFER_SIZE;
+    opts.xls_digit_count        = XLS_DEF_DIGIT_COUNT;
 }/* -----  end of function parsecmd_init  ----- */
 
 void 
@@ -54,7 +50,8 @@ print_help(char*executable)
     cout << "options:" << endl << endl;
 
     cout << "-b num"   << "\tset buffer size for parsing csv to num bytes." << endl
-                       << "\tDefaults to " << DEFAULT_CSV_BUFFER_SIZE << "." 
+                       << "\tDefaults to " << DEFAULT_CSV_BUFFER_SIZE << "." << endl 
+                       << "\tMaximum value: " << MAX_CSV_BUFFER_SIZE << "."  
                        << endl << endl;
 
     cout << "-d c"     << "\tset csv tab delimiter to c. Default: \'" 
@@ -68,7 +65,8 @@ print_help(char*executable)
 
     cout << "-l num"   << "\tbreak xls output into files with max num lines" 
                        << endl
-                       << "\tDefaults to " << DEFAULT_XLS_MAX_LINES << "." 
+                       << "\tDefaults to " << DEFAULT_XLS_MAX_LINES << "." << endl
+                       << "\tMaximum value: " << DEFAULT_XLS_MAX_LINES << "."  
                        << endl << endl;
     
     cout << "-o name"  << "\tSet output file name to \'name\'. If this option is" 
@@ -80,6 +78,13 @@ print_help(char*executable)
     
     cout << "-w name"  << "\tSet the excel worksheet name to \'name\'. "
                        << "Defaults to \'Table 1\'" << endl << endl;
+
+    cout << "-D num"   << "\tSet excel file name numbering to \'num\' digits "
+                       << "with leading zeros."
+                       << "Default: " << XLS_DEF_DIGIT_COUNT << "." <<endl
+                       << "\tMaximum value: " << MAX_XLS_DIGIT_COUNT << "."
+                       << endl << endl;
+
 }/* -----  end of function print_help  ----- */
 
 
@@ -94,14 +99,21 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
         return 0;
     }
     int opt;
-    while ((opt = getopt(argc, argv, "b:d:hHl:o:w:")) != -1) 
+    while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:")) != -1) 
     {
 
        switch (opt) 
        {
 
-           case 'b': 
-                    opts.input_buffer_size = atoi(optarg);
+           case 'b':
+                    if (! str2ulong(optarg, 
+                                    opts.input_buffer_size,
+                                    MAX_CSV_BUFFER_SIZE) ) 
+                    {
+                        print_help(argv[0]);
+                        cerr << "No valid parameter for option '-b'" << endl;
+                        exit(EXIT_FAILURE);
+                    }
                     break;
            case 'd':
                     opts.csv_tab_delimiter = optarg[0];
@@ -110,7 +122,14 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                     opts.csv_file_has_headline = true;
                     break;
            case 'l':
-                    opts.xls_row_limit = atoi(optarg);
+                    if (! str2ulong(optarg, 
+                                    opts.xls_row_limit,
+                                    DEFAULT_XLS_MAX_LINES) ) 
+                    {
+                        print_help(argv[0]);
+                        cerr << "No valid parameter for option '-l'" << endl;
+                        exit(EXIT_FAILURE);
+                    }
                     break;
            case 'o':
                     opts.xls_file_name.assign(optarg);
@@ -118,6 +137,17 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
            case 'w':
                     opts.xls_sheet_name.assign(optarg);
                     break;
+           case 'D':
+                    if (! str2ulong(optarg, 
+                                    opts.xls_digit_count,
+                                    MAX_XLS_DIGIT_COUNT) ) 
+                    {
+                        print_help(argv[0]);
+                        cerr << "No valid parameter for option '-D'" << endl;
+                        exit(EXIT_FAILURE);
+                    }
+                    break;
+
            default: /* '?' */
                print_help(argv[0]);
                return 0;

@@ -39,5 +39,7 @@ namespace csv2xls
  */
 std::string 
 xls_filename( std::string wish_name, 
-              int count);
+              unsigned long count,   /** the number added to file name */
+              unsigned long digits   /** minimum digits of the number */
+                        );
 } /* ----- end of namespace csv2xls ----- */

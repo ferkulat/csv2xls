@@ -23,9 +23,17 @@
 #ifndef PARSECMD_HPP
 #define PARSECMD_CPP
 #include <string>
-
+#include <limits.h>
+#include "str2ulong.hpp"
 namespace csv2xls
 {
+#define DEFAULT_XLS_MAX_LINES     65536
+#define DEFAULT_CSV_TAB_DELIMITER 59 /** ';' */
+#define DEFAULT_CSV_BUFFER_SIZE   1024*1024
+#define MAX_CSV_BUFFER_SIZE       ULONG_MAX
+#define XLS_DEF_DIGIT_COUNT       4
+#define MAX_XLS_DIGIT_COUNT       10
+    
 /**
  */    
 typedef struct 
@@ -34,9 +42,10 @@ typedef struct
   std::string   csv_file_name;
   std::string   xls_file_name;
   bool          csv_file_has_headline;
-  size_t        xls_row_limit;
+  unsigned long xls_row_limit;
   std::string   xls_sheet_name;
   unsigned long input_buffer_size;
+  unsigned long xls_digit_count;
 }cmd_opts_t;
 /**
  * \brief initialize the option struct with default values
@@ -59,8 +68,8 @@ parsecmd_init(cmd_opts_t &opts);
  */
 int 
 parse_commandline(cmd_opts_t &opts,
-                  int argc,
-                  char**argv);
+                      int argc,
+                      char**argv);
 
 } /* ----- end of namespace csv2xls ----- */
 #endif /*PARSECMD_HPP*/

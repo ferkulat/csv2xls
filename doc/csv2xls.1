@@ -9,7 +9,7 @@ Reads csv file INPUT_FILE and writes its contents into one or several Excel(TM) 
 .TP 7
 \fB-b N\fP
 set input buffer size for parsing csv to N bytes.
-Defaults to 1048576 (1 MB).
+Defaults to 1048576 (1 MB). Maximum value is 4294967296 bytes (4GB).
 .TP 7
 \fB-d C\fP
 set csv tab delimiter to C. Default: ';'
@@ -23,7 +23,7 @@ produced Excel(TM) file.
 .TP 7
 \fB-l N\fP
 break xls output into files with maximum N lines.
-Defaults to 65535. Starting with the second file the file name will be expanded with a number.
+Maximum value and default value is 65536. Starting with the second file the file name will be expanded with a number.
 .TP 7
 \fB-o name\fP
 Set output file name to 'name'. If this option is not set,
@@ -32,6 +32,13 @@ If 'name' does not end with '.xls', it will be added by program.
 .TP 7
 \fB-w name\fP
 Set the excel worksheet name to 'name'. Defaults to 'Table 1'.
+.TP 7
+\fB-D num\fP
+Set excel file name numbering to \'num\' digits with leading zeros.
+Defaults to '4'. Maximum value is 10.
+If file names for output files are extended by a number you can set the minimum
+digits for this number. The number will have leading zeros, if the actual number
+has less digits.
 .SH EXAMPLES
 .TP 7
 \fBcsv2xls data.csv\fP

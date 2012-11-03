@@ -13,6 +13,8 @@ class filenameTest : public CPPUNIT_NS :: TestFixture
     CPPUNIT_TEST_SUITE (filenameTest);
 
     CPPUNIT_TEST (no_xls_ending);
+    CPPUNIT_TEST (with_xls_ending);
+    CPPUNIT_TEST (numbering);
 
     CPPUNIT_TEST_SUITE_END ();
 
@@ -22,7 +24,8 @@ class filenameTest : public CPPUNIT_NS :: TestFixture
 
     protected:
         void no_xls_ending (void);
-
+        void with_xls_ending (void);
+        void numbering (void);
     private:
 	string inputfilename;
 };

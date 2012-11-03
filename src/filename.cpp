@@ -31,15 +31,16 @@ using namespace std;
 using namespace boost;
 
 #define FILE_TYPE_NAME_LENGHT 4
-#define DIGIT_COUNT 4
 
 typedef boost::find_iterator<std::string::iterator> string_find_iterator;
 
 
 string 
 xls_filename( string wish_name, 
-              int count)
+              unsigned long count, 
+              unsigned long digits)
 {
+
     string               basename;
     string               filetype;
     stringstream         ss;
@@ -75,8 +76,8 @@ xls_filename( string wish_name,
     ss << basename;
     if (count)
     {
-        /*add count with DIGIT_COUNT digits width and leading zero to basename */
-        numstream.width(DIGIT_COUNT);
+        /*add count with 'digits' width and leading zero to basename */
+        numstream.width(digits);
         numstream.fill('0');
         numstream << count;
     	ss << numstream.str();

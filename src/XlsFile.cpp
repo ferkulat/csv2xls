@@ -47,7 +47,8 @@ void
 xls_close(xls_file_t *file)
 {
     string fname = xls_filename(file->filename,
-                                file->page_number);
+                                file->page_number,
+                                file->digit_count);
     file->wbook->Dump(fname);
     file->wbook->~workbook();
 }/* ----- end of function xls_close ----- */
@@ -55,10 +56,14 @@ xls_close(xls_file_t *file)
 void 
 xls_append_cell(xls_file_t *file, string label)
 {
-    file->sheet->label(file->current_row, 
-                       file->current_column,label
-                      );
-    file->current_column++;
+    //ignore columns > XLS_MAX_COLUMNS
+    if (XLS_MAX_COLUMNS > file->current_column)
+    {
+        file->sheet->label(file->current_row, 
+                           file->current_column,
+                           label);
+        file->current_column++;
+    }
 }/* ----- end of function xls_append_cell ----- */
 
 void 
@@ -66,8 +71,8 @@ xls_newline(xls_file_t *file)
 {
     file->current_column = 0;
     file->current_row++;
-    if ((file->xls_row_limit)
-            &&(file->current_row >= file->xls_row_limit))
+    if ( (file->current_row >= file->xls_row_limit)
+            ||(file->current_row >= XLS_MAX_ROWS))
     {
         xls_dump_worksheet(file);
     }

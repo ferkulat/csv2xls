@@ -113,11 +113,13 @@ main(int argc, char *argv[])
              << " bytes of memory" << endl;
         exit(EXIT_FAILURE);
     }
+    cerr << "allocated " << input_buffer.size << " bytes for input buffer" << endl;
     
     xls_out.filename      = options.xls_file_name;
     xls_out.xls_row_limit = options.xls_row_limit;
     xls_out.sheet_name    = options.xls_sheet_name;
     xls_out.page_number   = 0;
+    xls_out.digit_count   = options.xls_digit_count;
     xls_init(&xls_out);
     
     
@@ -226,13 +228,14 @@ csv_cb_headline_field(void *s,
 {
     char       *csv_field = (char*)s;
     xls_file_t *xls_file  = (xls_file_t*)data;
-    
-    #if  CSV_MAJOR < 3
-    *(csv_field+len) ='\0'; /*terminate string*/
-    #endif
-    
-    xls_append_cell(xls_file, csv_field);
-    xls_file->headline.push_back(csv_field);
+    if (XLS_MAX_COLUMNS >= xls_file->headline.size())
+    {
+        #if  CSV_MAJOR < 3
+        *(csv_field+len) ='\0'; /*terminate string*/
+        #endif
+        xls_append_cell(xls_file, csv_field);
+        xls_file->headline.push_back(csv_field);
+    }
 }/* ----- end of function csv_cb_headline_field ----- */
 
 void 
