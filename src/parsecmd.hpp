@@ -24,10 +24,12 @@
 #define PARSECMD_CPP
 #include <string>
 
-namespace csv2xls{
+namespace csv2xls
+{
 /**
  */    
-typedef struct {
+typedef struct 
+{
   char          csv_tab_delimiter; 
   std::string   csv_file_name;
   std::string   xls_file_name;
@@ -41,7 +43,8 @@ typedef struct {
  * @param opts
  * Reference to the option struct
  */
-void parsecmd_init(cmd_opts_t &opts);
+void 
+parsecmd_init(cmd_opts_t &opts);
 
 /**
  * \brief parse command line paramets and set the values of option struct
@@ -54,7 +57,11 @@ void parsecmd_init(cmd_opts_t &opts);
  * @return 
  * Returns 1 if succeded. Otherwise 0. 
  */
-int parse_commandline(cmd_opts_t &opts,int argc ,char**argv);
-} /*---namespace csv2xls ---*/
+int 
+parse_commandline(cmd_opts_t &opts,
+                  int argc,
+                  char**argv);
+
+} /* ----- end of namespace csv2xls ----- */
 #endif /*PARSECMD_HPP*/
 

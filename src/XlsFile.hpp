@@ -35,23 +35,24 @@
 
 using namespace std;
 //#define xls xlslib_core
-namespace csv2xls {
-  using namespace xlslib_core;
-  using namespace std;
+namespace csv2xls 
+{
+using namespace xlslib_core;
+using namespace std;
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
-  typedef struct{
-      unsigned16_t   current_column;
-      unsigned16_t   current_row;
-      workbook       *wbook ;
-      worksheet      *sheet;
-      int	     page_number;
-      unsigned16_t   xls_row_limit;                     
-      string         sheet_name;
-      string         filename;
-      vector<string> headline;
-  }xls_file_t;
+typedef struct{
+  unsigned16_t   current_column;
+  unsigned16_t   current_row;
+  workbook       *wbook ;
+  worksheet      *sheet;
+  int	     page_number;
+  unsigned16_t   xls_row_limit;                     
+  string         sheet_name;
+  string         filename;
+  vector<string> headline;
+}xls_file_t;
 
 /**
  * \brief Set some parameters for the xls output file.
@@ -69,7 +70,8 @@ namespace csv2xls {
  * lol
  * Pointer to the struct xls_file_t.
  */
-void xls_init(xls_file_t * xlsfile);
+void 
+xls_init(xls_file_t * file);
 
 /**
  * \brief Dumps the xls data to disk and destruct xls data.
@@ -77,7 +79,8 @@ void xls_init(xls_file_t * xlsfile);
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
  */
-void xls_close(xls_file_t*xlsfile);
+void 
+xls_close(xls_file_t*xlsfile);
 
 /**
  * \brief Write into the current xls data cell
@@ -90,7 +93,8 @@ void xls_close(xls_file_t*xlsfile);
  * @param val
  * The string to be written into the current xls data cell.
  */
-void xls_append_cell(xls_file_t*xlsfile, string val);
+void 
+xls_append_cell(xls_file_t*xlsfile, string val);
 
 /**
  * \brief Point to the next line at column 0 in xls data
@@ -98,10 +102,11 @@ void xls_append_cell(xls_file_t*xlsfile, string val);
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
  */
-void xls_newline(xls_file_t*xlsfile);
+void 
+xls_newline(xls_file_t*xlsfile);
 
 /**
- * \fn void xls_dumpworksheet(xls_file_t * xlsfile)
+ * \fn void xls_dump_worksheet(xls_file_t * xlsfile)
  *
  * \brief Write xls data to disk an create a new workbook.
  *
@@ -111,10 +116,11 @@ void xls_newline(xls_file_t*xlsfile);
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
  */
-void xls_dumpworksheet(xls_file_t*xlsfile);
+void 
+xls_dump_worksheet(xls_file_t*xlsfile);
 
 /**
- * \fn void xls_dumpworksheet(xls_file_t*xlsfile)
+ * \fn void xls_add_headline(xls_file_t*xlsfile)
  * \brief Add the head line to the xls data
  *
  * and make a new line after that. Ideally you should set
@@ -128,6 +134,7 @@ void xls_dumpworksheet(xls_file_t*xlsfile);
  * @return
  * nix
  */
-void xls_add_headline(xls_file_t *xlsfile);
-} /*namespace csv2xls*/
+void 
+xls_add_headline(xls_file_t *xlsfile);
+} /* ----- end of namespace csv2xls ----- */
 #endif /*end XLSFILE_HPP*/

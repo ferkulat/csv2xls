@@ -22,24 +22,31 @@
 #include "memory.hpp"
 #include <stdlib.h>
 
-namespace csv2xls{
-    int get_buffer(char_buf_t & mem){
-        mem.mem = NULL;
-        unsigned long current_size = mem.size ;
-        /*
-         * try to allocate mem.size bytes of memory from heap
-         * if it does not work, try mem.size/2 bytes and so on
-         * */
-        while((current_size > 0)
-                &&(NULL == mem.mem)){
-            mem.mem = (char*) malloc(sizeof(char*)*current_size);
-            if (NULL != mem.mem){
-                mem.size = current_size;
-                return 1;
-            }
-            current_size = current_size/2;
+namespace csv2xls
+{
+
+int 
+get_buffer(char_buf_t & mem)
+{
+    mem.mem = NULL;
+    unsigned long current_size = mem.size ;
+    /*
+     * try to allocate mem.size bytes of memory from heap
+     * if it does not work, try mem.size/2 bytes and so on
+     * */
+    while((current_size > 0)
+            &&(NULL == mem.mem))
+    {
+        mem.mem = (char*) malloc(sizeof(char*)*current_size);
+        if (NULL != mem.mem)
+        {
+            mem.size = current_size;
+            return 1;
         }
-        mem.size = 0;
-        return 0;
+        current_size = current_size/2;
     }
-}
+    mem.size = 0;
+    return 0;
+}/* ----- end of function get_buffer ----- */
+
+}/* ----- end of namespace csv2xls ----- */

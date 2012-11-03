@@ -23,7 +23,10 @@
 #include "filename.hpp"
 #include <sstream>
 #include <boost/algorithm/string.hpp>
-namespace csv2xls{
+
+namespace csv2xls
+{
+
 using namespace std;
 using namespace boost;
 
@@ -33,7 +36,10 @@ using namespace boost;
 typedef boost::find_iterator<std::string::iterator> string_find_iterator;
 
 
-string xls_filename( string wish_name, int count){
+string 
+xls_filename( string wish_name, 
+              int count)
+{
     string               basename;
     string               filetype;
     stringstream         ss;
@@ -42,18 +48,22 @@ string xls_filename( string wish_name, int count){
     /*
      * separate base name from file type name, if possible 
      */
-    if (iends_with(wish_name, ".xls")) {
+    if (iends_with(wish_name, ".xls")) 
+    {
         /* devide wish_name into basename and file type name*/
       	basename.assign(wish_name.substr(0,(wish_name.size() - FILE_TYPE_NAME_LENGHT)));
-      	It       = make_find_iterator( wish_name, last_finder(".xls", is_iequal())); 
+      	It       = make_find_iterator( wish_name, 
+                                       last_finder(".xls", is_iequal()) ); 
       	filetype = copy_range<std::string>(*It);
     }
-    else if(iends_with(wish_name, ".csv")){
+    else if(iends_with(wish_name, ".csv"))
+    {
         /* take base name and set file type name to '.xls'*/
         basename.assign(wish_name.substr(0,(wish_name.size() - FILE_TYPE_NAME_LENGHT)));
       	filetype.assign(".xls");
     }
-    else{ 
+    else
+    { 
         /* take whole wish name for basename and set file type name to 'xls'. */
 	basename.assign(wish_name);
       	filetype.assign(".xls");
@@ -63,7 +73,8 @@ string xls_filename( string wish_name, int count){
      * Construct the file name from base name , number and file type name 
      */
     ss << basename;
-    if (count){
+    if (count)
+    {
         /*add count with DIGIT_COUNT digits width and leading zero to basename */
         numstream.width(DIGIT_COUNT);
         numstream.fill('0');
@@ -73,5 +84,6 @@ string xls_filename( string wish_name, int count){
     ss << filetype;
 	
     return ss.str();   
-}
+}/* ----- end of funtcion xls_filename ----- */
+
 }/*---namespace csv2xls---*/

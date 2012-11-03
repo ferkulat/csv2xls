@@ -23,60 +23,76 @@
 #include "filename.hpp"
 #include <boost/foreach.hpp>
 
-namespace csv2xls{
+namespace csv2xls
+{
 
-    void xls_init(xls_file_t *file){
-        file->current_column = 0;
-        file->current_row    = 0;
-        file->wbook          = new xlslib_core::workbook();
-        
-	if (!file->sheet_name.empty()){
-            file->sheet = file->wbook->sheet(file->sheet_name.c_str());
-	}
-        else {
-            file->sheet = file->wbook->sheet("Table 1");
-        }
-    }
-    
-    void xls_close(xls_file_t *file){
-        string fname = xls_filename(file->filename,
-                                    file->page_number
-                                   );
-        file->wbook->Dump(fname);
-        file->wbook->~workbook();
-    }
-    
-    void xls_append_cell(xls_file_t *file, string label){
-        file->sheet->label(file->current_row, 
-                           file->current_column,label
-                          );
-        file->current_column++;
-    }
-    
-    void xls_newline(xls_file_t *file){
-        file->current_column = 0;
-        file->current_row++;
-        if ((file->xls_row_limit)
-                &&(file->current_row >= file->xls_row_limit)
-           ){
-            xls_dumpworksheet(file);
-        }
-    }
-    
-    void xls_dumpworksheet(xls_file_t *file){
-        xls_close(file);
-        file->page_number++;
-        xls_init(file);
-        if (file->headline.size()){
-            xls_add_headline(file);
-        }
-    }
-    
-    void xls_add_headline(xls_file_t * file){
-       BOOST_FOREACH(string it, file->headline ){
-           xls_append_cell(file, it);
-       } 
-       xls_newline(file);
-    }
+void 
+xls_init(xls_file_t *file)
+{
+    file->current_column = 0;
+    file->current_row    = 0;
+    file->wbook          = new xlslib_core::workbook();
 
-}
+    if (!file->sheet_name.empty())
+    {
+        file->sheet = file->wbook->sheet(file->sheet_name.c_str());
+    }
+    else 
+    {
+        file->sheet = file->wbook->sheet("Table 1");
+    }
+}/* ----- end of function xls_init ----- */
+
+void 
+xls_close(xls_file_t *file)
+{
+    string fname = xls_filename(file->filename,
+                                file->page_number);
+    file->wbook->Dump(fname);
+    file->wbook->~workbook();
+}/* ----- end of function xls_close ----- */
+
+void 
+xls_append_cell(xls_file_t *file, string label)
+{
+    file->sheet->label(file->current_row, 
+                       file->current_column,label
+                      );
+    file->current_column++;
+}/* ----- end of function xls_append_cell ----- */
+
+void 
+xls_newline(xls_file_t *file)
+{
+    file->current_column = 0;
+    file->current_row++;
+    if ((file->xls_row_limit)
+            &&(file->current_row >= file->xls_row_limit))
+    {
+        xls_dump_worksheet(file);
+    }
+}/* ----- end of function xls_newline ----- */
+
+void 
+xls_dump_worksheet(xls_file_t *file)
+{
+    xls_close(file);
+    file->page_number++;
+    xls_init(file);
+    if (file->headline.size())
+    {
+        xls_add_headline(file);
+    }
+}/* ----- end of function xls_dump_worksheet ----- */
+
+void 
+xls_add_headline(xls_file_t * file)
+{
+   BOOST_FOREACH(string it, file->headline )
+   {
+       xls_append_cell(file, it);
+   } 
+   xls_newline(file);
+}/* ----- end of function xls_add_headline ----- */
+
+}/* ---- end of namespace csv2xls ---- */

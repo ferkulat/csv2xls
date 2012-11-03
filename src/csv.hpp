@@ -28,17 +28,21 @@
 
 #include <csv.h>
 
-namespace csv2xls{
-    typedef struct{
-        struct csv_parser  csv_file_parser; /** < the parser */
-        char               tab_delimter;    
-    }csv_file_t;
-    /**
-     * \brief hides some low lowlevel of libcsv
-     * 
-     * @param parser
-     */
-    void csv_init_parser(csv_file_t &parser);
+namespace csv2xls
+{
 
-} /*---namesace csv---*/
+typedef struct
+{
+    struct csv_parser  csv_file_parser; /** < the parser */
+    char               tab_delimter;    
+}csv_file_t;
+/**
+ * \brief hides some low lowlevel of libcsv
+ * 
+ * @param parser
+ */
+void 
+csv_init_parser(csv_file_t &parser);
+
+} /* ----- end of namesace csv2xls ----- */
 #endif   /* ----- #ifndef CSV_HPP  ----- */

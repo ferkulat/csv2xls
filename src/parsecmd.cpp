@@ -31,17 +31,22 @@
 #define DEFAULT_CSV_TAB_DELIMITER 59 /** ';' */
 #define DEFAULT_CSV_BUFFER_SIZE   1024*1024
 
-namespace csv2xls{
+namespace csv2xls
+{
 using namespace std;
 
-void parsecmd_init(cmd_opts_t &opts){
+void 
+parsecmd_init(cmd_opts_t &opts)
+{
     opts.csv_file_has_headline  = false;
     opts.csv_tab_delimiter      = DEFAULT_CSV_TAB_DELIMITER;
     opts.xls_row_limit          = DEFAULT_XLS_MAX_LINES;
     opts.input_buffer_size      = DEFAULT_CSV_BUFFER_SIZE;
-}
+}/* -----  end of function parsecmd_init  ----- */
 
-void print_help(char*executable){
+void 
+print_help(char*executable)
+{
     cout << "Usage: " << executable << " [options] file" << endl << endl
          << "Description: Read csv file and convert it to one or more excel files." 
          << endl << endl;
@@ -75,21 +80,25 @@ void print_help(char*executable){
     
     cout << "-w name"  << "\tSet the excel worksheet name to \'name\'. "
                        << "Defaults to \'Table 1\'" << endl << endl;
-}
+}/* -----  end of function print_help  ----- */
 
 
 int 
-parse_commandline(cmd_opts_t &opts,int argc,char**argv){
+parse_commandline(cmd_opts_t &opts,int argc,char**argv)
+{
     parsecmd_init(opts);
     //We need at least an input file
-    if (argc < 2){
+    if (argc < 2)
+    {
         print_help(argv[0]);
         return 0;
     }
     int opt;
-    while ((opt = getopt(argc, argv, "b:d:hHl:o:w:")) != -1) {
+    while ((opt = getopt(argc, argv, "b:d:hHl:o:w:")) != -1) 
+    {
 
-       switch (opt) {
+       switch (opt) 
+       {
 
            case 'b': 
                     opts.input_buffer_size = atoi(optarg);
@@ -115,10 +124,11 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv){
        }
    }
    opts.csv_file_name.assign(argv[optind]);
-   if (opts.xls_file_name.empty()){
+   if (opts.xls_file_name.empty())
+   {
        opts.xls_file_name.assign(argv[optind]);
    }
    return 1;
-}	/* -----  end of function parse_commandline  ----- */
+}/* -----  end of function parse_commandline  ----- */
 
-} /*--- csv2xls ---*/
+}/* -----  end of namespace csv2xls  ----- */

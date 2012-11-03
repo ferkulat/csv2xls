@@ -27,38 +27,40 @@
 /**
  * 
  */
-namespace csv2xls{
-    /**
-     * \brief structure to hold information about the allocated/ to be allocated memory
-     */
-    typedef struct{
-        char          *mem; /**< pointer to allocated memory*/
-        unsigned long size; /**< number of bytes [to allocate|allocated]*/
-    }char_buf_t;
-    /**
-     * \brief tries to allocate memory for char
-     * 
-     * It tries to allocate buffer.size bytes for type `char`. if it failes, 
-     * it tries the half of the current requested amount.
-     * 
-     * @param 
-     *  buffer is a reference to a struct char_buf_t. It holds informtion about 
-     *  the amount of memory to allocate.
-     * @return 
-     * *On success:*
-     * 
-     *  Returns 1. if succeeded to allocate at least 1 byte. 
-     *  `buffer.mem` holds the pointer to memory and
-     *  buffer.size holds the count of bytes wich where allocated.
-     * 
-     * *On failure:*
-     * 
-     *  Returns 0.
-     *  `buffer.mem` is set to NULL. `buffer.size` is 0.
-     * 
-     */
-    int get_buffer(char_buf_t & buffer);
+namespace csv2xls
+{
+/**
+ * \brief structure to hold information about the allocated/ to be allocated memory
+ */
+typedef struct
+{
+    char          *mem; /**< pointer to allocated memory*/
+    unsigned long size; /**< number of bytes [to allocate|allocated]*/
+}char_buf_t;
+/**
+ * \brief tries to allocate memory for char
+ * 
+ * It tries to allocate buffer.size bytes for type `char`. if it failes, 
+ * it tries the half of the current requested amount.
+ * 
+ * @param 
+ *  buffer is a reference to a struct char_buf_t. It holds informtion about 
+ *  the amount of memory to allocate.
+ * @return 
+ * *On success:*
+ * 
+ *  Returns 1. if succeeded to allocate at least 1 byte. 
+ *  `buffer.mem` holds the pointer to memory and
+ *  buffer.size holds the count of bytes wich where allocated.
+ * 
+ * *On failure:*
+ * 
+ *  Returns 0.
+ *  `buffer.mem` is set to NULL. `buffer.size` is 0.
+ * 
+ */
+int get_buffer(char_buf_t & buffer);
     
-}
+}/* ----- end of namespace csv2xls ----- */
 
 #endif

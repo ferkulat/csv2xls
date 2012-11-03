@@ -20,7 +20,8 @@
  * MA  02110-1301  USA
  */
 #include <string>
-namespace csv2xls{
+namespace csv2xls
+{
 /**
  * \brief construct a file name for xls output
  * @param wish_name
@@ -36,5 +37,7 @@ namespace csv2xls{
  * 
  * The resulting file name.
  */
-std::string xls_filename( std::string wish_name, int count);
-} /*---namespace csv2xls---*/
+std::string 
+xls_filename( std::string wish_name, 
+              int count);
+} /* ----- end of namespace csv2xls ----- */
