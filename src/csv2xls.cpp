@@ -206,9 +206,9 @@ csv_cb_end_of_field (void *s,
     char       *csv_field = (char*)s;
     xls_file_t *xls_file  = (xls_file_t*)data;
     
-#if  CSV_MAJOR < 3
+    #if  CSV_MAJOR < 3
     *(csv_field+len) ='\0'; /*terminate string*/
-#endif
+    #endif
     
     xls_append_cell(xls_file,csv_field);
 }/* ----- end of function csv_cb_end_of_field ----- */
