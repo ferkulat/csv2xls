@@ -1,25 +1,25 @@
 /**
  * @file XlsFile.hpp
- * 
+ *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU GENERAL PUBLIC LICENSE for more details.
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the 
- * 
+ * License along with this program; if not, write to the
+ *
  * Free Software Foundation Inc.
  * 51 Franklin Street
  * Fifth Floor
  * Boston
- * MA  02110-1301  USA * 
+ * MA  02110-1301  USA *
  */
 
 #ifndef XLSFILE_HPP
@@ -33,10 +33,10 @@
 #include <vector>
 #include <stdint.h>
 
-namespace csv2xls 
+namespace csv2xls
 {
-#define XLS_MAX_ROWS    65536U    
-#define XLS_MAX_COLUMNS 256U    
+#define XLS_MAX_ROWS    65536U
+#define XLS_MAX_COLUMNS 256U
 using namespace xlslib_core;
 using namespace std;
 /**
@@ -49,8 +49,8 @@ typedef struct
   workbook       *wbook ;
   worksheet      *sheet;
   unsigned long  page_number;
-  unsigned long  xls_row_limit;                     
-  unsigned long  digit_count;                     
+  unsigned long  xls_row_limit;
+  unsigned long  digit_count;
   string         sheet_name;
   string         filename;
   vector<string> headline;
@@ -58,21 +58,21 @@ typedef struct
 
 /**
  * \brief Set some parameters for the xls output file.
- * 
+ *
  * Since this function is used to reinitialize the worksheet after dumping it to disk,
  * it does only
  * * xlsfile->current_column = 0
  * * xlsfile->current_row = 0
  * * constructs a new `xlsfile->workbook`
  * * constructs a new `xlsfile->worksheet` in `xlsfile->workbook`
- *  
- * @param 
+ *
+ * @param
  * xlsfile
- * @return 
+ * @return
  * lol
  * Pointer to the struct xls_file_t.
  */
-void 
+void
 xls_init(xls_file_t * file);
 
 /**
@@ -81,7 +81,7 @@ xls_init(xls_file_t * file);
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
  */
-void 
+void
 xls_close(xls_file_t*xlsfile);
 
 /**
@@ -89,13 +89,13 @@ xls_close(xls_file_t*xlsfile);
  *
  *  adressed by `xlsfile->current_column`  and `xlsfile->current_row`.
  *  After writing increase `xlsfile->current_column` by 1.
- * 
+ *
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
  * @param val
  * The string to be written into the current xls data cell.
  */
-void 
+void
 xls_append_cell(xls_file_t*xlsfile, string val);
 
 /**
@@ -104,7 +104,7 @@ xls_append_cell(xls_file_t*xlsfile, string val);
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
  */
-void 
+void
 xls_newline(xls_file_t*xlsfile);
 
 /**
@@ -118,7 +118,7 @@ xls_newline(xls_file_t*xlsfile);
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
  */
-void 
+void
 xls_dump_worksheet(xls_file_t*xlsfile);
 
 /**
@@ -126,17 +126,17 @@ xls_dump_worksheet(xls_file_t*xlsfile);
  * \brief Add the head line to the xls data
  *
  * and make a new line after that. Ideally you should set
- * * `xlsfile->current_column = 0`  and 
+ * * `xlsfile->current_column = 0`  and
  * * `xlsfile->current_row = 0`
- * 
- * before calling this function. 
- * @param 
+ *
+ * before calling this function.
+ * @param
  * xlsfile
  * Pointer to the struct which holds the information of the xls data.
  * @return
  * nix
  */
-void 
+void
 xls_add_headline(xls_file_t *xlsfile);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*end XLSFILE_HPP*/

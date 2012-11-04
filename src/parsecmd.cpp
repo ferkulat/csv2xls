@@ -1,18 +1,18 @@
 /*
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU GENERAL PUBLIC LICENSE for more details.
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the 
- * 
+ * License along with this program; if not, write to the
+ *
  * Free Software Foundation Inc.
  * 51 Franklin Street
  * Fifth Floor
@@ -30,7 +30,7 @@ namespace csv2xls
 {
 using namespace std;
 
-void 
+void
 parsecmd_init(cmd_opts_t &opts)
 {
     opts.csv_file_has_headline  = false;
@@ -40,42 +40,42 @@ parsecmd_init(cmd_opts_t &opts)
     opts.xls_digit_count        = XLS_DEF_DIGIT_COUNT;
 }/* -----  end of function parsecmd_init  ----- */
 
-void 
+void
 print_help(char*executable)
 {
     cout << "Usage: " << executable << " [options] file" << endl << endl
-         << "Description: Read csv file and convert it to one or more excel files." 
+         << "Description: Read csv file and convert it to one or more excel files."
          << endl << endl;
 
     cout << "options:" << endl << endl;
 
     cout << "-b num"   << "\tset buffer size for parsing csv to num bytes." << endl
-                       << "\tDefaults to " << DEFAULT_CSV_BUFFER_SIZE << "." << endl 
-                       << "\tMaximum value: " << MAX_CSV_BUFFER_SIZE << "."  
+                       << "\tDefaults to " << DEFAULT_CSV_BUFFER_SIZE << "." << endl
+                       << "\tMaximum value: " << MAX_CSV_BUFFER_SIZE << "."
                        << endl << endl;
 
-    cout << "-d c"     << "\tset csv tab delimiter to c. Default: \'" 
+    cout << "-d c"     << "\tset csv tab delimiter to c. Default: \'"
                        << (char)DEFAULT_CSV_TAB_DELIMITER << "\'" << endl << endl;
 
     cout << "-h"       << "\tPrint this help text and exit." << endl << endl;
 
-    cout << "-H"       << "\tTake first line from csv file as head line for each" 
+    cout << "-H"       << "\tTake first line from csv file as head line for each"
                        << endl
                        << "\tproduced excel file. " << endl << endl;
 
-    cout << "-l num"   << "\tbreak xls output into files with max num lines" 
+    cout << "-l num"   << "\tbreak xls output into files with max num lines"
                        << endl
                        << "\tDefaults to " << DEFAULT_XLS_MAX_LINES << "." << endl
-                       << "\tMaximum value: " << DEFAULT_XLS_MAX_LINES << "."  
+                       << "\tMaximum value: " << DEFAULT_XLS_MAX_LINES << "."
                        << endl << endl;
-    
-    cout << "-o name"  << "\tSet output file name to \'name\'. If this option is" 
+
+    cout << "-o name"  << "\tSet output file name to \'name\'. If this option is"
                        << " not set," << endl
-                       << "\ttake csv input file name and replace \'.csv\' with " 
+                       << "\ttake csv input file name and replace \'.csv\' with "
                        << "\'.xls\'." << endl
-                       << "\tIf \'name\' does not end with \'.xls\', it will be " 
+                       << "\tIf \'name\' does not end with \'.xls\', it will be "
                        << "added by program." << endl << endl;
-    
+
     cout << "-w name"  << "\tSet the excel worksheet name to \'name\'. "
                        << "Defaults to \'Table 1\'" << endl << endl;
 
@@ -88,7 +88,7 @@ print_help(char*executable)
 }/* -----  end of function print_help  ----- */
 
 
-int 
+int
 parse_commandline(cmd_opts_t &opts,int argc,char**argv)
 {
     parsecmd_init(opts);
@@ -99,16 +99,16 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
         return 0;
     }
     int opt;
-    while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:")) != -1) 
+    while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:")) != -1)
     {
 
-       switch (opt) 
+       switch (opt)
        {
 
            case 'b':
-                    if (! str2ulong(optarg, 
+                    if (! str2ulong(optarg,
                                     opts.input_buffer_size,
-                                    MAX_CSV_BUFFER_SIZE) ) 
+                                    MAX_CSV_BUFFER_SIZE) )
                     {
                         print_help(argv[0]);
                         cerr << "No valid parameter for option '-b'" << endl;
@@ -122,9 +122,9 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                     opts.csv_file_has_headline = true;
                     break;
            case 'l':
-                    if (! str2ulong(optarg, 
+                    if (! str2ulong(optarg,
                                     opts.xls_row_limit,
-                                    DEFAULT_XLS_MAX_LINES) ) 
+                                    DEFAULT_XLS_MAX_LINES) )
                     {
                         print_help(argv[0]);
                         cerr << "No valid parameter for option '-l'" << endl;
@@ -138,9 +138,9 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                     opts.xls_sheet_name.assign(optarg);
                     break;
            case 'D':
-                    if (! str2ulong(optarg, 
+                    if (! str2ulong(optarg,
                                     opts.xls_digit_count,
-                                    MAX_XLS_DIGIT_COUNT) ) 
+                                    MAX_XLS_DIGIT_COUNT) )
                     {
                         print_help(argv[0]);
                         cerr << "No valid parameter for option '-D'" << endl;

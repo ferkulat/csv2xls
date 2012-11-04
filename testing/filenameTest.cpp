@@ -2,27 +2,27 @@
 #include <cppunit/config/SourcePrefix.h>
 CPPUNIT_TEST_SUITE_REGISTRATION (filenameTest);
 
-void 
+void
 filenameTest::setUp(){}
 
-void 
+void
 filenameTest::tearDown(){}
 
-void 
+void
 filenameTest::no_xls_ending()
 {
     CPPUNIT_ASSERT (0 == csv2xls::xls_filename("input.csv",0,4).compare("input.xls"));
     CPPUNIT_ASSERT (0 == csv2xls::xls_filename("input",0,4    ).compare("input.xls"));
     CPPUNIT_ASSERT (0 == csv2xls::xls_filename("input",1,4    ).compare("input0001.xls"));
 }
-void 
+void
 filenameTest::with_xls_ending()
 {
     CPPUNIT_ASSERT (0 == csv2xls::xls_filename("input.xls",0,4).compare("input.xls"));
     CPPUNIT_ASSERT (0 == csv2xls::xls_filename("input.Xls",0,4).compare("input.Xls"));
     CPPUNIT_ASSERT (0 == csv2xls::xls_filename("input.XLS",1,4).compare("input0001.XLS"));
 }
-void 
+void
 filenameTest::numbering()
 {
     CPPUNIT_ASSERT (0 == csv2xls::xls_filename("input.XLS",4294967295U,4).compare("input4294967295.XLS"));

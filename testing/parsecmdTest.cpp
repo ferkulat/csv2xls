@@ -8,14 +8,14 @@ typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 
 #include <cppunit/config/SourcePrefix.h>
 CPPUNIT_TEST_SUITE_REGISTRATION (parsecmdTest);
-void 
+void
 parsecmdTest::
 string2cmdline(int &count ,char**&argv,string line)
 {
 
     tokenizer::iterator tok_iter;
     char delim[] = {' ','\0'};
-    boost::char_separator<char> sep(delim, "");        
+    boost::char_separator<char> sep(delim, "");
     tokenizer tokens(line, sep);
     vector<string> tokenlist ;
     for (tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter)
@@ -24,7 +24,7 @@ string2cmdline(int &count ,char**&argv,string line)
     }
     count = tokenlist.size();
     argv  = (char**) malloc(sizeof(char**)*count);
-    
+
     for (int i = 0;i < count;i++)
     {
         argv[i] = (char*) malloc(tokenlist[i].size()+1);

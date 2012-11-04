@@ -1,18 +1,18 @@
 /*
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU GENERAL PUBLIC LICENSE for more details.
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the 
- * 
+ * License along with this program; if not, write to the
+ *
  * Free Software Foundation Inc.
  * 51 Franklin Street
  * Fifth Floor
@@ -26,7 +26,7 @@
 namespace csv2xls
 {
 
-void 
+void
 xls_init(xls_file_t *file)
 {
     file->current_column = 0;
@@ -37,13 +37,13 @@ xls_init(xls_file_t *file)
     {
         file->sheet = file->wbook->sheet(file->sheet_name.c_str());
     }
-    else 
+    else
     {
         file->sheet = file->wbook->sheet("Table 1");
     }
 }/* ----- end of function xls_init ----- */
 
-void 
+void
 xls_close(xls_file_t *file)
 {
     string fname = xls_filename(file->filename,
@@ -53,20 +53,20 @@ xls_close(xls_file_t *file)
     file->wbook->~workbook();
 }/* ----- end of function xls_close ----- */
 
-void 
+void
 xls_append_cell(xls_file_t *file, string label)
 {
     //ignore columns > XLS_MAX_COLUMNS
     if (XLS_MAX_COLUMNS > file->current_column)
     {
-        file->sheet->label(file->current_row, 
+        file->sheet->label(file->current_row,
                            file->current_column,
                            label);
         file->current_column++;
     }
 }/* ----- end of function xls_append_cell ----- */
 
-void 
+void
 xls_newline(xls_file_t *file)
 {
     file->current_column = 0;
@@ -78,7 +78,7 @@ xls_newline(xls_file_t *file)
     }
 }/* ----- end of function xls_newline ----- */
 
-void 
+void
 xls_dump_worksheet(xls_file_t *file)
 {
     xls_close(file);
@@ -90,13 +90,13 @@ xls_dump_worksheet(xls_file_t *file)
     }
 }/* ----- end of function xls_dump_worksheet ----- */
 
-void 
+void
 xls_add_headline(xls_file_t * file)
 {
    BOOST_FOREACH(string it, file->headline )
    {
        xls_append_cell(file, it);
-   } 
+   }
    xls_newline(file);
 }/* ----- end of function xls_add_headline ----- */
 
