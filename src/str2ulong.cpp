@@ -25,7 +25,6 @@
 #include "str2ulong.hpp"
 namespace csv2xls
 {
-using namespace std;
 
 int
 str2ulong(const char *str,
@@ -35,18 +34,18 @@ str2ulong(const char *str,
     char *endptr;
     errno = 0;
     num = strtoul(str, &endptr,10);
-    if ((errno == ERANGE && (num == ULONG_MAX ))
-                   || (errno != 0 && num == 0))
+    if (   ((errno == ERANGE) && (num == ULONG_MAX ))
+        || ((errno != 0     ) && (num == 0         ))  )
     {
        return 0;
     }
 
-    if (endptr == str)
+    if (endptr == str)/* no conversion is done*/
     {
        return 0;
     }
 
-    if ( (num < 0) || (num > max_value) )
+    if ( num > max_value )
     {
         return 0;
     }

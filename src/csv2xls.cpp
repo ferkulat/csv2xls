@@ -196,7 +196,7 @@ main(int argc, char *argv[])
     free(input_buffer.mem);
     exit(EXIT_SUCCESS);
 
-}
+}/* ----- end of function main ----- */
 
 void
 csv_cb_end_of_field (void *s,
