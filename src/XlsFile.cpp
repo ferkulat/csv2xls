@@ -21,7 +21,6 @@
  */
 #include "XlsFile.hpp"
 #include "filename.hpp"
-#include <boost/foreach.hpp>
 
 namespace csv2xls
 {
@@ -93,9 +92,11 @@ xls_dump_worksheet(xls_file_t *file)
 void
 xls_add_headline(xls_file_t * file)
 {
-   BOOST_FOREACH(string it, file->headline )
+         vector<string>::iterator it  = file->headline.begin();
+   const vector<string>::iterator end = file->headline.end();
+   for (;it != end;++it )
    {
-       xls_append_cell(file, it);
+       xls_append_cell(file, *it);
    }
    xls_newline(file);
 }/* ----- end of function xls_add_headline ----- */

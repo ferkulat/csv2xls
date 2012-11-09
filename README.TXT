@@ -23,7 +23,6 @@ There is room for improvements in functionality and style.
 
 	-= Prequisites =-
 
-boost:  www.boost.org
 xlslib: http://sourceforge.net/projects/xlslib/
 libcsv: http://sourceforge.net/projects/libcsv/
 

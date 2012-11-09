@@ -22,17 +22,15 @@
 
 #include "filename.hpp"
 #include <sstream>
-#include <boost/algorithm/string.hpp>
+#include <algorithm>
 
 namespace csv2xls
 {
 
 using namespace std;
-using namespace boost;
 
 #define FILE_TYPE_NAME_LENGHT 4
 
-typedef boost::find_iterator<std::string::iterator> string_find_iterator;
 
 
 string
@@ -40,27 +38,41 @@ xls_filename( string wish_name,
               unsigned long count,
               unsigned long digits)
 {
-
-    string               basename;
-    string               filetype;
-    stringstream         ss;
-    stringstream         numstream;
-    string_find_iterator It;
+    string        tmp_name;
+    string        tmp_type;
+    string        basename;
+    string        filetype;
+    stringstream  ss;
+    stringstream  numstream;
+    int           basename_length;
+    
+    basename_length = wish_name.size() - FILE_TYPE_NAME_LENGHT;
+    
+    /**
+     * make comparisons case insensitive
+     */
+    tmp_name.assign(wish_name);
+    std::transform(tmp_name.begin(),
+                   tmp_name.end(),
+                   tmp_name.begin(),
+                   ::tolower);
+    
+    
+    tmp_type.assign(tmp_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
+    
     /*
      * separate base name from file type name, if possible
      */
-    if (iends_with(wish_name, ".xls"))
+    if (0 == tmp_type.compare( ".xls"))
     {
         /* devide wish_name into basename and file type name*/
-      	basename.assign(wish_name.substr(0,(wish_name.size() - FILE_TYPE_NAME_LENGHT)));
-      	It       = make_find_iterator( wish_name,
-                                       last_finder(".xls", is_iequal()) );
-      	filetype = copy_range<std::string>(*It);
+      	basename.assign(wish_name.substr(0,basename_length));
+      	filetype.assign(wish_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
     }
-    else if(iends_with(wish_name, ".csv"))
+    else if(0 == tmp_type.compare( ".csv"))
     {
         /* take base name and set file type name to '.xls'*/
-        basename.assign(wish_name.substr(0,(wish_name.size() - FILE_TYPE_NAME_LENGHT)));
+        basename.assign(wish_name.substr(0,basename_length));
       	filetype.assign(".xls");
     }
     else

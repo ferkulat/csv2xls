@@ -1,26 +1,33 @@
 #include "parsecmdTest.hpp"
 #include <stdlib.h>
 #include <string.h>
-#include <boost/tokenizer.hpp>
 #include <vector>
 
-typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 
 #include <cppunit/config/SourcePrefix.h>
 CPPUNIT_TEST_SUITE_REGISTRATION (parsecmdTest);
+
+
+
 void
 parsecmdTest::
 string2cmdline(int &count ,char**&argv,string line)
 {
-
-    tokenizer::iterator tok_iter;
-    char delim[] = {' ','\0'};
-    boost::char_separator<char> sep(delim, "");
-    tokenizer tokens(line, sep);
+    unsigned int start = 0;
+    unsigned int end = 0;
     vector<string> tokenlist ;
-    for (tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter)
+   
+    while( end < (line.size()-2) )
     {
-        tokenlist.push_back( *tok_iter) ;
+        if (string::npos == (start = line.find_first_not_of(" ",end)))
+        {
+            break;
+        }
+        if (string::npos ==(end = line.find_first_of(" ",start)))
+        {
+            end = line.size()-1;
+        }
+        tokenlist.push_back(line.substr(start,end));
     }
     count = tokenlist.size();
     argv  = (char**) malloc(sizeof(char**)*count);
