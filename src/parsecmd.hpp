@@ -71,6 +71,8 @@ parse_commandline(cmd_opts_t &opts,
                       int argc,
                       char**argv);
 
+void
+print_help(char*executable);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*PARSECMD_HPP*/
 

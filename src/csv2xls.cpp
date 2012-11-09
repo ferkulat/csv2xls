@@ -101,6 +101,7 @@ main(int argc, char *argv[])
 
     if (!parse_commandline(options,argc,argv))
     {
+        print_help(argv[0]);
         exit(EXIT_FAILURE);
     }
 

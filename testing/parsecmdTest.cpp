@@ -32,15 +32,43 @@ string2cmdline(int &count ,char**&argv,string line)
         argv[i][tokenlist[i].size()] = '\0';
     }
 }
-void parsecmdTest::setUp(){}
+
+void
+parsecmdTest::
+print_argv(int count ,char**argv)
+{
+    for(int i=0;i<count;++i)
+    {
+        cerr << argv[i]<< " ";
+    }
+    cerr << endl;
+}
+
+void
+parsecmdTest::
+clean_command_line(int &count ,char**&argv)
+{
+    for (int i=count-1;i>=0;--i)
+    {
+        free(argv[i]);
+    }
+    free(argv);
+}
+
+void parsecmdTest::setUp()
+{
+}
+
 void parsecmdTest::tearDown(){}
 
 void parsecmdTest::no_options()
 {
-    string line;
+    char**ARGV;
+    int ARGC;
     line.assign("csv2xls input.csv");
     string2cmdline(ARGC,ARGV,line);
     parse_commandline(opts,ARGC,ARGV);
+    clean_command_line(ARGC,ARGV);
 
     CPPUNIT_ASSERT (false == opts.csv_file_has_headline);
     CPPUNIT_ASSERT (65536 == (int)opts.xls_row_limit);
@@ -48,10 +76,36 @@ void parsecmdTest::no_options()
     CPPUNIT_ASSERT (0 == opts.xls_file_name.compare("input.csv"));
 }
 
-//void parsecmdTest::line_limit(){
-//	CPPUNIT_ASSERT_EQUAL (0,filename("input.xls",0).compare("input.xls"));
-//	CPPUNIT_ASSERT_EQUAL (0,filename("input.Xls",0).compare("input.Xls"));
-//	CPPUNIT_ASSERT_EQUAL (0,filename("input.XLS",1).compare("input0001.XLS"));
-//}
+void parsecmdTest::line_limit_0()
+{
+    char**ARGV_0;
+    int ARGC_0;
+    line.assign("csv2xls -l0 input.csv");
+    string2cmdline(ARGC_0,ARGV_0,line);
+    CPPUNIT_ASSERT (0 == parse_commandline(opts,ARGC_0,ARGV_0));
+    clean_command_line(ARGC_0,ARGV_0);
+}
+
+void 
+parsecmdTest::line_limit_1()
+{
+    char**ARGV_1;
+    int ARGC_1;
+    line.assign("csv2xls -l1 input.csv");
+    string2cmdline(ARGC_1,ARGV_1,line);
+    CPPUNIT_ASSERT (0 == parse_commandline(opts,ARGC_1,ARGV_1));
+    clean_command_line(ARGC_1,ARGV_1);
+}
+
+void 
+parsecmdTest::line_limit_2()
+{
+    char**ARGV_2;
+    int ARGC_2;
+    line.assign("csv2xls -l2 input.csv");
+    string2cmdline(ARGC_2,ARGV_2,line);
+    CPPUNIT_ASSERT (1 == parse_commandline(opts,ARGC_2,ARGV_2));
+    clean_command_line(ARGC_2,ARGV_2);
+}
 
 

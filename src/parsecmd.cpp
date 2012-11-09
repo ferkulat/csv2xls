@@ -67,7 +67,8 @@ print_help(char*executable)
                        << endl
                        << "\tDefaults to " << DEFAULT_XLS_MAX_LINES << "." << endl
                        << "\tMaximum value: " << DEFAULT_XLS_MAX_LINES << "."
-                       << endl << endl;
+                       << "\tMinimum value: " << 2 << "."
+                      << endl << endl;
 
     cout << "-o name"  << "\tSet output file name to \'name\'. If this option is"
                        << " not set," << endl
@@ -98,7 +99,9 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
         print_help(argv[0]);
         return 0;
     }
+    optind = 0;
     int opt;
+    int converted = 0 ;
     while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:")) != -1)
     {
 
@@ -110,9 +113,7 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                                     opts.input_buffer_size,
                                     MAX_CSV_BUFFER_SIZE) )
                     {
-                        print_help(argv[0]);
-                        cerr << "No valid parameter for option '-b'" << endl;
-                        exit(EXIT_FAILURE);
+                        return 0;
                     }
                     break;
            case 'd':
@@ -122,13 +123,13 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                     opts.csv_file_has_headline = true;
                     break;
            case 'l':
-                    if (! str2ulong(optarg,
+                    converted = str2ulong(optarg,
                                     opts.xls_row_limit,
-                                    DEFAULT_XLS_MAX_LINES) )
+                                    DEFAULT_XLS_MAX_LINES);
+                    if (    (!converted)
+                          ||(opts.xls_row_limit < 2 ) )
                     {
-                        print_help(argv[0]);
-                        cerr << "No valid parameter for option '-l'" << endl;
-                        exit(EXIT_FAILURE);
+                        return 0;
                     }
                     break;
            case 'o':
@@ -142,9 +143,7 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                                     opts.xls_digit_count,
                                     MAX_XLS_DIGIT_COUNT) )
                     {
-                        print_help(argv[0]);
-                        cerr << "No valid parameter for option '-D'" << endl;
-                        exit(EXIT_FAILURE);
+                        return 0;
                     }
                     break;
 
