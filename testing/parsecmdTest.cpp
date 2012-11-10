@@ -16,7 +16,7 @@ string2cmdline(int &count ,char**&argv,string line)
     unsigned int start = 0;
     unsigned int end = 0;
     vector<string> tokenlist ;
-   
+  
     while( end < (line.size()-2) )
     {
         if (string::npos == (start = line.find_first_not_of(" ",end)))
@@ -93,7 +93,7 @@ void parsecmdTest::line_limit_0()
     clean_command_line(ARGC_0,ARGV_0);
 }
 
-void 
+void
 parsecmdTest::line_limit_1()
 {
     char**ARGV_1;
@@ -104,7 +104,7 @@ parsecmdTest::line_limit_1()
     clean_command_line(ARGC_1,ARGV_1);
 }
 
-void 
+void
 parsecmdTest::line_limit_2()
 {
     char**ARGV_2;

@@ -45,9 +45,9 @@ xls_filename( string wish_name,
     stringstream  ss;
     stringstream  numstream;
     int           basename_length;
-    
+   
     basename_length = wish_name.size() - FILE_TYPE_NAME_LENGHT;
-    
+   
     /**
      * make comparisons case insensitive
      */
@@ -56,10 +56,10 @@ xls_filename( string wish_name,
                    tmp_name.end(),
                    tmp_name.begin(),
                    ::tolower);
-    
-    
+   
+   
     tmp_type.assign(tmp_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
-    
+   
     /*
      * separate base name from file type name, if possible
      */
