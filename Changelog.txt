@@ -1,0 +1,23 @@
+Date:    Sa 10. Nov 19:08:15 CET 2012
+Version: 0.2
+    * removed boost as dependency
+    * Don't allow less than 2 lines in xls file
+      - If parameter '-H' is set and -l1 and csv input file has at least 2 lines,
+        we end up in endless numbers of xls files with just the head line.
+
+Date:    Sun  4. Nov 05:25:11 CET 2012 
+Version: 0.1
+    * added option '-D' to set digit count for file numbering
+      - leading zeros help to sort output files by name
+    * check command line parameters
+      - max 10 digits for xls file numbering
+      - max 65536 lines for one xls file
+      - ignore columns > 256 in xls file
+      - max 4GB for input buffer
+    * crosscompiling
+      - added mingwbuild.sh to make mingw builds easier 
+
+Date:    Mon 15. Oct 14:53:09 CET 2012
+
+    initial commit
+
