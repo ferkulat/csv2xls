@@ -81,7 +81,7 @@ print_help(char*executable)
                        << "Defaults to \'Table 1\'" << endl << endl;
 
     cout << "-D num"   << "\tSet excel file name numbering to \'num\' digits "
-                       << "with leading zeros."
+                       << "with leading zeros." << endl
                        << "Default: " << XLS_DEF_DIGIT_COUNT << "." <<endl
                        << "\tMaximum value: " << MAX_XLS_DIGIT_COUNT << "."
                        << endl << endl;
