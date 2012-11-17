@@ -41,6 +41,12 @@ parsecmd_init(cmd_opts_t &opts)
 }/* -----  end of function parsecmd_init  ----- */
 
 void
+print_version(char*executable)
+{
+    cout << executable << VERSION << endl;
+}
+
+void
 print_help(char*executable)
 {
     cout << "Usage: " << executable << " [options] file" << endl << endl
@@ -85,6 +91,8 @@ print_help(char*executable)
                        << "Default: " << XLS_DEF_DIGIT_COUNT << "." <<endl
                        << "\tMaximum value: " << MAX_XLS_DIGIT_COUNT << "."
                        << endl << endl;
+    cout << "-v"       << "\tPrint verion and exit" << endl;
+    
 
 }/* -----  end of function print_help  ----- */
 
@@ -102,7 +110,7 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
     optind = 0;
     int opt;
     int converted = 0 ;
-    while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:")) != -1)
+    while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:v")) != -1)
     {
 
        switch (opt)
@@ -146,6 +154,9 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                         return 0;
                     }
                     break;
+           case 'v':
+                    print_version(argv[0]);
+                    exit(EXIT_SUCCESS);
 
            default: /* '?' */
                print_help(argv[0]);
