@@ -104,7 +104,6 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
     //We need at least an input file
     if (argc < 2)
     {
-        print_help(argv[0]);
         return 0;
     }
     optind = 0;
@@ -159,7 +158,6 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                     exit(EXIT_SUCCESS);
 
            default: /* '?' */
-               print_help(argv[0]);
                return 0;
        }
    }
