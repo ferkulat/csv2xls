@@ -88,10 +88,10 @@ print_help(char*executable)
 
     cout << "-D num"   << "\tSet excel file name numbering to \'num\' digits "
                        << "with leading zeros." << endl
-                       << "Default: " << XLS_DEF_DIGIT_COUNT << "." <<endl
-                       << "\tMaximum value: " << MAX_XLS_DIGIT_COUNT << "."
+                       << "\tDefault: " << XLS_DEF_DIGIT_COUNT << "."
+                       << " Maximum value: " << MAX_XLS_DIGIT_COUNT << "."
                        << endl << endl;
-    cout << "-v"       << "\tPrint verion and exit" << endl;
+    cout << "-v"       << "\tPrint version and exit" << endl;
     
 
 }/* -----  end of function print_help  ----- */
