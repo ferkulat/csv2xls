@@ -3,19 +3,19 @@
 In a use case I should import millions of records into a MSSQL data base via SSIS.
 The import tool expected the input as an Excel file.
 It was not allowed to access the data base directly.
-This Excel file  
-- must not contain more than 65536 rows, 
+This Excel file
+- must not contain more than 65536 rows,
 - has to have a special worksheet name,
-- has to have a special name and 
+- has to have a special name and
 - should be placed into a special folder to get imported.
 
 The millions of input records, are listed in a CSV file.
 To meet the conditions for the import, following could be done:
 
-1. Produce several CSV files with maximum 65536 lines, 
+1. Produce several CSV files with maximum 65536 lines,
 2. For each CSV file do
-	   open it with Excel, 
-   	   rename the work sheet, 
+	   open it with Excel,
+   	   rename the work sheet,
   	   save as \specialpath\specialfilename.xls,
 	   run the import tool
 
@@ -43,7 +43,7 @@ For step 1 a noninteractive way to convert CSV to Excel is needed.
     - if more than one Excel file is produced, starting with the second Excel file,
       the file name will be extended by a growing 3 digit number
       Example: filename.xls filename001.xls filename002.xls
-    - by setting a parameter for head line, the first line of input file 
+    - by setting a parameter for head line, the first line of input file
       is the first line for all produced Excel files
     - all entries are in text format, no conversion to numbers, dates and so on
 

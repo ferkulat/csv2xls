@@ -92,7 +92,7 @@ print_help(char*executable)
                        << " Maximum value: " << MAX_XLS_DIGIT_COUNT << "."
                        << endl << endl;
     cout << "-v"       << "\tPrint version and exit" << endl;
-    
+
 
 }/* -----  end of function print_help  ----- */
 

@@ -11,7 +11,7 @@ Version: 0.2
       - If parameter '-H' is set and -l1 and csv input file has at least 2 lines,
         we end up in endless numbers of xls files with just the head line.
 
-Date:    Sun  4. Nov 05:25:11 CET 2012 
+Date:    Sun  4. Nov 05:25:11 CET 2012
 Version: 0.1
     * added option '-D' to set digit count for file numbering
       - leading zeros help to sort output files by name
@@ -21,7 +21,7 @@ Version: 0.1
       - ignore columns > 256 in xls file
       - max 4GB for input buffer
     * crosscompiling
-      - added mingwbuild.sh to make mingw builds easier 
+      - added mingwbuild.sh to make mingw builds easier
 
 Date:    Mon 15. Oct 14:53:09 CET 2012
 
