@@ -81,6 +81,26 @@ void parsecmdTest::no_options()
     CPPUNIT_ASSERT (65536 == (int)opts.xls_row_limit);
     CPPUNIT_ASSERT (0 == opts.csv_file_name.compare("input.csv"));
     CPPUNIT_ASSERT (0 == opts.xls_file_name.compare("input.csv"));
+
+    line.assign("csv2xls tmp/input.csv");
+    string2cmdline(ARGC,ARGV,line);
+    parse_commandline(opts,ARGC,ARGV);
+    clean_command_line(ARGC,ARGV);
+
+    CPPUNIT_ASSERT (false == opts.csv_file_has_headline);
+    CPPUNIT_ASSERT (65536 == (int)opts.xls_row_limit);
+    CPPUNIT_ASSERT (0 == opts.csv_file_name.compare("tmp/input.csv"));
+    CPPUNIT_ASSERT (0 == opts.xls_file_name.compare("input.csv"));
+    
+    line.assign("csv2xls /tmp/input.csv");
+    string2cmdline(ARGC,ARGV,line);
+    parse_commandline(opts,ARGC,ARGV);
+    clean_command_line(ARGC,ARGV);
+
+    CPPUNIT_ASSERT (false == opts.csv_file_has_headline);
+    CPPUNIT_ASSERT (65536 == (int)opts.xls_row_limit);
+    CPPUNIT_ASSERT (0 == opts.csv_file_name.compare("/tmp/input.csv"));
+    CPPUNIT_ASSERT (0 == opts.xls_file_name.compare("input.csv"));
 }
 
 void parsecmdTest::line_limit_0()

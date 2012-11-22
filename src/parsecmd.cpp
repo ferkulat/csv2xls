@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <strings.h>
+#include <libgen.h>
 
 namespace csv2xls
 {
@@ -164,7 +165,17 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
    opts.csv_file_name.assign(argv[optind]);
    if (opts.xls_file_name.empty())
    {
-       opts.xls_file_name.assign(argv[optind]);
+       char *output_name = NULL;
+
+       if (NULL != (output_name = basename(argv[optind])))
+       {
+           opts.xls_file_name.assign(output_name);
+       }
+       else
+       {
+           cerr << "Error determnining output file name" << endl;
+           return 0;
+       }
    }
    return 1;
 }/* -----  end of function parse_commandline  ----- */
