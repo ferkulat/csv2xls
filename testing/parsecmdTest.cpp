@@ -64,6 +64,18 @@ void parsecmdTest::no_options()
     wordfree(&args);
 }
 
+void parsecmdTest::output_dir()
+{
+    wordexp_t args;
+    wordexp("csv2xls  -o/tmp/ input.csv", &args,0);
+    opts.csv_file_name.clear();
+    opts.xls_file_name.clear();
+    parse_commandline(opts,args.we_wordc,args.we_wordv);
+    CPPUNIT_ASSERT (0 == opts.csv_file_name.compare("input.csv"));
+    CPPUNIT_ASSERT (0 == opts.xls_file_name.compare("/tmp/input.csv"));
+    wordfree(&args);
+}
+
 void parsecmdTest::line_limit_0()
 {
     wordexp_t args;

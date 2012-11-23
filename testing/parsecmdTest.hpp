@@ -16,6 +16,7 @@ class parsecmdTest : public CPPUNIT_NS :: TestFixture
     CPPUNIT_TEST (line_limit_0);
     CPPUNIT_TEST (line_limit_1);
     CPPUNIT_TEST (line_limit_2);
+    CPPUNIT_TEST (output_dir);
 
     CPPUNIT_TEST_SUITE_END ();
 
@@ -28,6 +29,7 @@ class parsecmdTest : public CPPUNIT_NS :: TestFixture
         void line_limit_0 (void);
         void line_limit_1 (void);
         void line_limit_2 (void);
+        void output_dir(void);
     private:
 	cmd_opts_t opts;
         void print_argv(int ,char**);

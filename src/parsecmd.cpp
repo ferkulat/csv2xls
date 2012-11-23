@@ -177,6 +177,17 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
            return 0;
        }
    }
+   else
+   {   /* If output file name ends with '\' or '/' it is a directory.
+        * We construct output path from this directory and basename of input file
+        */
+       char lastchar = opts.xls_file_name[opts.xls_file_name.size()-1];
+       if (    ( '/' == lastchar) /* *nix */
+             ||('\\' == lastchar) /* windows */ )
+       {
+           opts.xls_file_name.append(basename(argv[optind]));
+       }
+   }
    return 1;
 }/* -----  end of function parse_commandline  ----- */
 
