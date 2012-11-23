@@ -28,12 +28,8 @@ class parsecmdTest : public CPPUNIT_NS :: TestFixture
         void line_limit_0 (void);
         void line_limit_1 (void);
         void line_limit_2 (void);
-
     private:
 	cmd_opts_t opts;
-        string line;
-        void string2cmdline(int &,char**&, string);
-        void clean_command_line(int &,char**&);
         void print_argv(int ,char**);
 };
 
