@@ -26,10 +26,10 @@ namespace csv2xls
 {
 
 int
-get_buffer(char_buf_t & mem)
+get_buffer(char_buf_t &mem)
 {
     mem.mem = NULL;
-    unsigned long current_size = mem.size ;
+    unsigned long current_size = mem.size;
     /*
      * try to allocate mem.size bytes of memory from heap
      * if it does not work, try mem.size/2 bytes and so on

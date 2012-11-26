@@ -50,7 +50,7 @@ main(int argc, char *argv[])
 
 
 
-    if (!parse_commandline(options,argc,argv))
+    if (!parse_commandline(options, argc, argv))
     {
         print_help(argv[0]);
         exit(EXIT_FAILURE);
@@ -78,7 +78,8 @@ main(int argc, char *argv[])
     csv_in.tab_delimter = options.csv_tab_delimiter;
     csv_init_parser(csv_in);
 
-    fstream csv_input(options.csv_file_name.c_str(), ifstream::in|ifstream::binary);
+    fstream csv_input(options.csv_file_name.c_str(),
+                      ifstream::in|ifstream::binary);
     if ( !csv_input.is_open())
     {
         cerr << "Failed to open file " << options.csv_file_name << endl;

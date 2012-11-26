@@ -12,11 +12,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION (parsecmdTest);
 
 void
 parsecmdTest::
-print_argv(int count ,char**argv)
+print_argv(int count, char**argv)
 {
-    for(int i=0;i<count;++i)
+    for(int i = 0; i < count; ++i)
     {
-        cerr << argv[i]<< " ";
+        cerr << argv[i] << " ";
     }
     cerr << endl;
 }

@@ -29,7 +29,7 @@ namespace csv2xls
 static int
 csv_is_space(unsigned char c)
 {
-    if (c == CSV_SPACE || c == CSV_TAB)
+    if ( (c == CSV_SPACE) || (c == CSV_TAB) )
     {
         return 1;
     }
@@ -42,7 +42,7 @@ csv_is_space(unsigned char c)
 static int
 csv_is_term(unsigned char c)
 {
-    if (c == CSV_CR || c == CSV_LF)
+    if ( (c == CSV_CR) || (c == CSV_LF) )
     {
         return 1;
     }

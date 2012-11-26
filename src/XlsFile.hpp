@@ -73,7 +73,7 @@ typedef struct
  * Pointer to the struct xls_file_t.
  */
 void
-xls_init(xls_file_t * file);
+xls_init(xls_file_t *file);
 
 /**
  * \brief Dumps the xls data to disk and destruct xls data.
@@ -82,7 +82,7 @@ xls_init(xls_file_t * file);
  * Pointer to the struct which holds the information of the xls data.
  */
 void
-xls_close(xls_file_t*xlsfile);
+xls_close(xls_file_t *xlsfile);
 
 /**
  * \brief Write into the current xls data cell
@@ -96,7 +96,7 @@ xls_close(xls_file_t*xlsfile);
  * The string to be written into the current xls data cell.
  */
 void
-xls_append_cell(xls_file_t*xlsfile, string val);
+xls_append_cell(xls_file_t *xlsfile, string val);
 
 /**
  * \brief Point to the next line at column 0 in xls data
@@ -105,7 +105,7 @@ xls_append_cell(xls_file_t*xlsfile, string val);
  * Pointer to the struct which holds the information of the xls data.
  */
 void
-xls_newline(xls_file_t*xlsfile);
+xls_newline(xls_file_t *xlsfile);
 
 /**
  * \fn void xls_dump_worksheet(xls_file_t * xlsfile)
@@ -119,7 +119,7 @@ xls_newline(xls_file_t*xlsfile);
  * Pointer to the struct which holds the information of the xls data.
  */
 void
-xls_dump_worksheet(xls_file_t*xlsfile);
+xls_dump_worksheet(xls_file_t *xlsfile);
 
 /**
  * \fn void xls_add_headline(xls_file_t*xlsfile)

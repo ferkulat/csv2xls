@@ -75,7 +75,7 @@ print_help(char*executable)
                        << "\tDefaults to " << DEFAULT_XLS_MAX_LINES << "." << endl
                        << "\tMaximum value: " << DEFAULT_XLS_MAX_LINES << "."
                        << "\tMinimum value: " << 2 << "."
-                      << endl << endl;
+                       << endl << endl;
 
     cout << "-o name"  << "\tSet output file name to \'name\'. If this option is"
                        << " not set," << endl

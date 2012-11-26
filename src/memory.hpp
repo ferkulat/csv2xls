@@ -37,6 +37,7 @@ typedef struct
     char          *mem; /**< pointer to allocated memory*/
     unsigned long size; /**< number of bytes [to allocate|allocated]*/
 }char_buf_t;
+
 /**
  * \brief tries to allocate memory for char
  *
@@ -59,7 +60,7 @@ typedef struct
  *  `buffer.mem` is set to NULL. `buffer.size` is 0.
  *
  */
-int get_buffer(char_buf_t & buffer);
+int get_buffer(char_buf_t &buffer);
 
 }/* ----- end of namespace csv2xls ----- */
 

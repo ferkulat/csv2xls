@@ -78,7 +78,7 @@ xls_filename( string wish_name,
     else
     {
         /* take whole wish name for basename and set file type name to 'xls'. */
-	basename.assign(wish_name);
+        basename.assign(wish_name);
       	filetype.assign(".xls");
     }
 

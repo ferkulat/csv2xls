@@ -53,7 +53,8 @@ xls_close(xls_file_t *file)
 }/* ----- end of function xls_close ----- */
 
 void
-xls_append_cell(xls_file_t *file, string label)
+xls_append_cell(xls_file_t *file,
+                string label)
 {
     //ignore columns > XLS_MAX_COLUMNS
     if (XLS_MAX_COLUMNS > file->current_column)
@@ -70,8 +71,8 @@ xls_newline(xls_file_t *file)
 {
     file->current_column = 0;
     file->current_row++;
-    if ( (file->current_row >= file->xls_row_limit)
-            ||(file->current_row >= XLS_MAX_ROWS))
+    if (   (file->current_row >= file->xls_row_limit)
+         ||(file->current_row >= XLS_MAX_ROWS))
     {
         xls_dump_worksheet(file);
     }
@@ -90,11 +91,11 @@ xls_dump_worksheet(xls_file_t *file)
 }/* ----- end of function xls_dump_worksheet ----- */
 
 void
-xls_add_headline(xls_file_t * file)
+xls_add_headline(xls_file_t *file)
 {
          vector<string>::iterator it  = file->headline.begin();
    const vector<string>::iterator end = file->headline.end();
-   for (;it != end;++it )
+   for ( ; it != end; ++it )
    {
        xls_append_cell(file, *it);
    }
