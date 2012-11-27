@@ -11,9 +11,10 @@ automake
 autoconf
 
         -= Compile =-
-
+In my case (arch linux) I have to set prefix for configure.
+ 
 ./bootstrap.sh
-./configure
+./configure --prefix=/usr
 make
         -= Install =-
 
