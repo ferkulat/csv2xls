@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "str2ulong.hpp"
+#define BASE 10
 namespace csv2xls
 {
 
@@ -33,7 +34,7 @@ str2ulong(const char *str,
 {
     char *endptr;
     errno = 0;
-    num = strtoul(str, &endptr,10);
+    num = strtoul(str, &endptr, BASE);
     if (   ((errno == ERANGE) && (num == ULONG_MAX ))
         || ((errno != 0     ) && (num == 0         ))  )
     {

@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <strings.h>
+#include <libgen.h>
 
 namespace csv2xls
 {
@@ -74,7 +75,7 @@ print_help(char*executable)
                        << "\tDefaults to " << DEFAULT_XLS_MAX_LINES << "." << endl
                        << "\tMaximum value: " << DEFAULT_XLS_MAX_LINES << "."
                        << "\tMinimum value: " << 2 << "."
-                      << endl << endl;
+                       << endl << endl;
 
     cout << "-o name"  << "\tSet output file name to \'name\'. If this option is"
                        << " not set," << endl
@@ -92,7 +93,7 @@ print_help(char*executable)
                        << " Maximum value: " << MAX_XLS_DIGIT_COUNT << "."
                        << endl << endl;
     cout << "-v"       << "\tPrint version and exit" << endl;
-    
+
 
 }/* -----  end of function print_help  ----- */
 
@@ -164,7 +165,28 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
    opts.csv_file_name.assign(argv[optind]);
    if (opts.xls_file_name.empty())
    {
-       opts.xls_file_name.assign(argv[optind]);
+       char *output_name = NULL;
+
+       if (NULL != (output_name = basename(argv[optind])))
+       {
+           opts.xls_file_name.assign(output_name);
+       }
+       else
+       {
+           cerr << "Error determnining output file name" << endl;
+           return 0;
+       }
+   }
+   else
+   {   /* If output file name ends with '\' or '/' it is a directory.
+        * We construct output path from this directory and basename of input file
+        */
+       char lastchar = opts.xls_file_name[opts.xls_file_name.size()-1];
+       if (    ( '/' == lastchar) /* *nix */
+             ||('\\' == lastchar) /* windows */ )
+       {
+           opts.xls_file_name.append(basename(argv[optind]));
+       }
    }
    return 1;
 }/* -----  end of function parse_commandline  ----- */

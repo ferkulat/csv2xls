@@ -69,8 +69,8 @@ parsecmd_init(cmd_opts_t &opts);
  */
 int
 parse_commandline(cmd_opts_t &opts,
-                      int argc,
-                      char**argv);
+                         int argc,
+                        char **argv);
 
 void
 print_help(char*executable);

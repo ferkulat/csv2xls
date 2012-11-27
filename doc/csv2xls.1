@@ -1,7 +1,7 @@
 .TH csv2xls 1 2012-10-03
-.SH NAME 
+.SH NAME
 csv2xls
-.SH SYNOPSIS 
+.SH SYNOPSIS
 csv2xls [OPTIONS] INPUT_FILE
 .SH DESCRIPTION
 Reads csv file INPUT_FILE and writes its contents into one or several Excel(TM) file(s).
@@ -23,7 +23,7 @@ produced Excel(TM) file.
 .TP 7
 \fB-l N\fP
 break xls output into files with maximum N lines.
-Maximum value and default value is 65536. 
+Maximum value and default value is 65536.
 Starting with the second file the file name will be expanded with a number.
 Minimum value is 2.
 .TP 7
@@ -57,5 +57,5 @@ Like before but sets DEFAULT_MAX_LINES to 200.
 \fBcsv2xls -o addresses.xls data.csv\fP
 results into addresses.xls.
 If data.csv has more than DEFAULT_MAX_LINES the result will be addresses.xls and addresses0001.xls.
- 
- 
+
+

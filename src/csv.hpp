@@ -36,6 +36,7 @@ typedef struct
     struct csv_parser  csv_file_parser; /** < the parser */
     char               tab_delimter;
 }csv_file_t;
+
 /**
  * \brief hides some low lowlevel of libcsv
  *

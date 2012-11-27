@@ -22,3 +22,5 @@ stamp-h1
 testing/.deps/
 testing/Makefile
 testing/Makefile.in
+testing/TestMain
+src/.dirstamp

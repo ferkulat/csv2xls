@@ -1,0 +1,21 @@
+
+=========== Building ==============
+
+
+	-= Prequisites =-
+
+xlslib: http://sourceforge.net/projects/xlslib/
+libcsv: http://sourceforge.net/projects/libcsv/
+
+automake
+autoconf
+
+        -= Compile =-
+In my case (arch linux) I have to set prefix for configure.
+ 
+./bootstrap.sh
+./configure --prefix=/usr
+make
+        -= Install =-
+
+make install

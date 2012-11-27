@@ -7,6 +7,7 @@ csv2xls_SOURCES = csv2xls.cpp  \
 		  csv.hpp csv.cpp \
 		  memory.hpp memory.cpp \
 		  str2ulong.hpp str2ulong.cpp \
+		  callback.hpp callback.cpp \
 		  version.h
 
 ## depending on your configuration, you will have to uncomment
