@@ -1,4 +1,4 @@
-AC_INIT([csv2xls], [0.3], [Marcel.Schneider@coopmasters.de])
+AC_INIT([csv2xls], [0.3.1], [Marcel.Schneider@coopmasters.de])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AC_PROG_CXX
 #AM_PROG_AR

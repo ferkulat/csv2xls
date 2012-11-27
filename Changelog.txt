@@ -1,3 +1,8 @@
+Date:    Di 27. Nov 20:24:25 CET 2012
+Version: 0.3.1
+    * allow directory as output path
+    * Issue #3: write output files into current working directory
+
 Date:    Sa 17. Nov 23:18:35 CET 2012
 Version: 0.3
     * options: added option -v to show program version
