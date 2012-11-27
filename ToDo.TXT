@@ -1,0 +1,13 @@
+Here are some topics where I need a hand.
+If you have done something from this list, let me know.
+
+- project files for MS Visual Studio Express
+- cmake files
+- package scripts for linux distributions or other OS
+  + Debian
+  + redhat
+  + ubuntu
+  + Mint
+  + ...
+- check compiling for 64 Bit
+- check compilling with other compiler than gcc and mingw

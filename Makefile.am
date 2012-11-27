@@ -5,7 +5,8 @@ if COND_TESTS
 endif
 SUBDIRS = src  doc $(MAYBE_TESTS)
 
-EXTRA_DIST = README.TXT LICENSE.TXT mingwbuild.sh Changelog.txt bootstrap.sh
+EXTRA_DIST = README.TXT LICENSE.TXT mingwbuild.sh Changelog.txt \
+	     bootstrap.sh INSTALL.TXT ToDo.TXT
 
 clean-local:
 	rm -rf doc/html doc/latex

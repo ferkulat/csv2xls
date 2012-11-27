@@ -1,0 +1,20 @@
+
+=========== Building ==============
+
+
+	-= Prequisites =-
+
+xlslib: http://sourceforge.net/projects/xlslib/
+libcsv: http://sourceforge.net/projects/libcsv/
+
+automake
+autoconf
+
+        -= Compile =-
+
+./bootstrap.sh
+./configure
+make
+        -= Install =-
+
+make install
