@@ -24,14 +24,16 @@
 
 #ifndef XLSFILE_HPP
 #define XLSFILE_HPP
-#include <xlslib/common/xlconfig.h>
-#include <xlslib/common/xlsys.h>
-#include <xlslib/common/xlstypes.h>
-#include <xlslib/xlslib.h>
 
 #include <string>
 #include <vector>
 #include <stdint.h>
+
+namespace xlslib_core
+{
+    class workbook;
+    class worksheet;
+}
 
 namespace csv2xls
 {

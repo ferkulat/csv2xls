@@ -15,7 +15,8 @@ TestMain_SOURCES = ../src/filename.hpp ../src/filename.cpp \
 			../src/str2ulong.hpp ../src/str2ulong.cpp \
 			str2ulongTest.hpp str2ulongTest.cpp \
 			TestMain.cpp
-TestMain_CXXFLAGS=$(CPPUNIT_CFLAGS) -Wall -Werror -I${includedir}/xlslib
+TestMain_CXXFLAGS=$(CPPUNIT_CFLAGS) -Wall -Werror \
+		  -I${includedir}/xlslib -I${includedir} -I${includedir}/cppunit
 TestMain_LDFLAGS=$(CPPUNIT_LIBS)
-TestMain_LDADD=-lcppunit -ldl -lxls
+TestMain_LDADD=-L${libdir} -lcppunit -ldl -lxls
 TestMain_CFLAGS = @CHECK_CFLAGS@
