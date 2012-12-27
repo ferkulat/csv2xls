@@ -12,7 +12,7 @@ csv2xls is a command line utility which converts csv files into one
 
 	-= Limitations =-
 
-- produces only Excel(TM) 97/2000/XP/2003
+- produces only Excel(TM) 97/2000/XP/2003 files
 - no cell formatting, just plain text
 
     -= Prequisites =-
@@ -20,13 +20,11 @@ csv2xls is a command line utility which converts csv files into one
 xlslib: http://sourceforge.net/projects/xlslib/
 libcsv: http://sourceforge.net/projects/libcsv/
 
-automake
-autoconf
-
 =========== Documentaion ==============
 
 Print help:  csv2xls -h
 manual page: man csv2xls
+https://github.com/ferkulat/csv2xls/wiki
 
 =========== How to contribute ==============
 
