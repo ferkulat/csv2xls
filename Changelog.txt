@@ -1,3 +1,8 @@
+Date:    Do 27. Dez 00:57:36 CET 2012
+Version: 0.3.2
+    * build: remove automake as dependency
+    * build: native on Windows (MinGW) works now
+
 Date:    Di 27. Nov 20:24:25 CET 2012
 Version: 0.3.1
     * allow directory as output path
