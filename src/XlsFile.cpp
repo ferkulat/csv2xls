@@ -20,6 +20,7 @@
  * MA  02110-1301  USA
  */
 #include "XlsFile.hpp"
+#include "xlslib.hpp"
 #include "filename.hpp"
 
 namespace csv2xls
