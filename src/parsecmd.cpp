@@ -28,6 +28,7 @@
 #include <iostream>
 #include <strings.h>
 #include <libgen.h>
+#include "../config.h"
 
 namespace csv2xls
 {
@@ -46,7 +47,7 @@ parsecmd_init(cmd_opts_t &opts)
 void
 print_version(char*executable)
 {
-    cout << executable << VERSION << endl;
+    cout  << PACKAGE_STRING << endl;
 }
 
 void
