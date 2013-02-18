@@ -17,3 +17,4 @@ rm src/Makefile
 rm cppUnit/Makefile.in
 rm cppUnit/Makefile
 rm -rf doc/html doc/latex doc/Makefile doc/Makefile.in
+rm -f test-driver 

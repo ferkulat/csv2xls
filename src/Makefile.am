@@ -8,7 +8,8 @@ csv2xls_SOURCES = csv2xls.cpp  \
 		  memory.hpp memory.cpp \
 		  str2ulong.hpp str2ulong.cpp \
 		  callback.hpp callback.cpp \
-		  version.h xlslib.hpp
+		  version.h xlslib.hpp \
+		  workbook.hpp xls_workbook.hpp xls_workbook.cpp
 
 ## depending on your configuration, you will have to uncomment
 ## the next line to cross compile with mingw
