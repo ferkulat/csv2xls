@@ -154,7 +154,7 @@ make_2_sheets_out_of_8_inputlines_with_headline(void)
     CPPUNIT_ASSERT (  1 == test_workbook->called_clear_sheet );
     CPPUNIT_ASSERT ( (INPUT_ROWS + HEADLINE)* INPUT_COLUMNS
                         == test_workbook->called_label );
-    
+
     CPPUNIT_ASSERT (  1 == test_workbook->called_write_to_file );
     CPPUNIT_ASSERT (  0 == xls_file.current_column );
     CPPUNIT_ASSERT (  INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET

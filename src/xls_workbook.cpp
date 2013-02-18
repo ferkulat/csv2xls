@@ -16,7 +16,7 @@ xls_workbook::
 {
     delete(this->wbook);
     this->wbook = NULL;
-    
+
 }
 
 void
@@ -27,11 +27,11 @@ clear_sheet(const std::string& sheetname)
    {
        delete(this->wbook);
        this->wbook = NULL;
-       
+
    }
    this->wbook  = new xlslib_core::workbook();
    this->wsheet = this->wbook->sheet(sheetname);
-   
+
 }
 
 void
@@ -45,6 +45,6 @@ int
 xls_workbook::
 write_to_file(const std::string& file_name)
 {
-   return wbook->Dump(file_name); 
+   return wbook->Dump(file_name);
 }
 }

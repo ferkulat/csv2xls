@@ -60,7 +60,7 @@ typedef struct
 
 
 /**
- * 
+ *
  * @param file
  */
 void

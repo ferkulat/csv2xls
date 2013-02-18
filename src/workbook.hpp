@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   workbook.hpp
  * Author: eagle
  *
@@ -18,7 +18,7 @@ class workbook
 public:
              workbook(){};
     virtual ~workbook(){};
-    
+
     virtual void clear_sheet(const std::string& sheetname)= 0;
     virtual int  write_to_file(const std::string &file_name) = 0;
     virtual void label(unsigned int row,

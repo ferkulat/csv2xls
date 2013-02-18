@@ -12,16 +12,16 @@ public:
                               called_write_to_file = 0;
                               called_label = 0;  };
     virtual ~dummy_workbook(){};
-    
+
     virtual void clear_sheet(const std::string& sheetname){called_clear_sheet++;}
     virtual int  write_to_file(const std::string &file_name){called_write_to_file++;return 0;}
     virtual void label(unsigned int row,
                        unsigned int col,
-                       const std::string& strlabel){called_label++;} 
+                       const std::string& strlabel){called_label++;}
     int called_clear_sheet;
     int called_write_to_file;
     int called_label;
-        
+
 };
 
 using namespace std;
@@ -38,7 +38,7 @@ class XlsFileTest : public CPPUNIT_NS :: TestFixture
     CPPUNIT_TEST (xls_add_headline_does_nothing_if_headline_is_empty);
     CPPUNIT_TEST (make_2_sheets_out_of_8_inputlines_without_headline);
     CPPUNIT_TEST (make_2_sheets_out_of_8_inputlines_with_headline);
-    
+
 //    CPPUNIT_TEST ();
 
     CPPUNIT_TEST_SUITE_END ();
