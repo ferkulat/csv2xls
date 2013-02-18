@@ -29,10 +29,9 @@
 #include "callback.hpp"
 #include "memory.hpp"
 #include <errno.h>
-
+#include "xls_workbook.hpp"
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
 
 using namespace csv2xls;
@@ -70,9 +69,10 @@ main(int argc, char *argv[])
     xls_out.filename      = options.xls_file_name;
     xls_out.xls_row_limit = options.xls_row_limit;
     xls_out.sheet_name    = options.xls_sheet_name;
-    xls_out.page_number   = 0;
     xls_out.digit_count   = options.xls_digit_count;
-    xls_init(&xls_out);
+    xls_out.wbook         = new xls_workbook();
+    xls_new_sheet(&xls_out);
+    xls_out.page_number   = 0;
 
 
     csv_in.tab_delimter = options.csv_tab_delimiter;
@@ -151,7 +151,8 @@ main(int argc, char *argv[])
     csv_free(&csv_in.csv_file_parser);
 
 
-    xls_close(&xls_out);
+    xls_dump_worksheet(&xls_out);
+    delete(xls_out.wbook);
     free(input_buffer.mem);
     csv_input.close();
     exit(EXIT_SUCCESS);

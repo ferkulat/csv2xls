@@ -66,7 +66,7 @@ am_csv2xls_OBJECTS = csv2xls-csv2xls.$(OBJEXT) \
 	csv2xls-parsecmd.$(OBJEXT) csv2xls-filename.$(OBJEXT) \
 	csv2xls-XlsFile.$(OBJEXT) csv2xls-csv.$(OBJEXT) \
 	csv2xls-memory.$(OBJEXT) csv2xls-str2ulong.$(OBJEXT) \
-	csv2xls-callback.$(OBJEXT)
+	csv2xls-callback.$(OBJEXT) csv2xls-xls_workbook.$(OBJEXT)
 csv2xls_OBJECTS = $(am_csv2xls_OBJECTS)
 csv2xls_DEPENDENCIES =
 AM_V_P = $(am__v_P_@AM_V@)
@@ -233,7 +233,8 @@ csv2xls_SOURCES = csv2xls.cpp  \
 		  memory.hpp memory.cpp \
 		  str2ulong.hpp str2ulong.cpp \
 		  callback.hpp callback.cpp \
-		  version.h xlslib.hpp
+		  version.h xlslib.hpp \
+		  workbook.hpp xls_workbook.hpp xls_workbook.cpp
 
 
 #csv2xls_LDFLAGS = -static
@@ -333,6 +334,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/csv2xls-memory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/csv2xls-parsecmd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/csv2xls-str2ulong.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/csv2xls-xls_workbook.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -459,6 +461,20 @@ csv2xls-callback.obj: callback.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='callback.cpp' object='csv2xls-callback.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(csv2xls_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o csv2xls-callback.obj `if test -f 'callback.cpp'; then $(CYGPATH_W) 'callback.cpp'; else $(CYGPATH_W) '$(srcdir)/callback.cpp'; fi`
+
+csv2xls-xls_workbook.o: xls_workbook.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(csv2xls_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT csv2xls-xls_workbook.o -MD -MP -MF $(DEPDIR)/csv2xls-xls_workbook.Tpo -c -o csv2xls-xls_workbook.o `test -f 'xls_workbook.cpp' || echo '$(srcdir)/'`xls_workbook.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/csv2xls-xls_workbook.Tpo $(DEPDIR)/csv2xls-xls_workbook.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='xls_workbook.cpp' object='csv2xls-xls_workbook.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(csv2xls_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o csv2xls-xls_workbook.o `test -f 'xls_workbook.cpp' || echo '$(srcdir)/'`xls_workbook.cpp
+
+csv2xls-xls_workbook.obj: xls_workbook.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(csv2xls_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT csv2xls-xls_workbook.obj -MD -MP -MF $(DEPDIR)/csv2xls-xls_workbook.Tpo -c -o csv2xls-xls_workbook.obj `if test -f 'xls_workbook.cpp'; then $(CYGPATH_W) 'xls_workbook.cpp'; else $(CYGPATH_W) '$(srcdir)/xls_workbook.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/csv2xls-xls_workbook.Tpo $(DEPDIR)/csv2xls-xls_workbook.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='xls_workbook.cpp' object='csv2xls-xls_workbook.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(csv2xls_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o csv2xls-xls_workbook.obj `if test -f 'xls_workbook.cpp'; then $(CYGPATH_W) 'xls_workbook.cpp'; else $(CYGPATH_W) '$(srcdir)/xls_workbook.cpp'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique

@@ -20,38 +20,29 @@
  * MA  02110-1301  USA
  */
 #include "XlsFile.hpp"
-#include "xlslib.hpp"
+#include "xls_workbook.hpp"
 #include "filename.hpp"
-
+#include <iostream>
 namespace csv2xls
 {
 
-void
-xls_init(xls_file_t *file)
-{
-    file->current_column = 0;
-    file->current_row    = 0;
-    file->wbook          = new xlslib_core::workbook();
 
+void xls_new_sheet(xls_file_t *file)
+{
     if (!file->sheet_name.empty())
     {
-        file->sheet = file->wbook->sheet(file->sheet_name.c_str());
+        file->wbook->clear_sheet(file->sheet_name);
     }
     else
     {
-        file->sheet = file->wbook->sheet("Table 1");
+        file->wbook->clear_sheet("Table 1");
     }
-}/* ----- end of function xls_init ----- */
+    file->current_column = 0;
+    file->current_row    = 0;
+    xls_add_headline(file);
+    file->page_number++;
+}
 
-void
-xls_close(xls_file_t *file)
-{
-    string fname = xls_filename(file->filename,
-                                file->page_number,
-                                file->digit_count);
-    file->wbook->Dump(fname);
-    delete(file->wbook);
-}/* ----- end of function xls_close ----- */
 
 void
 xls_append_cell(xls_file_t *file,
@@ -60,7 +51,7 @@ xls_append_cell(xls_file_t *file,
     //ignore columns > XLS_MAX_COLUMNS
     if (XLS_MAX_COLUMNS > file->current_column)
     {
-        file->sheet->label(file->current_row,
+        file->wbook->label(file->current_row,
                            file->current_column,
                            label);
         file->current_column++;
@@ -76,31 +67,32 @@ xls_newline(xls_file_t *file)
          ||(file->current_row >= XLS_MAX_ROWS))
     {
         xls_dump_worksheet(file);
+        xls_new_sheet(file);
     }
 }/* ----- end of function xls_newline ----- */
 
 void
 xls_dump_worksheet(xls_file_t *file)
 {
-    xls_close(file);
-    file->page_number++;
-    xls_init(file);
-    if (file->headline.size())
-    {
-        xls_add_headline(file);
-    }
+    string fname = xls_filename(file->filename,
+                                file->page_number,
+                                file->digit_count);
+    file->wbook->write_to_file(fname);
 }/* ----- end of function xls_dump_worksheet ----- */
 
 void
 xls_add_headline(xls_file_t *file)
 {
-         vector<string>::iterator it  = file->headline.begin();
-   const vector<string>::iterator end = file->headline.end();
-   for ( ; it != end; ++it )
-   {
-       xls_append_cell(file, *it);
-   }
-   xls_newline(file);
+    if (file->headline.size())
+    {
+              vector<string>::iterator it  = file->headline.begin();
+        const vector<string>::iterator end = file->headline.end();
+        for ( ; it != end; ++it )
+        {
+           xls_append_cell(file, *it);
+        }
+        xls_newline(file);
+    }
 }/* ----- end of function xls_add_headline ----- */
 
 }/* ---- end of namespace csv2xls ---- */

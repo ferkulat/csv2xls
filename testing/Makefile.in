@@ -70,7 +70,9 @@ am_TestMain_OBJECTS = ../src/TestMain-filename.$(OBJEXT) \
 	../src/TestMain-parsecmd.$(OBJEXT) \
 	TestMain-parsecmdTest.$(OBJEXT) \
 	../src/TestMain-str2ulong.$(OBJEXT) \
-	TestMain-str2ulongTest.$(OBJEXT) TestMain-TestMain.$(OBJEXT)
+	TestMain-str2ulongTest.$(OBJEXT) \
+	../src/TestMain-XlsFile.$(OBJEXT) \
+	TestMain-XlsFileTest.$(OBJEXT) TestMain-TestMain.$(OBJEXT)
 TestMain_OBJECTS = $(am_TestMain_OBJECTS)
 TestMain_DEPENDENCIES =
 TestMain_LINK = $(CXXLD) $(TestMain_CXXFLAGS) $(CXXFLAGS) \
@@ -443,13 +445,15 @@ TestMain_SOURCES = ../src/filename.hpp ../src/filename.cpp \
 			parsecmdTest.hpp parsecmdTest.cpp \
 			../src/str2ulong.hpp ../src/str2ulong.cpp \
 			str2ulongTest.hpp str2ulongTest.cpp \
+			../src/XlsFile.hpp ../src/XlsFile.cpp \
+			XlsFileTest.hpp XlsFileTest.cpp \
 			TestMain.cpp
 
 TestMain_CXXFLAGS = $(CPPUNIT_CFLAGS) -Wall -Werror \
-		  -I${includedir}/xlslib -I${includedir} -I${includedir}/cppunit
+		   -I${includedir} -I${includedir}/cppunit
 
 TestMain_LDFLAGS = $(CPPUNIT_LIBS)
-TestMain_LDADD = -L${libdir} -lcppunit -ldl -lxls
+TestMain_LDADD = -L${libdir} -lcppunit -ldl
 TestMain_CFLAGS = @CHECK_CFLAGS@
 all: all-am
 
@@ -500,6 +504,8 @@ clean-noinstPROGRAMS:
 	../src/$(DEPDIR)/$(am__dirstamp)
 ../src/TestMain-str2ulong.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
+../src/TestMain-XlsFile.$(OBJEXT): ../src/$(am__dirstamp) \
+	../src/$(DEPDIR)/$(am__dirstamp)
 TestMain$(EXEEXT): $(TestMain_OBJECTS) $(TestMain_DEPENDENCIES) $(EXTRA_TestMain_DEPENDENCIES) 
 	@rm -f TestMain$(EXEEXT)
 	$(AM_V_CXXLD)$(TestMain_LINK) $(TestMain_OBJECTS) $(TestMain_LDADD) $(LIBS)
@@ -511,10 +517,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/TestMain-XlsFile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/TestMain-filename.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/TestMain-parsecmd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/TestMain-str2ulong.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestMain-TestMain.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestMain-XlsFileTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestMain-filenameTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestMain-parsecmdTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestMain-str2ulongTest.Po@am__quote@
@@ -618,6 +626,34 @@ TestMain-str2ulongTest.obj: str2ulongTest.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='str2ulongTest.cpp' object='TestMain-str2ulongTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -c -o TestMain-str2ulongTest.obj `if test -f 'str2ulongTest.cpp'; then $(CYGPATH_W) 'str2ulongTest.cpp'; else $(CYGPATH_W) '$(srcdir)/str2ulongTest.cpp'; fi`
+
+../src/TestMain-XlsFile.o: ../src/XlsFile.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -MT ../src/TestMain-XlsFile.o -MD -MP -MF ../src/$(DEPDIR)/TestMain-XlsFile.Tpo -c -o ../src/TestMain-XlsFile.o `test -f '../src/XlsFile.cpp' || echo '$(srcdir)/'`../src/XlsFile.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/TestMain-XlsFile.Tpo ../src/$(DEPDIR)/TestMain-XlsFile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/XlsFile.cpp' object='../src/TestMain-XlsFile.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -c -o ../src/TestMain-XlsFile.o `test -f '../src/XlsFile.cpp' || echo '$(srcdir)/'`../src/XlsFile.cpp
+
+../src/TestMain-XlsFile.obj: ../src/XlsFile.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -MT ../src/TestMain-XlsFile.obj -MD -MP -MF ../src/$(DEPDIR)/TestMain-XlsFile.Tpo -c -o ../src/TestMain-XlsFile.obj `if test -f '../src/XlsFile.cpp'; then $(CYGPATH_W) '../src/XlsFile.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/XlsFile.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/TestMain-XlsFile.Tpo ../src/$(DEPDIR)/TestMain-XlsFile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/XlsFile.cpp' object='../src/TestMain-XlsFile.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -c -o ../src/TestMain-XlsFile.obj `if test -f '../src/XlsFile.cpp'; then $(CYGPATH_W) '../src/XlsFile.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/XlsFile.cpp'; fi`
+
+TestMain-XlsFileTest.o: XlsFileTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -MT TestMain-XlsFileTest.o -MD -MP -MF $(DEPDIR)/TestMain-XlsFileTest.Tpo -c -o TestMain-XlsFileTest.o `test -f 'XlsFileTest.cpp' || echo '$(srcdir)/'`XlsFileTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/TestMain-XlsFileTest.Tpo $(DEPDIR)/TestMain-XlsFileTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='XlsFileTest.cpp' object='TestMain-XlsFileTest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -c -o TestMain-XlsFileTest.o `test -f 'XlsFileTest.cpp' || echo '$(srcdir)/'`XlsFileTest.cpp
+
+TestMain-XlsFileTest.obj: XlsFileTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -MT TestMain-XlsFileTest.obj -MD -MP -MF $(DEPDIR)/TestMain-XlsFileTest.Tpo -c -o TestMain-XlsFileTest.obj `if test -f 'XlsFileTest.cpp'; then $(CYGPATH_W) 'XlsFileTest.cpp'; else $(CYGPATH_W) '$(srcdir)/XlsFileTest.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/TestMain-XlsFileTest.Tpo $(DEPDIR)/TestMain-XlsFileTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='XlsFileTest.cpp' object='TestMain-XlsFileTest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -c -o TestMain-XlsFileTest.obj `if test -f 'XlsFileTest.cpp'; then $(CYGPATH_W) 'XlsFileTest.cpp'; else $(CYGPATH_W) '$(srcdir)/XlsFileTest.cpp'; fi`
 
 TestMain-TestMain.o: TestMain.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(TestMain_CXXFLAGS) $(CXXFLAGS) -MT TestMain-TestMain.o -MD -MP -MF $(DEPDIR)/TestMain-TestMain.Tpo -c -o TestMain-TestMain.o `test -f 'TestMain.cpp' || echo '$(srcdir)/'`TestMain.cpp
