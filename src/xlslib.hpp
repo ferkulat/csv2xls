@@ -22,11 +22,6 @@
  * MA  02110-1301  USA *
  */
 
-/*
- * The original xlslib.h has not this kind of protection against multiple
- * include.
- * So we make it here.
- * */
 #ifndef XLSLIB_HPP
 #define XLSLIB_HPP
 #include <xlslib.h>

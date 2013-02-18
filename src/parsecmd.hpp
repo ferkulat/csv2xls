@@ -1,4 +1,6 @@
 /*
+ * @file parsecmd.hpp
+ *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
  *
