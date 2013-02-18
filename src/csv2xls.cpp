@@ -153,6 +153,7 @@ main(int argc, char *argv[])
 
     xls_close(&xls_out);
     free(input_buffer.mem);
+    csv_input.close();
     exit(EXIT_SUCCESS);
 
 }/* ----- end of function main ----- */

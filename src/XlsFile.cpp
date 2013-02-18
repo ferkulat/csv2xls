@@ -50,7 +50,7 @@ xls_close(xls_file_t *file)
                                 file->page_number,
                                 file->digit_count);
     file->wbook->Dump(fname);
-    file->wbook->~workbook();
+    delete(file->wbook);
 }/* ----- end of function xls_close ----- */
 
 void
