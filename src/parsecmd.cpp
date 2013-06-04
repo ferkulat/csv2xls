@@ -110,7 +110,6 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
     {
         return 0;
     }
-    optind = 0;
     int opt;
     int converted = 0 ;
     while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:v")) != -1)

@@ -28,6 +28,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "../src/parsecmd.hpp"
+#include <wordexp.h>
 
 using namespace std;
 using namespace csv2xls;
@@ -36,10 +37,13 @@ class parsecmdTest : public CPPUNIT_NS :: TestFixture
     CPPUNIT_TEST_SUITE (parsecmdTest);
 
     CPPUNIT_TEST (no_options);
+    CPPUNIT_TEST (no_options_subdir);
+    CPPUNIT_TEST (no_options_absolute_path);
+    CPPUNIT_TEST (output_dir_absolute);
+    CPPUNIT_TEST (output_dir_relative);
     CPPUNIT_TEST (line_limit_0);
     CPPUNIT_TEST (line_limit_1);
     CPPUNIT_TEST (line_limit_2);
-    CPPUNIT_TEST (output_dir);
 
     CPPUNIT_TEST_SUITE_END ();
 
@@ -49,13 +53,17 @@ class parsecmdTest : public CPPUNIT_NS :: TestFixture
 
     protected:
         void no_options (void);
+        void no_options_subdir (void);
+        void no_options_absolute_path(void);
+        void output_dir_absolute(void);
+        void output_dir_relative(void);
         void line_limit_0 (void);
         void line_limit_1 (void);
         void line_limit_2 (void);
-        void output_dir(void);
     private:
 	cmd_opts_t opts;
         void print_argv(int ,char**);
+        wordexp_t args;
 };
 
 #endif
