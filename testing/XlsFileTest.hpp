@@ -60,6 +60,8 @@ class XlsFileTest : public CPPUNIT_NS :: TestFixture
     CPPUNIT_TEST (xls_add_headline_does_nothing_if_headline_is_empty);
     CPPUNIT_TEST (make_2_sheets_out_of_8_inputlines_without_headline);
     CPPUNIT_TEST (make_2_sheets_out_of_8_inputlines_with_headline);
+    CPPUNIT_TEST (make_2x4_lines_sheets_out_of_8_inputlines_without_headline);
+    CPPUNIT_TEST (make_3x2_lines_sheets_out_of_4_inputlines_with_headline);
 
 //    CPPUNIT_TEST ();
 
@@ -78,12 +80,15 @@ class XlsFileTest : public CPPUNIT_NS :: TestFixture
         void xls_add_headline_does_nothing_if_headline_is_empty(void);
         void make_2_sheets_out_of_8_inputlines_without_headline(void);
         void make_2_sheets_out_of_8_inputlines_with_headline(void);
+        void make_2x4_lines_sheets_out_of_8_inputlines_without_headline(void);
+        void make_3x2_lines_sheets_out_of_4_inputlines_with_headline(void);
 
   //        void  (void);
     private:
     private:
         csv2xls::xls_file_t xls_file;
         dummy_workbook *test_workbook;
+        void read_CSV_into(csv2xls::xls_file_t *xlsfile,int row_count, int column_count);
 };
 
 #endif

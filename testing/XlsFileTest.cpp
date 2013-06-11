@@ -42,7 +42,7 @@ void
 XlsFileTest::
 tearDown()
 {
-    xls_file.wbook->~workbook();
+    delete xls_file.wbook;
 }
 
 void
@@ -130,50 +130,32 @@ make_2_sheets_out_of_8_inputlines_without_headline(void)
     #define LINE_LIMIT_PER_SHEET 5
 
     xls_file.xls_row_limit  = LINE_LIMIT_PER_SHEET;
-    for(int row = 0; row < INPUT_ROWS; row++)
-    {
-        for(int col = 0; col < INPUT_COLUMNS; col++)
-        {
-            csv2xls::xls_append_cell(&xls_file, "lol");
-        }
-        csv2xls::xls_newline(&xls_file);
-    }
+    read_CSV_into(&xls_file,INPUT_ROWS,INPUT_COLUMNS);
+    
     CPPUNIT_ASSERT ( 1 == test_workbook->called_clear_sheet );
     CPPUNIT_ASSERT ( INPUT_ROWS * INPUT_COLUMNS == test_workbook->called_label );
     CPPUNIT_ASSERT ( 1 == test_workbook->called_write_to_file );
     CPPUNIT_ASSERT ( 0 == xls_file.current_column );
-    CPPUNIT_ASSERT ( INPUT_ROWS - LINE_LIMIT_PER_SHEET == xls_file.current_row );
+
+    #undef INPUT_COLUMNS
+    #undef INPUT_ROWS
+    #undef LINE_LIMIT_PER_SHEET
 }
 
 void
 XlsFileTest::
 make_2_sheets_out_of_8_inputlines_with_headline(void)
 {
-    #define INPUT_COLUMNS 3
-    #define INPUT_ROWS    8
-    #define HEADLINE      1
-    #define LINE_LIMIT_PER_SHEET 5
+    #define INPUT_COLUMNS         3
+    #define INPUT_ROWS            8
+    #define HEADLINE              1
+    #define LINE_LIMIT_PER_SHEET  5
 
     std::vector<string>tmp(INPUT_COLUMNS,"head");
     xls_file.headline = tmp;
     xls_file.xls_row_limit  = LINE_LIMIT_PER_SHEET;
 
-    std::vector<string>::iterator first = xls_file.headline.begin();
-    std::vector<string>::iterator last  = xls_file.headline.end();
-    for(; first != last; first++)
-    {
-        csv2xls::xls_append_cell(&xls_file, *first);
-    }
-    csv2xls::xls_newline(&xls_file);
-
-    for(int row = 0; row< (INPUT_ROWS - HEADLINE) ; row++)
-    {
-        for(int col = 0; col < INPUT_COLUMNS; col++)
-        {
-            csv2xls::xls_append_cell(&xls_file, "lol");
-        }
-        csv2xls::xls_newline(&xls_file);
-    }
+    read_CSV_into(&xls_file,INPUT_ROWS,INPUT_COLUMNS);
     CPPUNIT_ASSERT (  1 == test_workbook->called_clear_sheet );
     CPPUNIT_ASSERT ( (INPUT_ROWS + HEADLINE)* INPUT_COLUMNS
                         == test_workbook->called_label );
@@ -182,4 +164,67 @@ make_2_sheets_out_of_8_inputlines_with_headline(void)
     CPPUNIT_ASSERT (  0 == xls_file.current_column );
     CPPUNIT_ASSERT (  INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET
                         == xls_file.current_row );
+    #undef INPUT_COLUMNS
+    #undef INPUT_ROWS
+    #undef HEADLINE
+    #undef LINE_LIMIT_PER_SHEET
+}
+
+void
+XlsFileTest::
+make_2x4_lines_sheets_out_of_8_inputlines_without_headline(void)
+{
+    #define INPUT_COLUMNS        3
+    #define INPUT_ROWS           8
+    #define LINE_LIMIT_PER_SHEET 4
+
+    xls_file.xls_row_limit  = LINE_LIMIT_PER_SHEET;
+    read_CSV_into(&xls_file,INPUT_ROWS,INPUT_COLUMNS);
+    csv2xls::xls_dump_worksheet(&xls_file);
+
+    CPPUNIT_ASSERT ( 2 == test_workbook->called_write_to_file );
+
+    #undef INPUT_COLUMNS
+    #undef INPUT_ROWS
+    #undef LINE_LIMIT_PER_SHEET
+}
+
+void
+XlsFileTest::
+make_3x2_lines_sheets_out_of_4_inputlines_with_headline(void)
+{
+    #define INPUT_COLUMNS        3
+    #define INPUT_ROWS           4
+    #define HEADLINE             1
+    #define LINE_LIMIT_PER_SHEET 2
+
+    std::vector<string>tmp(INPUT_COLUMNS,"head");
+    xls_file.headline = tmp;
+    xls_file.xls_row_limit  = LINE_LIMIT_PER_SHEET;
+    
+    read_CSV_into(&xls_file,INPUT_ROWS,INPUT_COLUMNS);
+    csv2xls::xls_dump_worksheet(&xls_file);
+
+    CPPUNIT_ASSERT ( 3 == test_workbook->called_write_to_file );
+
+    #undef INPUT_COLUMNS
+    #undef INPUT_ROWS
+    #undef HEADLINE
+    #undef LINE_LIMIT_PER_SHEET
+
+}
+
+void 
+XlsFileTest::
+read_CSV_into(csv2xls::xls_file_t *xlsfile,int row_count, int column_count)
+{
+    for(int row = 0; row < row_count; row++)
+    {
+        for(int col = 0; col < column_count; col++)
+        {
+            csv2xls::xls_append_cell(xlsfile, "lol");
+        }
+        csv2xls::xls_newline(xlsfile);
+    }
+
 }

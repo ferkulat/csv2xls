@@ -76,6 +76,16 @@ xls_newline(xls_file_t *file)
 void
 xls_dump_worksheet(xls_file_t *file)
 {
+    //Don't dump an empty sheet or a sheet with just the head line
+    if (       (file->current_column == 0    )
+            && (
+                  (file->headline.size() && file->current_row == 1)
+                ||(file->current_row == 0)
+               )
+       )
+    {
+        return;
+    }
     string fname = xls_filename(file->filename,
                                 file->page_number,
                                 file->digit_count);
