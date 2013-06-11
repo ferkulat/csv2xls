@@ -1,4 +1,6 @@
 /*
+ * @file filename.hpp
+ *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
  *
@@ -41,5 +43,5 @@ std::string
 xls_filename( std::string wish_name,
               unsigned long count,   /** the number added to file name */
               unsigned long digits );/** minimum digits of the number  */
-                        
+
 } /* ----- end of namespace csv2xls ----- */

@@ -1,4 +1,6 @@
 /*
+ * @file parsecmd.cpp
+ *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
  *
@@ -26,6 +28,7 @@
 #include <iostream>
 #include <strings.h>
 #include <libgen.h>
+#include "../config.h"
 
 namespace csv2xls
 {
@@ -44,7 +47,7 @@ parsecmd_init(cmd_opts_t &opts)
 void
 print_version(char*executable)
 {
-    cout << executable << VERSION << endl;
+    cout  << PACKAGE_STRING << endl;
 }
 
 void
@@ -107,7 +110,6 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
     {
         return 0;
     }
-    optind = 0;
     int opt;
     int converted = 0 ;
     while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:v")) != -1)

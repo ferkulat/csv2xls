@@ -50,7 +50,7 @@ csv_cb_headline_field(void   *s,
 {
     char       *csv_field = (char*)s;
     xls_file_t *xls_file  = (xls_file_t*)data;
-    
+
     if (XLS_MAX_COLUMNS >= xls_file->headline.size())
     {
         #if  CSV_MAJOR < 3

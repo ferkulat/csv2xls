@@ -1,4 +1,6 @@
 /*
+ * @file parsecmd.hpp
+ *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
  *
@@ -22,7 +24,6 @@
 
 #ifndef PARSECMD_HPP
 #define PARSECMD_CPP
-#include "version.h"
 #include <string>
 #include <limits.h>
 #include "str2ulong.hpp"

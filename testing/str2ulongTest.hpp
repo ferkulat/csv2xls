@@ -12,7 +12,7 @@ class str2ulongTest : public CPPUNIT_NS :: TestFixture
 {
     CPPUNIT_TEST_SUITE (str2ulongTest);
 
-    CPPUNIT_TEST (negative_value);
+    CPPUNIT_TEST (fails_on_negative_value);
     CPPUNIT_TEST (max_value);
 
     CPPUNIT_TEST_SUITE_END ();
@@ -22,7 +22,7 @@ class str2ulongTest : public CPPUNIT_NS :: TestFixture
         void tearDown (void);
 
     protected:
-        void negative_value (void);
+        void fails_on_negative_value (void);
         void max_value (void);
     private:
 	string inputstring;

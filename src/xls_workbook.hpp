@@ -1,5 +1,5 @@
 /**
- * @file filenameTest.cpp
+ * @file xls_workbook.hpp
  *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
@@ -21,35 +21,32 @@
  * Boston
  * MA  02110-1301  USA *
  */
-#ifndef FILENAME_TEST_H
-#define FILENAME_TEST_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include "../src/filename.hpp"
-
-using namespace std;
-
-class filenameTest : public CPPUNIT_NS :: TestFixture
+#include "workbook.hpp"
+namespace xlslib_core
 {
-    CPPUNIT_TEST_SUITE (filenameTest);
+    class workbook;
+    class worksheet;
+}
 
-    CPPUNIT_TEST (no_xls_ending);
-    CPPUNIT_TEST (with_xls_ending);
-    CPPUNIT_TEST (numbering);
 
-    CPPUNIT_TEST_SUITE_END ();
+namespace csv2xls
+{
 
-    public:
-        void setUp (void);
-        void tearDown (void);
+class xls_workbook:public workbook
+{
+public:
+             xls_workbook();
+    virtual ~xls_workbook();
 
-    protected:
-        void no_xls_ending (void);
-        void with_xls_ending (void);
-        void numbering (void);
-    private:
-	string inputfilename;
+    virtual void clear_sheet(const std::string& sheetname);
+    virtual int  write_to_file(const std::string &file_name);
+    virtual void label(unsigned int  row,
+                       unsigned int  col,
+                       const std::string& strlabel);
+private:
+    xlslib_core::workbook  *wbook;
+    xlslib_core::worksheet *wsheet;
+
 };
-
-#endif
+}

@@ -29,6 +29,8 @@
 #include <vector>
 #include <stdint.h>
 
+#include "workbook.hpp"
+
 namespace xlslib_core
 {
     class workbook;
@@ -39,7 +41,6 @@ namespace csv2xls
 {
 #define XLS_MAX_ROWS    65536U
 #define XLS_MAX_COLUMNS 256U
-using namespace xlslib_core;
 using namespace std;
 /**
  * \brief information about xls file to be passed to csv call back functions
@@ -49,7 +50,6 @@ typedef struct
   unsigned long  current_column;
   unsigned long  current_row;
   workbook       *wbook ;
-  worksheet      *sheet;
   unsigned long  page_number;
   unsigned long  xls_row_limit;
   unsigned long  digit_count;
@@ -57,6 +57,14 @@ typedef struct
   string         filename;
   vector<string> headline;
 }xls_file_t;
+
+
+/**
+ *
+ * @param file
+ */
+void
+xls_new_sheet(xls_file_t *file);
 
 /**
  * \brief Set some parameters for the xls output file.
@@ -77,14 +85,6 @@ typedef struct
 void
 xls_init(xls_file_t *file);
 
-/**
- * \brief Dumps the xls data to disk and destruct xls data.
- *
- * @param xlsfile
- * Pointer to the struct which holds the information of the xls data.
- */
-void
-xls_close(xls_file_t *xlsfile);
 
 /**
  * \brief Write into the current xls data cell

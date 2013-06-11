@@ -1,5 +1,5 @@
 /**
- * @file filenameTest.cpp
+ * @file xls_workbook.cpp
  *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
@@ -21,35 +21,54 @@
  * Boston
  * MA  02110-1301  USA *
  */
-#ifndef FILENAME_TEST_H
-#define FILENAME_TEST_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include "../src/filename.hpp"
+#include "xls_workbook.hpp"
+#include "xlslib.hpp"
 
-using namespace std;
-
-class filenameTest : public CPPUNIT_NS :: TestFixture
+namespace csv2xls
 {
-    CPPUNIT_TEST_SUITE (filenameTest);
 
-    CPPUNIT_TEST (no_xls_ending);
-    CPPUNIT_TEST (with_xls_ending);
-    CPPUNIT_TEST (numbering);
+xls_workbook::
+xls_workbook()
+{
+    this->wbook  = NULL;
+    this->wsheet = NULL;
+}
 
-    CPPUNIT_TEST_SUITE_END ();
+xls_workbook::
+~xls_workbook()
+{
+    delete(this->wbook);
+    this->wbook = NULL;
 
-    public:
-        void setUp (void);
-        void tearDown (void);
+}
 
-    protected:
-        void no_xls_ending (void);
-        void with_xls_ending (void);
-        void numbering (void);
-    private:
-	string inputfilename;
-};
+void
+xls_workbook::
+clear_sheet(const std::string& sheetname)
+{
+   if (NULL != this->wbook)
+   {
+       delete(this->wbook);
+       this->wbook = NULL;
 
-#endif
+   }
+   this->wbook  = new xlslib_core::workbook();
+   this->wsheet = this->wbook->sheet(sheetname);
+
+}
+
+void
+xls_workbook::
+label(unsigned32_t row, unsigned32_t col, const std::string& strlabel)
+{
+    this->wsheet->label(row, col, strlabel);
+}
+
+int
+xls_workbook::
+write_to_file(const std::string& file_name)
+{
+   return wbook->Dump(file_name);
+}
+}

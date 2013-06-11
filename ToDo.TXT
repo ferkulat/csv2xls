@@ -9,5 +9,4 @@ If you have done something from this list, let me know.
   + ubuntu
   + Mint
   + ...
-- check compiling for 64 Bit
 - check compilling with other compiler than gcc and mingw
