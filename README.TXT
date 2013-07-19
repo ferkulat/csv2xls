@@ -9,6 +9,7 @@ csv2xls (csv to xls) is a command line utility which converts csv files into one
 - split output in several files, if max line limit exceeded
 - set work sheet name of xls output file
 - noninteractive -> useful for automated tasks
+- if you want UTF-8 support, you need to compile and link xlslib with libiconv
 
 	-= Limitations =-
 
@@ -17,8 +18,9 @@ csv2xls (csv to xls) is a command line utility which converts csv files into one
 
         -= Prequisites =-
 
-xlslib: http://sourceforge.net/projects/xlslib/
-libcsv: http://sourceforge.net/projects/libcsv/
+libiconv: http://ftp.gnu.org/pub/gnu/libiconv/ (Optional to get UTF-8 support)
+xlslib:   http://sourceforge.net/projects/xlslib/
+libcsv:   http://sourceforge.net/projects/libcsv/
 
 =========== Documentaion ==============
 
