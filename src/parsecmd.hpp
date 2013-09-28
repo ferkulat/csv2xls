@@ -75,6 +75,12 @@ parse_commandline(cmd_opts_t &opts,
 
 void
 print_help(char*executable);
+
+int
+parsecmd_getopts(cmd_opts_t &opts,int argc,char**argv);
+
+int
+determine_xls_filename(cmd_opts_t &opts);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*PARSECMD_HPP*/
 

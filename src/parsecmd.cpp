@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <strings.h>
-#include <libgen.h>
+#include <libgen.h>     /* basename() */
 #include "../config.h"
 
 namespace csv2xls
@@ -45,7 +45,7 @@ parsecmd_init(cmd_opts_t &opts)
 }/* -----  end of function parsecmd_init  ----- */
 
 void
-print_version(char*executable)
+print_version()
 {
     cout  << PACKAGE_STRING << endl;
 }
@@ -104,12 +104,30 @@ print_help(char*executable)
 int
 parse_commandline(cmd_opts_t &opts,int argc,char**argv)
 {
+    int optind;
     parsecmd_init(opts);
     //We need at least an input file
     if (argc < 2)
     {
         return 0;
     }
+    
+    if ( ! (optind = parsecmd_getopts(opts, argc, argv)) )
+    {
+        return 0;
+    }
+    
+   
+   if (! determine_xls_filename(opts))
+   {
+       return 0;
+   }
+   return 1;
+}/* -----  end of function parse_commandline  ----- */
+
+int
+parsecmd_getopts(cmd_opts_t &opts,int argc,char**argv)
+{
     int opt;
     int converted = 0 ;
     while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:v")) != -1)
@@ -123,6 +141,7 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                                     opts.input_buffer_size,
                                     MAX_CSV_BUFFER_SIZE) )
                     {
+                        cerr << "failed to get parameter for option 'b'" << endl;
                         return 0;
                     }
                     break;
@@ -139,6 +158,7 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                     if (    (!converted)
                           ||(opts.xls_row_limit < 2 ) )
                     {
+                        cerr << "failed to get parameter for option 'l'" << endl;
                         return 0;
                     }
                     break;
@@ -153,11 +173,12 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
                                     opts.xls_digit_count,
                                     MAX_XLS_DIGIT_COUNT) )
                     {
+                        cerr << "failed to get parameter for option 'D'" << endl;
                         return 0;
                     }
                     break;
            case 'v':
-                    print_version(argv[0]);
+                    print_version();
                     exit(EXIT_SUCCESS);
 
            default: /* '?' */
@@ -165,17 +186,29 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
        }
    }
    opts.csv_file_name.assign(argv[optind]);
+
+   return optind;
+
+}/* -----  end of function parsecmd_getopts  ----- */
+
+
+int
+determine_xls_filename(cmd_opts_t &opts)
+{
+   string tmpstr;
+   tmpstr.assign(opts.csv_file_name);
+   char *inputname = (char*)tmpstr.c_str();
+   
    if (opts.xls_file_name.empty())
    {
        char *output_name = NULL;
-
-       if (NULL != (output_name = basename(argv[optind])))
+       if (NULL != (output_name = basename(inputname)))
        {
            opts.xls_file_name.assign(output_name);
        }
        else
        {
-           cerr << "Error determnining output file name" << endl;
+           cerr << "Error determining output file name" << endl;
            return 0;
        }
    }
@@ -187,10 +220,9 @@ parse_commandline(cmd_opts_t &opts,int argc,char**argv)
        if (    ( '/' == lastchar) /* *nix */
              ||('\\' == lastchar) /* windows */ )
        {
-           opts.xls_file_name.append(basename(argv[optind]));
+           opts.xls_file_name.append(basename(inputname));
        }
    }
    return 1;
-}/* -----  end of function parse_commandline  ----- */
-
+}
 }/* -----  end of namespace csv2xls  ----- */
