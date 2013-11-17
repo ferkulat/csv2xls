@@ -140,5 +140,8 @@ xls_dump_worksheet(xls_file_t *xlsfile);
  */
 void
 xls_add_headline(xls_file_t *xlsfile);
+
+bool
+xls_sheet_is_empty(xls_file_t *file);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*end XLSFILE_HPP*/

@@ -76,20 +76,13 @@ xls_newline(xls_file_t *file)
 void
 xls_dump_worksheet(xls_file_t *file)
 {
-    //Don't dump an empty sheet or a sheet with just the head line
-    if (       (file->current_column == 0    )
-            && (
-                  (file->headline.size() && file->current_row == 1)
-                ||(file->current_row == 0)
-               )
-       )
+    if ( !xls_sheet_is_empty(file))
     {
-        return;
+        string fname = xls_filename(file->filename,
+                                    file->page_number,
+                                    file->digit_count);
+        file->wbook->write_to_file(fname);
     }
-    string fname = xls_filename(file->filename,
-                                file->page_number,
-                                file->digit_count);
-    file->wbook->write_to_file(fname);
 }/* ----- end of function xls_dump_worksheet ----- */
 
 void
@@ -106,5 +99,23 @@ xls_add_headline(xls_file_t *file)
         xls_newline(file);
     }
 }/* ----- end of function xls_add_headline ----- */
+
+bool
+xls_sheet_is_empty(xls_file_t *file)
+{
+    if (       (file->current_column == 0    )
+            && (
+                  (file->headline.size() && file->current_row == 1)
+                ||(file->current_row == 0)
+               )
+       )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 }/* ---- end of namespace csv2xls ---- */
