@@ -71,8 +71,8 @@ main(int argc, char *argv[])
     xls_out.sheet_name    = options.xls_sheet_name;
     xls_out.digit_count   = options.xls_digit_count;
     xls_out.wbook         = new xls_workbook();
-    xls_new_sheet(&xls_out);
     xls_out.page_number   = 0;
+    xls_new_sheet(&xls_out);
 
 
     csv_in.tab_delimter = options.csv_tab_delimiter;
