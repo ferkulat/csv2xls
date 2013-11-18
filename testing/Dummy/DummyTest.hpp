@@ -1,8 +1,8 @@
 /**
- * @file filenameTest.cpp
+ * @file DUMMYTest.hpp
  *
  * csv2xls - convert csv files into one or more Excel(TM) files
- * Copyright (C) 2012  Marcel Schneider
+ * Copyright (C) 2013  Marcel Schneider
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU GENERAL PUBLIC LICENSE
@@ -21,35 +21,7 @@
  * Boston
  * MA  02110-1301  USA *
  */
-#ifndef FILENAME_TEST_H
-#define FILENAME_TEST_H
-
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include "../src/filename.hpp"
-
-using namespace std;
-
-class filenameTest : public CPPUNIT_NS :: TestFixture
-{
-    CPPUNIT_TEST_SUITE (filenameTest);
-
-    CPPUNIT_TEST (no_xls_ending);
-    CPPUNIT_TEST (with_xls_ending);
-    CPPUNIT_TEST (numbering);
-
-    CPPUNIT_TEST_SUITE_END ();
-
-    public:
-        void setUp (void);
-        void tearDown (void);
-
-    protected:
-        void no_xls_ending (void);
-        void with_xls_ending (void);
-        void numbering (void);
-    private:
-	string inputfilename;
-};
+#ifndef DUMMY_TEST_H
+#define DUMMY_TEST_H
 
 #endif
