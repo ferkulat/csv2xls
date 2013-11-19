@@ -26,14 +26,13 @@
 #include "parsecmd.hpp"
 #include "XlsFile.hpp"
 #include "csv.hpp"
-#include "callback.hpp"
-#include "memory.hpp"
 #include <errno.h>
 #include "xls_workbook.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include "readHeadLine.hpp"
+#include "parseCsvFile.hpp"
 using namespace csv2xls;
 
 
@@ -55,25 +54,13 @@ main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    char_buf_t input_buffer;
-    input_buffer.size = options.input_buffer_size;
-
-    if ( !get_buffer(input_buffer))
-    {
-        cerr << "could not allocate " << options.input_buffer_size
-             << " bytes of memory" << endl;
-        exit(EXIT_FAILURE);
-    }
-    cerr << "allocated " << input_buffer.size << " bytes for input buffer" << endl;
-
     xls_out.filename      = options.xls_file_name;
     xls_out.xls_row_limit = options.xls_row_limit;
     xls_out.sheet_name    = options.xls_sheet_name;
     xls_out.digit_count   = options.xls_digit_count;
     xls_out.wbook         = new xls_workbook();
-    xls_out.page_number   = 0;
+    xls_out.page_number   = -1;
     xls_new_sheet(&xls_out);
-
 
     csv_in.tab_delimter = options.csv_tab_delimiter;
     csv_init_parser(csv_in);
@@ -85,65 +72,13 @@ main(int argc, char *argv[])
         cerr << "Failed to open file " << options.csv_file_name << endl;
         exit(EXIT_FAILURE);
     }
-/*
- * If requested, treat the first line of input as head line for output.
- * When output gets split into several files, they start always with this line.
- */
+
     if (options.csv_file_has_headline)
     {
-        string head_line_buffer;
-        if(! getline(csv_input,head_line_buffer).fail())
-        {
-            //getline omits newline from input stream
-            // but csv_parser needs it
-            head_line_buffer.append("\n");
-
-            if (csv_parse(&csv_in.csv_file_parser,
-                          head_line_buffer.c_str(),
-                          head_line_buffer.size(),
-                          /* register call back function for end of csv field*/
-                          csv_cb_headline_field,
-                          /* register call back function for end of csv row*/
-                          csv_cb_end_of_row,
-                          /* to be passed to the call back functions*/
-                          &xls_out
-                         ) != head_line_buffer.size())
-            {
-                cerr << "Error while parsing file: %s" << endl
-                     << csv_strerror(csv_error(&csv_in.csv_file_parser)) << endl;
-            }
-        }
-
+	readHeadLine(csv_input, csv_in, xls_out);
     }
 
-
-/**
- * read csv input lines and put it into xls file
- */
-    unsigned long bytes_read;
-
-    while(csv_input.good())
-    {
-        csv_input.read(input_buffer.mem, input_buffer.size);
-        bytes_read = csv_input.gcount();
-
-        if (csv_parse(&csv_in.csv_file_parser,
-                      input_buffer.mem,
-                      bytes_read,
-                      /* register call back function for end of csv field*/
-                      csv_cb_end_of_field,
-                      /* register call back function for end of csv row*/
-                      csv_cb_end_of_row,
-                      /* to be passed to the call back functions*/
-                      &xls_out
-                     ) != bytes_read)
-        {
-            cerr << "Error while parsing file: %s" << endl
-                 << csv_strerror(csv_error(&csv_in.csv_file_parser)) << endl;
-        }
-
-    }
-
+    parseCsvFile(csv_input, csv_in, xls_out, options);
 
 /**
  *  cleaning up memory and exit
@@ -153,10 +88,6 @@ main(int argc, char *argv[])
 
     xls_dump_worksheet(&xls_out);
     delete(xls_out.wbook);
-    free(input_buffer.mem);
     csv_input.close();
     exit(EXIT_SUCCESS);
-
 }/* ----- end of function main ----- */
-
-

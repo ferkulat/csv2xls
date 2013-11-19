@@ -23,7 +23,7 @@
  */
 
 #ifndef PARSECMD_HPP
-#define PARSECMD_CPP
+#define PARSECMD_HPP
 #include <string>
 #include <limits.h>
 #include "str2ulong.hpp"
