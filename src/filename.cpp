@@ -33,7 +33,15 @@ using namespace std;
 
 #define FILE_TYPE_NAME_LENGHT 4
 
-
+string
+ConvertCountToStringWithLeadingZero(unsigned long numberOfDigits, unsigned long count)
+{
+	stringstream numstream;
+	numstream.width(numberOfDigits);
+	numstream.fill('0');
+	numstream << count;
+	return numstream.str();
+}
 
 string
 xls_filename( string wish_name,
@@ -44,8 +52,6 @@ xls_filename( string wish_name,
     string        tmp_type;
     string        basename;
     string        filetype;
-    stringstream  ss;
-    stringstream  numstream;
     int           basename_length;
 
     basename_length = wish_name.size() - FILE_TYPE_NAME_LENGHT;
@@ -87,18 +93,11 @@ xls_filename( string wish_name,
     /*
      * Construct the file name from base name , number and file type name
      */
-    ss << basename;
     if (count)
-    {
-        /*add count with 'digits' width and leading zero to basename */
-        numstream.width(digits);
-        numstream.fill('0');
-        numstream << count;
-    	ss << numstream.str();
-    }
-    ss << filetype;
+        basename.append( ConvertCountToStringWithLeadingZero(digits, count));
+    basename.append(filetype);
 
-    return ss.str();
-}/* ----- end of funtcion xls_filename ----- */
+    return basename;
+}/* ----- end of function xls_filename ----- */
 
 }/*---namespace csv2xls---*/
