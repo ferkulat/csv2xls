@@ -23,7 +23,7 @@
  */
 
 #include "xls_workbook.hpp"
-#include "xlslib.hpp"
+#include <xlslib.h>
 
 namespace csv2xls
 {
@@ -40,22 +40,16 @@ xls_workbook::
 {
     delete(this->wbook);
     this->wbook = NULL;
-
 }
 
 void
 xls_workbook::
 clear_sheet(const std::string& sheetname)
 {
-   if (NULL != this->wbook)
-   {
-       delete(this->wbook);
-       this->wbook = NULL;
-
-   }
+   delete(this->wbook);
+   this->wbook  = NULL;
    this->wbook  = new xlslib_core::workbook();
    this->wsheet = this->wbook->sheet(sheetname);
-
 }
 
 void
@@ -69,6 +63,6 @@ int
 xls_workbook::
 write_to_file(const std::string& file_name)
 {
-   return wbook->Dump(file_name);
+   return this->wbook->Dump(file_name);
 }
 }
