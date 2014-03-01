@@ -6,7 +6,7 @@ namespace csv2xls
 {
 //    using namespace std;
 void
-parseCsvFile(fstream &csv_input, csv_file_t &csv_in, xls_file_t &xls_out, cmd_opts_t &options )
+parseCsvFile(fstream &csv_input, csv_file_t &csv_in, xls_file_t &xls_out, opts_t &options )
 {
     char_buf_t input_buffer;
     input_buffer.size = options.input_buffer_size;

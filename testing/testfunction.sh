@@ -1,7 +1,7 @@
 TEST="${0%.*}"
 TEST="${TEST##*/}"
 
-if [ -e $(pwd)/../${TEST}.exe ]
+if [ -e $(pwd)/${TEST}.exe ]
   then DRIVER="wine"
        EXT=".exe"
 fi

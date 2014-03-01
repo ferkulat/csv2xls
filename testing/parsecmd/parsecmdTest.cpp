@@ -1,9 +1,5 @@
 #include "../src/parsecmd.hpp"
-#include <wordexp.h>
 #include "CppUTest/TestHarness.h"
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 
 using namespace std;
@@ -11,97 +7,157 @@ using namespace std;
 using namespace csv2xls;
 
 
-TEST_GROUP(Group1)
+
+TEST_GROUP(When_no_commandline_options_are_given)
 {
-    cmd_opts_t opts;
-    wordexp_t  args;
+    opts_t opts;
+    cmd_opts_t cmd_opts;
 
    void setup()
    {
-    optind = 1;
-    opts.csv_file_name.clear();
-    opts.xls_file_name.clear();
-
+    reset_cmd_opts(cmd_opts);
 
       // Init stuff
    }
 
    void teardown()
    {
-        wordfree(&args);
       // Uninit stuff
-   }	
+   }
 };
 
-TEST(Group1,no_options)
+TEST_GROUP(When_output_name_is_a_directory)
 {
-    wordexp("csv2xls input1.csv", &args,0);
-    parse_commandline(opts,args.we_wordc,args.we_wordv);
+    opts_t opts;
+    cmd_opts_t cmd_opts;
 
-    CHECK        ( ! opts.csv_file_has_headline             );
-    LONGS_EQUAL  ( 65536,        opts.xls_row_limit         );
+   void setup()
+   {
+    reset_cmd_opts(cmd_opts);
+   }
+
+   void teardown()
+   {
+      // Uninit stuff
+   }
+};
+
+TEST_GROUP(When_first_line_is_headline)
+{
+    opts_t opts;
+    cmd_opts_t cmd_opts;
+
+   void setup()
+   {
+    reset_cmd_opts(cmd_opts);
+   }
+
+   void teardown()
+   {
+      // Uninit stuff
+   }
+};
+
+TEST_GROUP(When_first_line_is_not_headline)
+{
+    opts_t opts;
+    cmd_opts_t cmd_opts;
+
+   void setup()
+   {
+    reset_cmd_opts(cmd_opts);
+   }
+
+   void teardown()
+   {
+      // Uninit stuff
+   }
+};
+
+
+TEST_GROUP(When_line_limit_is_0)
+{
+    opts_t opts;
+    cmd_opts_t cmd_opts;
+
+   void setup()
+   {
+    reset_cmd_opts(cmd_opts);
+   }
+
+   void teardown()
+   {
+      // Uninit stuff
+   }
+};
+
+
+
+TEST(When_no_commandline_options_are_given, set_default_values)
+{
+    cmd_opts.csv_file_name = (char*)"input1.csv";
+
+	CHECK        ( setOptionsFromCmdLineArgs(opts, cmd_opts )            );
+    CHECK        (                          ! opts.csv_file_has_headline );
+    LONGS_EQUAL  ( DEFAULT_CSV_TAB_DELIMITER, opts.csv_tab_delimiter     );
+    LONGS_EQUAL  ( DEFAULT_XLS_MAX_LINES,     opts.xls_row_limit         );
+    LONGS_EQUAL  ( DEFAULT_XLS_DIGIT_COUNT,   opts.xls_digit_count       );
+    LONGS_EQUAL  ( DEFAULT_CSV_BUFFER_SIZE,   opts.input_buffer_size     );
+    STRCMP_EQUAL ( DEFAULT_XLS_SHEET_NAME,    opts.xls_sheet_name.c_str());
+
+}
+
+TEST(When_no_commandline_options_are_given, guess_output_name_from_inputname)
+{
+    cmd_opts.csv_file_name = (char*)"input1.csv";
+
+    CHECK        (setOptionsFromCmdLineArgs(opts, cmd_opts ));
     STRCMP_EQUAL ( "input1.csv", opts.csv_file_name.c_str() );
-    STRCMP_EQUAL ( "input1.csv", opts.xls_file_name.c_str() );
+    STRCMP_EQUAL ( "input1.xls", opts.xls_file_name.c_str() );
 }
 
-TEST(Group1,no_options_subdir)
+TEST(When_output_name_is_a_directory, guess_output_name_from_inputname)
 {
-    wordexp("csv2xls tmp/input2.csv", &args,0);
-    parse_commandline(opts,args.we_wordc,args.we_wordv);
+    cmd_opts.csv_file_name = (char*)"input1.csv";
+    cmd_opts.xls_file_name = (char*)"tmp/";
 
-    CHECK        ( ! opts.csv_file_has_headline                 );
-    LONGS_EQUAL  ( 65536,            opts.xls_row_limit         );
-    STRCMP_EQUAL ( "tmp/input2.csv", opts.csv_file_name.c_str() );
-    STRCMP_EQUAL ( "input2.csv",     opts.xls_file_name.c_str() );
-}
-
-TEST(Group1,no_options_absolute_path)
-{
-
-    wordexp("csv2xls /tmp/input3.csv", &args,0);
-    parse_commandline(opts,args.we_wordc,args.we_wordv);
-
-    CHECK        ( ! opts.csv_file_has_headline                  );
-    LONGS_EQUAL  ( 65536,             opts.xls_row_limit         );
-    STRCMP_EQUAL ( "/tmp/input3.csv", opts.csv_file_name.c_str() );
-    STRCMP_EQUAL ( "input3.csv",      opts.xls_file_name.c_str() );
-}
-
- TEST(Group1,output_dir_absolute)
-{
-    wordexp("csv2xls  -o/tmp/ input.csv", &args,0);
-    parse_commandline(opts,args.we_wordc,args.we_wordv);
-
-    STRCMP_EQUAL ( "input.csv",      opts.csv_file_name.c_str() );
-    STRCMP_EQUAL ( "/tmp/input.csv", opts.xls_file_name.c_str() );
-}
-
- TEST(Group1,output_dir_relative)
-{
-    wordexp("csv2xls  -o tmp/ input1.csv", &args,0);
-    parse_commandline(opts,args.we_wordc,args.we_wordv);
-
+	CHECK        (setOptionsFromCmdLineArgs(opts, cmd_opts ));
     STRCMP_EQUAL ( "input1.csv",     opts.csv_file_name.c_str() );
-    STRCMP_EQUAL ( "tmp/input1.csv", opts.xls_file_name.c_str() );
+    STRCMP_EQUAL ( "tmp/input1.xls", opts.xls_file_name.c_str() );
 }
 
- TEST(Group1,line_limit_0)
+TEST(When_first_line_is_headline, it_should_fail_with_line_limit_1)
 {
-    wordexp("csv2xls -l0 input.csv", &args,0);
-    CHECK ( ! parse_commandline(opts,args.we_wordc,args.we_wordv));
+    cmd_opts.csv_file_name         = (char*)"input1.csv";
+	cmd_opts.xls_row_limit         = (char*)"1";
+    cmd_opts.csv_file_has_headline = true;
+
+	CHECK( ! setOptionsFromCmdLineArgs(opts, cmd_opts ));
 }
 
-
-TEST(Group1,line_limit_1)
+TEST(When_first_line_is_headline, it_accepts_line_limit_set_to_2)
 {
-    wordexp("csv2xls -l1 input.csv", &args,0);
-    CHECK ( ! parse_commandline(opts,args.we_wordc,args.we_wordv));
+    cmd_opts.csv_file_name         = (char*)"input1.csv";
+	cmd_opts.xls_row_limit         = (char*)"2";
+    cmd_opts.csv_file_has_headline = true;
+
+	CHECK( setOptionsFromCmdLineArgs(opts, cmd_opts ));
 }
 
-
-TEST(Group1,line_limit_2)
+TEST(When_first_line_is_not_headline, it_accepts_line_limit_set_to_1)
 {
-    wordexp("csv2xls -l2 input.csv", &args,0);
-    CHECK (1 == parse_commandline(opts,args.we_wordc,args.we_wordv));
+    cmd_opts.csv_file_name         = (char*)"input1.csv";
+	cmd_opts.xls_row_limit         = (char*)"1";
+    cmd_opts.csv_file_has_headline = false;
+
+	CHECK( setOptionsFromCmdLineArgs(opts, cmd_opts ));
 }
 
+
+TEST(When_line_limit_is_0, it_should_fail)
+{
+    cmd_opts.csv_file_name = (char*)"input1.csv";
+    cmd_opts.xls_row_limit = (char*)"0";
+
+    CHECK( ! setOptionsFromCmdLineArgs(opts, cmd_opts ));
+}

@@ -33,6 +33,7 @@
 #include <string>
 #include "readHeadLine.hpp"
 #include "parseCsvFile.hpp"
+#include "print_help.h"
 using namespace csv2xls;
 
 
@@ -44,7 +45,7 @@ main(int argc, char *argv[])
 
     xls_file_t xls_out;
     csv_file_t csv_in;
-    cmd_opts_t options;
+    opts_t options;
 
 
 

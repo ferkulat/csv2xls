@@ -29,30 +29,27 @@
 namespace csv2xls
 {
 
-int
-str2ulong(const char *str,
-          unsigned long &num,
-          unsigned long max_value)
+int str2ulong(const char *str, unsigned long &num, unsigned long max_value)
 {
-    char *endptr;
-    errno = 0;
-    num = strtoul(str, &endptr, BASE);
-    if (   ((errno == ERANGE) && (num == ULONG_MAX ))
-        || ((errno != 0     ) && (num == 0         ))  )
-    {
-       return 0;
-    }
+	char *endptr;
+	errno = 0;
+	num = strtoul(str, &endptr, BASE);
+	if (((errno == ERANGE) && (num == ULONG_MAX))
+			|| ((errno != 0) && (num == 0)))
+	{
+		return 0;
+	}
 
-    if (endptr == str)/* no conversion is done*/
-    {
-       return 0;
-    }
+	if (endptr == str)/* no conversion is done*/
+	{
+		return 0;
+	}
 
-    if ( num > max_value )
-    {
-        return 0;
-    }
-    return 1;
+	if (num > max_value)
+	{
+		return 0;
+	}
+	return 1;
 
 }/* -----  end of function str2ulong  ----- */
 }/* -----  end of namespace csv2xls  ----- */

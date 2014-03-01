@@ -12,7 +12,7 @@ void
 parseCsvFile(fstream &csv_input,
              csv_file_t &csv_in,
              xls_file_t &xls_out,
-             cmd_opts_t &options );
+             opts_t &options );
 
 }
 #endif
