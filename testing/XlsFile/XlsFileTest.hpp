@@ -25,26 +25,44 @@
 #define XLS_FILE_TEST_H
 
 #include "../src/XlsFile.hpp"
-class dummy_workbook : public csv2xls::workbook
+class dummy_workbook: public csv2xls::workbook
 {
 public:
-             dummy_workbook(){called_clear_sheet   = 0;
-                              called_write_to_file = 0;
-                              called_label         = 0;  };
-    virtual ~dummy_workbook(){};
+	dummy_workbook()
+	{
+		called_clear_sheet = 0;
+		called_write_to_file = 0;
+		called_label = 0;
+	}
+	;
+	virtual ~dummy_workbook()
+	{
+	}
+	;
 
-    virtual void clear_sheet(const std::string& sheetname){called_clear_sheet++;}
-    virtual int  write_to_file(const std::string &file_name){called_write_to_file++;return 0;}
-    virtual void label(unsigned int row,
-                       unsigned int col,
-                       const std::string& strlabel){called_label++;}
-    int called_clear_sheet;
-    int called_write_to_file;
-    int called_label;
+	virtual void clear_sheet(const std::string& sheetname)
+	{
+		called_clear_sheet++;
+	}
+	virtual int write_to_file(const std::string &file_name)
+	{
+		called_write_to_file++;
+		return 0;
+	}
+	virtual void label(	unsigned int row,
+						unsigned int col,
+						const std::string& strlabel)
+	{
+		called_label++;
+	}
+	int called_clear_sheet;
+	int called_write_to_file;
+	int called_label;
 
 };
 
-
-    void read_CSV_into(csv2xls::xls_file_t *xlsfile,int row_count, int column_count);
+void read_CSV_into(	csv2xls::xls_file_t *xlsfile,
+					int row_count,
+					int column_count);
 
 #endif

@@ -40,8 +40,8 @@ namespace csv2xls
  * The resulting file name.
  */
 std::string
-xls_filename( std::string wish_name,
-              unsigned long count,   /** the number added to file name */
-              unsigned long digits );/** minimum digits of the number  */
+xls_filename(	std::string wish_name,
+				unsigned long count, /** the number added to file name */
+				unsigned long digits);/** minimum digits of the number  */
 
 } /* ----- end of namespace csv2xls ----- */

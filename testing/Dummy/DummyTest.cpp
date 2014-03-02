@@ -1,28 +1,21 @@
-
 #include "CppUTest/TestHarness.h"
-
-
-
-
 
 TEST_GROUP(Group1)
 {
-   void setup()
-   {
+	void setup()
+	{
 
-      // Init stuff
-   }
+		// Init stuff
+	}
 
-   void teardown()
-   {
-      // Uninit stuff
-   }	
+	void teardown()
+	{
+		// Uninit stuff
+	}
 };
 
 TEST(Group1,lol)
 {
 	CHECK(true)
 }
-
-
 

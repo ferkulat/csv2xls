@@ -22,7 +22,6 @@
  * MA  02110-1301  USA
  */
 
-
 #ifndef  CSV_HPP
 #define  CSV_HPP
 
@@ -33,9 +32,9 @@ namespace csv2xls
 
 typedef struct
 {
-    struct csv_parser  csv_file_parser; /** < the parser */
-    char               tab_delimter;
-}csv_file_t;
+	struct csv_parser csv_file_parser; /** < the parser */
+	char tab_delimter;
+} csv_file_t;
 
 /**
  * \brief hides some low lowlevel of libcsv

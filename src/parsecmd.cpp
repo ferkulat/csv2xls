@@ -70,7 +70,8 @@ int checkOptions(opts_t &opts)
 	{
 		cerr << "failed to get parameter for option 'l'" << endl;
 		return 0;
-	}else
+	}
+	else
 	{
 		if (DEFAULT_XLS_MAX_LINES < opts.xls_row_limit)
 		{
@@ -99,13 +100,16 @@ int checkOptions(opts_t &opts)
 	return 1;
 }
 
-int parse_commandline(opts_t &opts, int argc, char**argv)
+int parse_commandline(	opts_t &opts,
+						int argc,
+						char**argv)
 {
 	int optind;
 	csv_set_default_values(opts);
 	xls_set_default_values(opts);
 	//We need at least an input file
-	if (argc < 2) return 0;
+	if (argc < 2)
+		return 0;
 
 	if (!(optind = parsecmd_getopts(opts, argc, argv)))
 		return 0;
@@ -116,7 +120,9 @@ int parse_commandline(opts_t &opts, int argc, char**argv)
 	return 1;
 }/* -----  end of function parse_commandline  ----- */
 
-int parsecmd_getopts(opts_t &opts, int argc, char**argv)
+int parsecmd_getopts(	opts_t &opts,
+						int argc,
+						char**argv)
 {
 	csv_set_default_values(opts);
 	xls_set_default_values(opts);
@@ -206,8 +212,8 @@ bool isDir(string path)
 {
 	char lastchar = path[path.size() - 1];
 
-	if (('/' == lastchar)	/* *nix */
-	|| ('\\' == lastchar) )	/* windows */
+	if (('/' == lastchar) /* *nix */
+	|| ('\\' == lastchar)) /* windows */
 		return 1;
 	else
 		return 0;

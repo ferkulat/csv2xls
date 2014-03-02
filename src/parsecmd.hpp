@@ -51,9 +51,9 @@ typedef struct
 	char *xls_digit_count;
 	char *csv_file_name;
 
-	bool  csv_file_has_headline;
+	bool csv_file_has_headline;
 
-}cmd_opts_t;
+} cmd_opts_t;
 
 int
 checkOptions(opts_t &opts);
@@ -83,12 +83,14 @@ xls_set_default_values(opts_t &opts);
  * Returns 1 if succeded. Otherwise 0.
  */
 int
-parse_commandline(opts_t &opts,
-                         int argc,
-                        char **argv);
+parse_commandline(	opts_t &opts,
+					int argc,
+					char **argv);
 
 int
-parsecmd_getopts(opts_t &opts,int argc,char**argv);
+parsecmd_getopts(	opts_t &opts,
+					int argc,
+					char**argv);
 
 int
 determine_xls_filename(opts_t &opts);

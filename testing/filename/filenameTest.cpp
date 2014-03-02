@@ -25,39 +25,43 @@
 #include "filenameTest.hpp"
 #include <CppUTest/TestHarness.h>
 
+using namespace csv2xls;
+
 TEST_GROUP(Group1)
 {
-    void
-    setUp(){}
+	void setUp()
+	{
+	}
 
-    void
-    tearDown(){}
+	void tearDown()
+	{
+	}
 };
-
-
 
 TEST(Group1,no_xls_ending)
 {
-    STRCMP_EQUAL ("input.xls",    csv2xls::xls_filename("input.csv",0,4).c_str()  );
-    STRCMP_EQUAL ("input.xls",    csv2xls::xls_filename("input",0,4    ).c_str()  );
-    STRCMP_EQUAL ("input0001.xls",csv2xls::xls_filename("input",1,4    ).c_str()  );
-    STRCMP_EQUAL ("inp.xls",      csv2xls::xls_filename("inp",0,4      ).c_str()  );
-    STRCMP_EQUAL ("i.p.xls",      csv2xls::xls_filename("i.p",0,4      ).c_str()  );
-    STRCMP_EQUAL ("i.p0001.xls",  csv2xls::xls_filename("i.p",1,4      ).c_str()  );
+	STRCMP_EQUAL("input.xls", xls_filename("input.csv", 0, 4).c_str());
+	STRCMP_EQUAL("input.xls", xls_filename("input", 0, 4).c_str());
+	STRCMP_EQUAL("input0001.xls", xls_filename("input", 1, 4).c_str());
+	STRCMP_EQUAL("inp.xls", xls_filename("inp", 0, 4).c_str());
+	STRCMP_EQUAL("i.p.xls", xls_filename("i.p", 0, 4).c_str());
+	STRCMP_EQUAL("i.p0001.xls", xls_filename("i.p", 1, 4).c_str());
 }
 
 TEST(Group1,with_xls_ending)
 {
-    STRCMP_EQUAL ("input.xls",    csv2xls::xls_filename("input.xls",0,4).c_str()  );
-    STRCMP_EQUAL ("input.Xls",    csv2xls::xls_filename("input.Xls",0,4).c_str()  );
-    STRCMP_EQUAL ("input0001.XLS",csv2xls::xls_filename("input.XLS",1,4).c_str()  );
-    STRCMP_EQUAL ("xls.xls",      csv2xls::xls_filename("xls",      0,4).c_str()  );
-    STRCMP_EQUAL ("xls0001.xls",  csv2xls::xls_filename("xls",      1,4).c_str()  );
+	STRCMP_EQUAL("input.xls", xls_filename("input.xls", 0, 4).c_str());
+	STRCMP_EQUAL("input.Xls", xls_filename("input.Xls", 0, 4).c_str());
+	STRCMP_EQUAL("input0001.XLS", xls_filename("input.XLS", 1, 4).c_str());
+	STRCMP_EQUAL("xls.xls", xls_filename("xls", 0, 4).c_str());
+	STRCMP_EQUAL("xls0001.xls", xls_filename("xls", 1, 4).c_str());
 }
 
 TEST(Group1,numbering)
 {
-    STRCMP_EQUAL ("input4294967295.XLS", csv2xls::xls_filename("input.XLS",4294967295U,4).c_str()  );
-    STRCMP_EQUAL ("input0429496729.XLS", csv2xls::xls_filename("input.XLS",429496729U,10).c_str()  );
+	STRCMP_EQUAL("input4294967295.XLS",
+			xls_filename("input.XLS", 4294967295U, 4).c_str());
+	STRCMP_EQUAL("input0429496729.XLS",
+			xls_filename("input.XLS", 429496729U, 10).c_str());
 }
 

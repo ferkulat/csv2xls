@@ -1,7 +1,5 @@
-
 #ifndef PRINT_HELP_H_
 #define PRINT_HELP_H_
-
 
 namespace csv2xls
 

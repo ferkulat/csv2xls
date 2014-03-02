@@ -7,6 +7,8 @@
 #include "csv.hpp"
 namespace csv2xls
 {
-void readHeadLine(fstream &csv_input, csv_file_t &csv_in, xls_file_t &xls_out);
+void readHeadLine(	fstream &csv_input,
+					csv_file_t &csv_in,
+					xls_file_t &xls_out);
 }
 #endif

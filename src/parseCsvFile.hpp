@@ -7,12 +7,12 @@
 #include "csv.hpp"
 namespace csv2xls
 {
-    
+
 void
-parseCsvFile(fstream &csv_input,
-             csv_file_t &csv_in,
-             xls_file_t &xls_out,
-             opts_t &options );
+parseCsvFile(	fstream &csv_input,
+				csv_file_t &csv_in,
+				xls_file_t &xls_out,
+				opts_t &options);
 
 }
 #endif
