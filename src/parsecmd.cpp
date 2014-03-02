@@ -31,6 +31,7 @@
 #include "../config.h"
 #include "filename.hpp"
 #include "print_help.h"
+#include <sstream>
 namespace csv2xls
 {
 
@@ -41,12 +42,15 @@ void csv_set_default_values(opts_t &opts)
 	opts.csv_file_has_headline = false;
 	opts.csv_tab_delimiter = DEFAULT_CSV_TAB_DELIMITER;
 	opts.input_buffer_size = DEFAULT_CSV_BUFFER_SIZE;
+	opts.csv_file_name.clear();
 }
 
 void xls_set_default_values(opts_t &opts)
 {
 	opts.xls_row_limit = DEFAULT_XLS_MAX_LINES;
 	opts.xls_digit_count = DEFAULT_XLS_DIGIT_COUNT;
+	opts.xls_file_name.clear();
+	opts.xls_sheet_name.clear();
 }
 
 void print_version()
@@ -54,68 +58,43 @@ void print_version()
 	cout << PACKAGE_STRING << endl;
 }
 
-int setOptionsFromCmdLineArgs(opts_t &opts, cmd_opts_t &cmd_opts)
+int checkOptions(opts_t &opts)
 {
-	csv_set_default_values(opts);
-	xls_set_default_values(opts);
-	opts.csv_file_name.assign(cmd_opts.csv_file_name);
-	if (cmd_opts.input_buffer_size)
+	if (0 == opts.input_buffer_size)
 	{
-		if (!str2ulong(cmd_opts.input_buffer_size, opts.input_buffer_size,
-		MAX_CSV_BUFFER_SIZE))
-		{
-			cerr << "failed to get parameter for option 'b'" << endl;
-			return 0;
-		}
+		cerr << "failed to get parameter for option 'b'" << endl;
+		return 0;
 	}
 
-	if (cmd_opts.csv_tab_delimiter)
-		opts.csv_tab_delimiter = cmd_opts.csv_tab_delimiter[0];
-
-	if (cmd_opts.csv_file_has_headline)
-		opts.csv_file_has_headline = true;
-
-	if (cmd_opts.xls_row_limit)
+	if (0 == opts.xls_row_limit)
 	{
-		int converted = 0;
-		converted = str2ulong(cmd_opts.xls_row_limit, opts.xls_row_limit,
-		DEFAULT_XLS_MAX_LINES);
-		if (!converted)
+		cerr << "failed to get parameter for option 'l'" << endl;
+		return 0;
+	}else
+	{
+		if (DEFAULT_XLS_MAX_LINES < opts.xls_row_limit)
 		{
-			cerr << "failed to get parameter for option 'l'" << endl;
+			cerr << "DEFAULT_XLS_MAX_LINES is maximum value for option 'l'";
+			cerr << endl;
 			return 0;
 		}
 		if ((opts.csv_file_has_headline) && (opts.xls_row_limit < 2))
 		{
-			cerr << "if first line is Head line, minimum line limit is 2"
-					<< endl;
-			return 0;
-		}
-		if ((!opts.csv_file_has_headline) && (opts.xls_row_limit < 1))
-		{
-			cerr << "minimum line limit is 1" << endl;
+			cerr << "if first line is head line, minimum line limit is 2";
+			cerr << endl;
 			return 0;
 		}
 	}
 
-	if (cmd_opts.xls_file_name)
-		opts.xls_file_name.assign(cmd_opts.xls_file_name);
-
 	determine_xls_filename(opts);
 
-	if (cmd_opts.xls_sheet_name)
-		opts.xls_sheet_name.assign(cmd_opts.xls_sheet_name);
-	else
+	if (opts.xls_sheet_name.empty())
 		opts.xls_sheet_name.assign(DEFAULT_XLS_SHEET_NAME);
 
-	if (cmd_opts.xls_digit_count)
+	if (MAX_XLS_DIGIT_COUNT < opts.xls_digit_count)
 	{
-		if (!str2ulong(cmd_opts.xls_digit_count, opts.xls_digit_count,
-		MAX_XLS_DIGIT_COUNT))
-		{
-			cerr << "failed to get parameter for option 'D'" << endl;
-			return 0;
-		}
+		cerr << "failed to get parameter for option 'D'" << endl;
+		return 0;
 	}
 	return 1;
 }
@@ -123,51 +102,54 @@ int setOptionsFromCmdLineArgs(opts_t &opts, cmd_opts_t &cmd_opts)
 int parse_commandline(opts_t &opts, int argc, char**argv)
 {
 	int optind;
-	cmd_opts_t cmd_opts;
-	reset_cmd_opts(cmd_opts);
 	csv_set_default_values(opts);
 	xls_set_default_values(opts);
 	//We need at least an input file
 	if (argc < 2) return 0;
 
-	if (!(optind = parsecmd_getopts(cmd_opts, argc, argv)))
+	if (!(optind = parsecmd_getopts(opts, argc, argv)))
 		return 0;
 
-	if (!setOptionsFromCmdLineArgs(opts, cmd_opts))
+	if (!checkOptions(opts))
 		return 0;
 
 	return 1;
 }/* -----  end of function parse_commandline  ----- */
 
-int parsecmd_getopts(cmd_opts_t &cmd_opts, int argc, char**argv)
+int parsecmd_getopts(opts_t &opts, int argc, char**argv)
 {
+	csv_set_default_values(opts);
+	xls_set_default_values(opts);
 	int opt;
 	while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:v")) != -1)
 	{
+		stringstream ss;
 
 		switch (opt)
 		{
-
 		case 'b':
-			cmd_opts.input_buffer_size = optarg;
+			ss << optarg;
+			ss >> opts.input_buffer_size;
 			break;
 		case 'd':
-			cmd_opts.csv_tab_delimiter = optarg;
+			opts.csv_tab_delimiter = optarg[0];
 			break;
 		case 'H':
-			cmd_opts.csv_file_has_headline = true;
+			opts.csv_file_has_headline = true;
 			break;
 		case 'l':
-			cmd_opts.xls_row_limit = optarg;
+			ss << optarg;
+			ss >> opts.xls_row_limit;
 			break;
 		case 'o':
-			cmd_opts.xls_file_name = optarg;
+			opts.xls_file_name = optarg;
 			break;
 		case 'w':
-			cmd_opts.xls_sheet_name = optarg;
+			opts.xls_sheet_name = optarg;
 			break;
 		case 'D':
-			cmd_opts.xls_digit_count = optarg;
+			ss << optarg;
+			ss >> opts.xls_digit_count;
 			break;
 		case 'v':
 			print_version();
@@ -177,7 +159,7 @@ int parsecmd_getopts(cmd_opts_t &cmd_opts, int argc, char**argv)
 			return 0;
 		}
 	}
-	cmd_opts.csv_file_name = argv[optind];
+	opts.csv_file_name = argv[optind];
 
 	return optind;
 
@@ -222,15 +204,4 @@ bool isDir(string path)
 		return 0;
 }
 
-void reset_cmd_opts(cmd_opts_t &cmd_opts)
-{
-	cmd_opts.csv_file_has_headline = false;
-	cmd_opts.csv_file_name = NULL;
-	cmd_opts.csv_tab_delimiter = NULL;
-	cmd_opts.input_buffer_size = NULL;
-	cmd_opts.xls_digit_count = NULL;
-	cmd_opts.xls_file_name = NULL;
-	cmd_opts.xls_row_limit = NULL;
-	cmd_opts.xls_sheet_name = NULL;
-}
 }/* -----  end of namespace csv2xls  ----- */

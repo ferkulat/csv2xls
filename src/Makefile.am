@@ -6,7 +6,6 @@ csv2xls_SOURCES = csv2xls.cpp  \
 		  XlsFile.hpp XlsFile.cpp \
 		  csv.hpp csv.cpp \
 		  memory.hpp memory.cpp \
-		  str2ulong.hpp str2ulong.cpp \
 		  callback.hpp callback.cpp \
 		  xlslib.hpp \
 		  workbook.hpp xls_workbook.hpp xls_workbook.cpp \

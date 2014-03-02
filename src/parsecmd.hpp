@@ -26,7 +26,6 @@
 #define PARSECMD_HPP
 #include <string>
 #include "default_values.h"
-#include "str2ulong.hpp"
 namespace csv2xls
 {
 
@@ -57,7 +56,7 @@ typedef struct
 }cmd_opts_t;
 
 int
-setOptionsFromCmdLineArgs(opts_t &opts, cmd_opts_t &cmd_opts );
+checkOptions(opts_t &opts);
 
 void
 reset_cmd_opts(cmd_opts_t &cmd_opts);
@@ -89,7 +88,7 @@ parse_commandline(opts_t &opts,
                         char **argv);
 
 int
-parsecmd_getopts(cmd_opts_t &cmd_opts,int argc,char**argv);
+parsecmd_getopts(opts_t &opts,int argc,char**argv);
 
 int
 determine_xls_filename(opts_t &opts);
