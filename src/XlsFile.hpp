@@ -33,8 +33,8 @@
 
 namespace xlslib_core
 {
-    class workbook;
-    class worksheet;
+class workbook;
+class worksheet;
 }
 
 namespace csv2xls
@@ -47,17 +47,16 @@ using namespace std;
  */
 typedef struct
 {
-  unsigned long  current_column;
-  unsigned long  current_row;
-  workbook       *wbook ;
-  unsigned long  page_number;
-  unsigned long  xls_row_limit;
-  unsigned long  digit_count;
-  string         sheet_name;
-  string         filename;
-  vector<string> headline;
-}xls_file_t;
-
+	unsigned long current_column;
+	unsigned long current_row;
+	workbook *wbook;
+	unsigned long page_number;
+	unsigned long xls_row_limit;
+	unsigned long digit_count;
+	string sheet_name;
+	string filename;
+	vector<string> headline;
+} xls_file_t;
 
 /**
  *
@@ -85,7 +84,6 @@ xls_new_sheet(xls_file_t *file);
 void
 xls_init(xls_file_t *file);
 
-
 /**
  * \brief Write into the current xls data cell
  *
@@ -98,7 +96,8 @@ xls_init(xls_file_t *file);
  * The string to be written into the current xls data cell.
  */
 void
-xls_append_cell(xls_file_t *xlsfile, string val);
+xls_append_cell(xls_file_t *xlsfile,
+				string val);
 
 /**
  * \brief Point to the next line at column 0 in xls data
@@ -140,5 +139,8 @@ xls_dump_worksheet(xls_file_t *xlsfile);
  */
 void
 xls_add_headline(xls_file_t *xlsfile);
+
+bool
+xls_sheet_is_empty(xls_file_t *file);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*end XLSFILE_HPP*/

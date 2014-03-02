@@ -10,3 +10,4 @@ src/.dirstamp
 src/.deps
 testing/.deps
 Makefile
+*Makefile.in

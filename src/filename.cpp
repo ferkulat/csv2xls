@@ -33,72 +33,72 @@ using namespace std;
 
 #define FILE_TYPE_NAME_LENGHT 4
 
-
-
-string
-xls_filename( string wish_name,
-              unsigned long count,
-              unsigned long digits)
+string ConvertCountToStringWithLeadingZero(	unsigned long numberOfDigits,
+											unsigned long count)
 {
-    string        tmp_name;
-    string        tmp_type;
-    string        basename;
-    string        filetype;
-    stringstream  ss;
-    stringstream  numstream;
-    int           basename_length;
+	stringstream numstream;
+	numstream.width(numberOfDigits);
+	numstream.fill('0');
+	numstream << count;
+	return numstream.str();
+}
 
-    basename_length = wish_name.size() - FILE_TYPE_NAME_LENGHT;
+string xls_filename(string wish_name,
+					unsigned long count,
+					unsigned long digits)
+{
+	string tmp_name;
+	string tmp_type;
+	string basename;
+	string filetype;
+	int basename_length;
 
-    /**
-     * make comparisons case insensitive
-     */
-    tmp_name.assign(wish_name);
-    std::transform(tmp_name.begin(),
-                   tmp_name.end(),
-                   tmp_name.begin(),
-                   ::tolower);
+	if (4 > wish_name.size())
+	{
+		wish_name.append(".xls");
+	}
+	basename_length = wish_name.size() - FILE_TYPE_NAME_LENGHT;
 
+	/**
+	 * make comparisons case insensitive
+	 */
+	tmp_name.assign(wish_name);
+	std::transform(tmp_name.begin(), tmp_name.end(), tmp_name.begin(),
+			::tolower);
 
-    tmp_type.assign(tmp_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
+	tmp_type.assign(tmp_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
 
-    /*
-     * separate base name from file type name, if possible
-     */
-    if (0 == tmp_type.compare( ".xls"))
-    {
-        /* devide wish_name into basename and file type name*/
-      	basename.assign(wish_name.substr(0,basename_length));
-      	filetype.assign(wish_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
-    }
-    else if(0 == tmp_type.compare( ".csv"))
-    {
-        /* take base name and set file type name to '.xls'*/
-        basename.assign(wish_name.substr(0,basename_length));
-      	filetype.assign(".xls");
-    }
-    else
-    {
-        /* take whole wish name for basename and set file type name to 'xls'. */
-        basename.assign(wish_name);
-      	filetype.assign(".xls");
-    }
+	/*
+	 * separate base name from file type name, if possible
+	 */
+	if (0 == tmp_type.compare(".xls"))
+	{
+		/* devide wish_name into basename and file type name*/
+		basename.assign(wish_name.substr(0, basename_length));
+		filetype.assign(
+				wish_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
+	}
+	else if (0 == tmp_type.compare(".csv"))
+	{
+		/* take base name and set file type name to '.xls'*/
+		basename.assign(wish_name.substr(0, basename_length));
+		filetype.assign(".xls");
+	}
+	else
+	{
+		/* take whole wish name for basename and set file type name to 'xls'. */
+		basename.assign(wish_name);
+		filetype.assign(".xls");
+	}
 
-    /*
-     * Construct the file name from base name , number and file type name
-     */
-    ss << basename;
-    if (count)
-    {
-        /*add count with 'digits' width and leading zero to basename */
-        numstream.width(digits);
-        numstream.fill('0');
-        numstream << count;
-    	ss << numstream.str();
-    }
-    ss << filetype;
+	/*
+	 * Construct the file name from base name , number and file type name
+	 */
+	if (count)
+		basename.append(ConvertCountToStringWithLeadingZero(digits, count));
+	basename.append(filetype);
 
-    return ss.str();
-}/* ----- end of funtcion xls_filename ----- */
+	return basename;
+}/* ----- end of function xls_filename ----- */
 
 }/*---namespace csv2xls---*/

@@ -1,5 +1,5 @@
 /**
- * @file xlslib.hpp
+ * @file filenameTest.cpp
  *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
@@ -21,8 +21,9 @@
  * Boston
  * MA  02110-1301  USA *
  */
+#ifndef FILENAME_TEST_H
+#define FILENAME_TEST_H
 
-#ifndef XLSLIB_HPP
-#define XLSLIB_HPP
-#include <xlslib.h>
+#include "../src/filename.hpp"
+
 #endif

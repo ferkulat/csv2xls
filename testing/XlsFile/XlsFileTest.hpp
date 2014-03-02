@@ -1,5 +1,5 @@
-/*
- * @file str2ulong.hpp
+/**
+ * @file XlsFileTest.hpp
  *
  * csv2xls - convert csv files into one or more Excel(TM) files
  * Copyright (C) 2012  Marcel Schneider
@@ -19,37 +19,50 @@
  * 51 Franklin Street
  * Fifth Floor
  * Boston
- * MA  02110-1301  USA
+ * MA  02110-1301  USA *
  */
+#ifndef XLS_FILE_TEST_H
+#define XLS_FILE_TEST_H
 
-#ifndef STR2ULONG_HPP
-#define STR2ULONG_CPP
-#include <limits.h>
-
-namespace csv2xls
+#include "../src/XlsFile.hpp"
+class dummy_workbook: public csv2xls::workbook
 {
+public:
+	dummy_workbook()
+	{
+		called_clear_sheet = 0;
+		called_write_to_file = 0;
+		called_label = 0;
+	}
+	;
+	virtual ~dummy_workbook()
+	{
+	}
+	;
 
+	virtual void clear_sheet(const std::string& sheetname)
+	{
+		called_clear_sheet++;
+	}
+	virtual int write_to_file(const std::string &file_name)
+	{
+		called_write_to_file++;
+		return 0;
+	}
+	virtual void label(	unsigned int row,
+						unsigned int col,
+						const std::string& strlabel)
+	{
+		called_label++;
+	}
+	int called_clear_sheet;
+	int called_write_to_file;
+	int called_label;
 
-/**
- * \fn str2ulong
- * \brief converts string 'str' into unsigned long 'num'.
- * @param str
- * String to be converted
- * @param num
- * Where the result gets stored
- * @param max_value
- * The maximum allowed value for 'num'
- * @return
- * Returns 1 on success.
- * Returns 0 if:
- *      - conversion failed
- *      - conversion suceeded, but num is greater than max_value
- */
+};
 
-int
-str2ulong(const char *str,
-          unsigned long &num,
-          unsigned long max_value);
-} /* ----- end of namespace csv2xls ----- */
-#endif /*STR2ULONG_HPP*/
+void read_CSV_into(	csv2xls::xls_file_t *xlsfile,
+					int row_count,
+					int column_count);
 
+#endif

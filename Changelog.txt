@@ -1,3 +1,12 @@
+Date:    Sun Mar  2 15:12:48 CET 2014
+Version: 0.3.4
+    * issue #8: crash on missing input file
+                It was not enough to check on minimum one command line parameter.
+                Given any valid option it passes this check, and tries to access a
+                nonexisting argument.
+    * issue #9: crash if inputfile name length is less than 4 chars
+    * fix:      If option -H is not set, allow option -l1
+ 
 Date:    Do 11. Jun 18:07:51 CET 2013
 Version: 0.3.3
     * issue #5: empty xls file
