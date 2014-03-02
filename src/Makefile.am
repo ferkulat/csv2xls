@@ -7,7 +7,6 @@ csv2xls_SOURCES = csv2xls.cpp  \
 		  csv.hpp csv.cpp \
 		  memory.hpp memory.cpp \
 		  callback.hpp callback.cpp \
-		  xlslib.hpp \
 		  workbook.hpp xls_workbook.hpp xls_workbook.cpp \
 		  readHeadLine.hpp readHeadLine.cpp \
 		  parseCsvFile.hpp parseCsvFile.cpp \
