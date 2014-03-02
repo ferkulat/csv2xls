@@ -159,7 +159,16 @@ int parsecmd_getopts(opts_t &opts, int argc, char**argv)
 			return 0;
 		}
 	}
-	opts.csv_file_name = argv[optind];
+
+	if (optind < argc)
+	{
+		opts.csv_file_name = argv[optind];
+	}
+	else
+	{
+		cerr << "error: missing input file" << endl;
+		return 0;
+	}
 
 	return optind;
 
