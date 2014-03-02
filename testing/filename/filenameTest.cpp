@@ -34,11 +34,16 @@ TEST_GROUP(Group1)
     tearDown(){}
 };
 
+
+
 TEST(Group1,no_xls_ending)
 {
     STRCMP_EQUAL ("input.xls",    csv2xls::xls_filename("input.csv",0,4).c_str()  );
     STRCMP_EQUAL ("input.xls",    csv2xls::xls_filename("input",0,4    ).c_str()  );
     STRCMP_EQUAL ("input0001.xls",csv2xls::xls_filename("input",1,4    ).c_str()  );
+    STRCMP_EQUAL ("inp.xls",      csv2xls::xls_filename("inp",0,4      ).c_str()  );
+    STRCMP_EQUAL ("i.p.xls",      csv2xls::xls_filename("i.p",0,4      ).c_str()  );
+    STRCMP_EQUAL ("i.p0001.xls",  csv2xls::xls_filename("i.p",1,4      ).c_str()  );
 }
 
 TEST(Group1,with_xls_ending)
@@ -46,6 +51,8 @@ TEST(Group1,with_xls_ending)
     STRCMP_EQUAL ("input.xls",    csv2xls::xls_filename("input.xls",0,4).c_str()  );
     STRCMP_EQUAL ("input.Xls",    csv2xls::xls_filename("input.Xls",0,4).c_str()  );
     STRCMP_EQUAL ("input0001.XLS",csv2xls::xls_filename("input.XLS",1,4).c_str()  );
+    STRCMP_EQUAL ("xls.xls",      csv2xls::xls_filename("xls",      0,4).c_str()  );
+    STRCMP_EQUAL ("xls0001.xls",  csv2xls::xls_filename("xls",      1,4).c_str()  );
 }
 
 TEST(Group1,numbering)
