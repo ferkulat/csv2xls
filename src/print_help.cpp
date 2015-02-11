@@ -30,6 +30,9 @@ void print_help(char*executable)
 			<< (char) DEFAULT_CSV_TAB_DELIMITER << "\'" << std::endl
 			<< std::endl;
 
+	std::cout << "-t" << "\tset csv tab delimiter to tab character (ASCII 9)."
+			<< std::endl;
+
 	std::cout << "-h" << "\tPrint this help text and exit." << std::endl
 			<< std::endl;
 
