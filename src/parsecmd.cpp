@@ -141,7 +141,7 @@ int parsecmd_getopts(	opts_t &opts,
 			opts.csv_tab_delimiter = optarg[0];
 			break;
 		case 't':
-			opts.csv_tab_delimiter = 9; // tab character as a delimiter
+			opts.csv_tab_delimiter = CHAR_TABULATOR;
 			break;
 		case 'H':
 			opts.csv_file_has_headline = true;
