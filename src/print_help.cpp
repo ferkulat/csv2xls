@@ -4,6 +4,10 @@
  *  Created on: 17.02.2014
  *      Author: eagle
  */
+#ifdef __MINGW32__
+#include <_mingw.h>
+#include <crtdefs.h>
+#endif
 
 #include "print_help.h"
 #include "default_values.h"
