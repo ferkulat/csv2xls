@@ -127,7 +127,7 @@ int parsecmd_getopts(	opts_t &opts,
 	csv_set_default_values(opts);
 	xls_set_default_values(opts);
 	int opt;
-	while ((opt = getopt(argc, argv, "b:d:hHl:o:w:D:v")) != -1)
+	while ((opt = getopt(argc, argv, "b:d:thHl:o:w:D:v")) != -1)
 	{
 		stringstream ss;
 
@@ -139,6 +139,9 @@ int parsecmd_getopts(	opts_t &opts,
 			break;
 		case 'd':
 			opts.csv_tab_delimiter = optarg[0];
+			break;
+		case 't':
+			opts.csv_tab_delimiter = CHAR_TABULATOR;
 			break;
 		case 'H':
 			opts.csv_file_has_headline = true;

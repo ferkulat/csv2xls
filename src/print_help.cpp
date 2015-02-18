@@ -4,6 +4,10 @@
  *  Created on: 17.02.2014
  *      Author: eagle
  */
+#ifdef __MINGW32__
+#include <_mingw.h>
+#include <crtdefs.h>
+#endif
 
 #include "print_help.h"
 #include "default_values.h"
@@ -28,6 +32,9 @@ void print_help(char*executable)
 
 	std::cout << "-d c" << "\tset csv tab delimiter to c. Default: \'"
 			<< (char) DEFAULT_CSV_TAB_DELIMITER << "\'" << std::endl
+			<< std::endl;
+
+	std::cout << "-t" << "\tset csv tab delimiter to tab character (ASCII 9)."
 			<< std::endl;
 
 	std::cout << "-h" << "\tPrint this help text and exit." << std::endl
