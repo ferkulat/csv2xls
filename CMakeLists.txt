@@ -21,7 +21,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/csv2xlslib)
 set(CMAKE_CXX_STANDARD 11)
 add_subdirectory(csv2xlslib)
 add_subdirectory(csv2xlslib.Test)
-add_executable(csv2xls csv2xls.cpp)
+add_executable(csv2xls csv2xls.cpp ${version_file})
 target_link_libraries(csv2xls csv2xlslib xls csv)
 add_test( csv2xlslibTest csv2xlslib.Test/csv2xlslibTest.cpp)
 
