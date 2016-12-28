@@ -5,5 +5,5 @@ set(TEST_SOURCE_FILES
         parsecmdTest.cpp
         XlsFileTest.cpp
 )
-add_executable(csv2xlslibTest ${TEST_SOURCE_FILES})
+add_executable(csv2xlslibTest ${TEST_SOURCE_FILES} ${version_file})
 target_link_libraries(csv2xlslibTest csv2xlslib)
