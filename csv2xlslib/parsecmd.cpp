@@ -28,7 +28,7 @@
 #include <iostream>
 #include <strings.h>
 #include <libgen.h>     /* basename() */
-#include "../config.h"
+//#include "version.h"
 #include "filename.hpp"
 #include "print_help.h"
 #include <sstream>
@@ -55,7 +55,7 @@ void xls_set_default_values(opts_t &opts)
 
 void print_version()
 {
-	cout << PACKAGE_STRING << endl;
+	//cout << gGIT_VERSION << endl;
 }
 
 int checkOptions(opts_t &opts)

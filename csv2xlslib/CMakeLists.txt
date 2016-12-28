@@ -1,0 +1,23 @@
+INCLUDE_DIRECTORIES(/usr/include/xlslib)
+add_library(csv2xlslib
+        callback.cpp
+        callback.hpp
+        csv.cpp
+        csv.hpp
+        filename.cpp
+        filename.hpp
+        memory.cpp
+        memory.hpp
+        parsecmd.cpp
+        parsecmd.hpp
+        parseCsvFile.cpp
+        parseCsvFile.hpp
+        print_help.cpp
+        readHeadLine.cpp
+        readHeadLine.hpp
+        workbook.hpp
+        XlsFile.cpp
+        XlsFile.hpp
+        xls_workbook.cpp
+        xls_workbook.hpp
+        callback.hpp)
