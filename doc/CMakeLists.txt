@@ -1,0 +1,1 @@
+INSTALL(FILES csv2xls.1 DESTINATION man)
