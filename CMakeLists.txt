@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 3.6)
 find_package(Git)
 project(csv2xls)
 enable_testing()
+
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
 set(VERSION_UPDATE_FROM_GIT "TRUE")
+else()
+set(VERSION_UPDATE_FROM_GIT "FALSE")
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 #
 # Make a version file containing the current version from git.
