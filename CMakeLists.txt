@@ -28,3 +28,4 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
 
 add_test( csv2xlslibTest  csv2xlslib.Test/csv2xlslibTest)
 add_dependencies(check csv2xlslibTest)
+install(TARGETS csv2xls DESTINATION bin)
