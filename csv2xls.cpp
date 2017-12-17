@@ -39,49 +39,49 @@ using namespace csv2xls;
 int main(int argc, char *argv[])
 {
 
-	xls_file_t xls_out;
-	csv_file_t csv_in;
-	opts_t options;
+    xls_file_t xls_out;
+    csv_file_t csv_in;
+    opts_t options;
 
-	if (!parse_commandline(options, argc, argv))
-	{
-		print_help(argv[0]);
-		exit(EXIT_FAILURE);
-	}
+    if (!parse_commandline(options, argc, argv))
+    {
+        print_help(argv[0]);
+        exit(EXIT_FAILURE);
+    }
 
-	xls_out.filename = options.xls_file_name;
-	xls_out.xls_row_limit = options.xls_row_limit;
-	xls_out.sheet_name = options.xls_sheet_name;
-	xls_out.digit_count = options.xls_digit_count;
-	xls_out.wbook = new xls_workbook();
-	xls_out.page_number = -1;
-	xls_new_sheet(&xls_out);
+    xls_out.filename = options.xls_file_name;
+    xls_out.xls_row_limit = options.xls_row_limit;
+    xls_out.sheet_name = options.xls_sheet_name;
+    xls_out.digit_count = options.xls_digit_count;
+    xls_out.wbook = new xls_workbook();
+    xls_out.page_number = -1;
+    xls_new_sheet(&xls_out);
 
-	csv_in.tab_delimter = options.csv_tab_delimiter;
-	csv_init_parser(csv_in);
+    csv_in.tab_delimter = options.csv_tab_delimiter;
+    csv_init_parser(csv_in);
 
-	std::fstream csv_input(options.csv_file_name.c_str(),
-			std::ifstream::in | std::ifstream::binary);
-	if (!csv_input.is_open())
-	{
-		std::cerr << "Failed to open file " << options.csv_file_name << "\n";
-		exit(EXIT_FAILURE);
-	}
+    std::fstream csv_input(options.csv_file_name.c_str(),
+            std::ifstream::in | std::ifstream::binary);
+    if (!csv_input.is_open())
+    {
+        std::cerr << "Failed to open file " << options.csv_file_name << "\n";
+        exit(EXIT_FAILURE);
+    }
 
-	if (options.csv_file_has_headline)
-	{
-		readHeadLine(csv_input, csv_in, xls_out);
-	}
+    if (options.csv_file_has_headline)
+    {
+        readHeadLine(csv_input, csv_in, xls_out);
+    }
 
-	parseCsvFile(csv_input, csv_in, xls_out, options);
+    parseCsvFile(csv_input, csv_in, xls_out, options);
 
-	/**
-	 *  cleaning up memory and exit
-	 */
-	csv_free(&csv_in.csv_file_parser);
+    /**
+     *  cleaning up memory and exit
+     */
+    csv_free(&csv_in.csv_file_parser);
 
-	xls_dump_worksheet(&xls_out);
-	delete (xls_out.wbook);
-	csv_input.close();
-	exit(EXIT_SUCCESS);
+    xls_dump_worksheet(&xls_out);
+    delete (xls_out.wbook);
+    csv_input.close();
+    exit(EXIT_SUCCESS);
 }/* ----- end of function main ----- */

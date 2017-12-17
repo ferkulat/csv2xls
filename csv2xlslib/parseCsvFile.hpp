@@ -9,10 +9,10 @@ namespace csv2xls
 {
 
 void
-parseCsvFile(	std::fstream &csv_input,
-				csv_file_t &csv_in,
-				xls_file_t &xls_out,
-				opts_t &options);
+parseCsvFile(std::fstream &csv_input,
+             csv_file_t &csv_in,
+             xls_file_t &xls_out,
+             opts_t &options);
 
 }
 #endif

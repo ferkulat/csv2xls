@@ -31,27 +31,27 @@ namespace csv2xls
 
 typedef struct
 {
-	char csv_tab_delimiter;
-	std::string csv_file_name;
-	std::string xls_file_name;
-	bool csv_file_has_headline;
-	unsigned long xls_row_limit;
-	std::string xls_sheet_name;
-	unsigned long input_buffer_size;
-	unsigned long xls_digit_count;
+    char csv_tab_delimiter;
+    std::string csv_file_name;
+    std::string xls_file_name;
+    bool csv_file_has_headline;
+    unsigned long xls_row_limit;
+    std::string xls_sheet_name;
+    unsigned long input_buffer_size;
+    unsigned long xls_digit_count;
 } opts_t;
 
 typedef struct
 {
-	char *input_buffer_size;
-	char *csv_tab_delimiter;
-	char *xls_row_limit;
-	char *xls_file_name;
-	char *xls_sheet_name;
-	char *xls_digit_count;
-	char *csv_file_name;
+    char *input_buffer_size;
+    char *csv_tab_delimiter;
+    char *xls_row_limit;
+    char *xls_file_name;
+    char *xls_sheet_name;
+    char *xls_digit_count;
+    char *csv_file_name;
 
-	bool csv_file_has_headline;
+    bool csv_file_has_headline;
 
 } cmd_opts_t;
 
@@ -84,13 +84,13 @@ xls_set_default_values(opts_t &opts);
  */
 int
 parse_commandline(	opts_t &opts,
-					int argc,
-					char **argv);
+                    int argc,
+                    char **argv);
 
 int
 parsecmd_getopts(	opts_t &opts,
-					int argc,
-					char**argv);
+                    int argc,
+                    char**argv);
 
 int
 determine_xls_filename(opts_t &opts);

@@ -46,15 +46,15 @@ namespace csv2xls
  */
 typedef struct
 {
-	unsigned long current_column;
-	unsigned long current_row;
-	workbook *wbook;
-	unsigned long page_number;
-	unsigned long xls_row_limit;
-	unsigned long digit_count;
-	std::string sheet_name;
-	std::string filename;
-	std::vector<std::string> headline;
+    unsigned long current_column;
+    unsigned long current_row;
+    workbook *wbook;
+    unsigned long page_number;
+    unsigned long xls_row_limit;
+    unsigned long digit_count;
+    std::string sheet_name;
+    std::string filename;
+    std::vector<std::string> headline;
 } xls_file_t;
 
 /**
@@ -96,7 +96,7 @@ xls_init(xls_file_t *file);
  */
 void
 xls_append_cell(xls_file_t *xlsfile,
-				std::string val);
+                std::string val);
 
 /**
  * \brief Point to the next line at column 0 in xls data

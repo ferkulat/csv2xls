@@ -34,8 +34,8 @@ namespace csv2xls
  */
 typedef struct
 {
-	char *mem; /**< pointer to allocated memory*/
-	unsigned long size; /**< number of bytes [to allocate|allocated]*/
+    char *mem; /**< pointer to allocated memory*/
+    unsigned long size; /**< number of bytes [to allocate|allocated]*/
 } char_buf_t;
 
 /**

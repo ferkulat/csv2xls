@@ -30,26 +30,26 @@ using namespace csv2xls;
 
 TEST_CASE("no_xls_ending")
 {
-	CHECK_EQ("input.xls", xls_filename("input.csv", 0, 4));
-	CHECK_EQ("input.xls", xls_filename("input", 0, 4));
-	CHECK_EQ("input0001.xls", xls_filename("input", 1, 4));
-	CHECK_EQ("inp.xls", xls_filename("inp", 0, 4));
-	CHECK_EQ("i.p.xls", xls_filename("i.p", 0, 4));
-	CHECK_EQ("i.p0001.xls", xls_filename("i.p", 1, 4));
+    CHECK_EQ("input.xls", xls_filename("input.csv", 0, 4));
+    CHECK_EQ("input.xls", xls_filename("input", 0, 4));
+    CHECK_EQ("input0001.xls", xls_filename("input", 1, 4));
+    CHECK_EQ("inp.xls", xls_filename("inp", 0, 4));
+    CHECK_EQ("i.p.xls", xls_filename("i.p", 0, 4));
+    CHECK_EQ("i.p0001.xls", xls_filename("i.p", 1, 4));
 }
 
 TEST_CASE("with_xls_ending")
 {
-	CHECK_EQ("input.xls", xls_filename("input.xls", 0, 4));
-	CHECK_EQ("input.Xls", xls_filename("input.Xls", 0, 4));
-	CHECK_EQ("input0001.XLS", xls_filename("input.XLS", 1, 4));
-	CHECK_EQ("xls.xls", xls_filename("xls", 0, 4));
-	CHECK_EQ("xls0001.xls", xls_filename("xls", 1, 4));
+    CHECK_EQ("input.xls", xls_filename("input.xls", 0, 4));
+    CHECK_EQ("input.Xls", xls_filename("input.Xls", 0, 4));
+    CHECK_EQ("input0001.XLS", xls_filename("input.XLS", 1, 4));
+    CHECK_EQ("xls.xls", xls_filename("xls", 0, 4));
+    CHECK_EQ("xls0001.xls", xls_filename("xls", 1, 4));
 }
 
 TEST_CASE("numbering")
 {
-	CHECK_EQ("input4294967295.XLS", xls_filename("input.XLS", 4294967295U, 4));
-	CHECK_EQ("input0429496729.XLS", xls_filename("input.XLS", 429496729U, 10));
+    CHECK_EQ("input4294967295.XLS", xls_filename("input.XLS", 4294967295U, 4));
+    CHECK_EQ("input0429496729.XLS", xls_filename("input.XLS", 429496729U, 10));
 }
 

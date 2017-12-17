@@ -32,8 +32,8 @@ namespace csv2xls
 
 typedef struct
 {
-	struct csv_parser csv_file_parser; /** < the parser */
-	char tab_delimter;
+    struct csv_parser csv_file_parser; /** < the parser */
+    char tab_delimter;
 } csv_file_t;
 
 /**

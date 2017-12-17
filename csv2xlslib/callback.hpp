@@ -43,8 +43,8 @@ namespace csv2xls
  */
 void
 csv_cb_end_of_field(void *s,
-					size_t len,
-					void *data);
+                    size_t len,
+                    void *data);
 
 /**
  * \fn void csv_cb_end_of_row (int c, void *data)
@@ -57,8 +57,8 @@ csv_cb_end_of_field(void *s,
  * A pointer to the data structure we registered during `csv_parse()`.
  */
 void
-csv_cb_end_of_row(	int c,
-					void *data);
+csv_cb_end_of_row(int c,
+                  void *data);
 
 /**
  * \fn void csv_cb_headline_field(void *s, size_t len, void *data)
@@ -76,9 +76,9 @@ csv_cb_end_of_row(	int c,
  * A pointer to a data structure we registered during `csv_parse()`.
  */
 void
-csv_cb_headline_field(	void *s,
-						size_t len,
-						void *data);
+csv_cb_headline_field(  void *s,
+                        size_t len,
+                        void *data);
 }/* ---- end of namespace csv2xls ---- */
 
 #endif
