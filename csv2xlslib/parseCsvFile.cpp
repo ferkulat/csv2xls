@@ -5,7 +5,7 @@
 namespace csv2xls
 {
 //    using namespace std;
-void parseCsvFile(	fstream &csv_input,
+void parseCsvFile(	std::fstream &csv_input,
 					csv_file_t &csv_in,
 					xls_file_t &xls_out,
 					opts_t &options)
@@ -15,12 +15,12 @@ void parseCsvFile(	fstream &csv_input,
 
 	if (!get_buffer(input_buffer))
 	{
-		cerr << "could not allocate " << options.input_buffer_size
-				<< " bytes of memory" << endl;
+		std::cerr << "could not allocate " << options.input_buffer_size
+				<< " bytes of memory" << "\n";
 		exit(EXIT_FAILURE);
 	}
-	cerr << "allocated " << input_buffer.size << " bytes for input buffer"
-			<< endl;
+	std::cerr << "allocated " << input_buffer.size << " bytes for input buffer"
+			<< "\n";
 
 	/**
 	 * read csv input lines and put it into xls file
@@ -40,8 +40,8 @@ void parseCsvFile(	fstream &csv_input,
 		/* to be passed to the call back functions*/
 		&xls_out) != bytes_read)
 		{
-			cerr << "Error while parsing file: %s" << endl
-					<< csv_strerror(csv_error(&csv_in.csv_file_parser)) << endl;
+			std::cerr << "Error while parsing file: %s" << "\n"
+					<< csv_strerror(csv_error(&csv_in.csv_file_parser)) << "\n";
 		}
 
 	}

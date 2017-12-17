@@ -60,11 +60,11 @@ int main(int argc, char *argv[])
 	csv_in.tab_delimter = options.csv_tab_delimiter;
 	csv_init_parser(csv_in);
 
-	fstream csv_input(options.csv_file_name.c_str(),
-			ifstream::in | ifstream::binary);
+	std::fstream csv_input(options.csv_file_name.c_str(),
+			std::ifstream::in | std::ifstream::binary);
 	if (!csv_input.is_open())
 	{
-		cerr << "Failed to open file " << options.csv_file_name << endl;
+		std::cerr << "Failed to open file " << options.csv_file_name << "\n";
 		exit(EXIT_FAILURE);
 	}
 

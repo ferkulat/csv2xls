@@ -4,11 +4,11 @@
 #include "callback.hpp"
 namespace csv2xls
 {
-void readHeadLine(	fstream &csv_input,
+void readHeadLine(	std::fstream &csv_input,
 					csv_file_t &csv_in,
 					xls_file_t &xls_out)
 {
-	string head_line_buffer;
+	std::string head_line_buffer;
 	if (!getline(csv_input, head_line_buffer).fail())
 	{
 		//getline omits newline from input stream
@@ -24,8 +24,8 @@ void readHeadLine(	fstream &csv_input,
 				/* to be passed to the call back functions*/
 				&xls_out) != head_line_buffer.size())
 		{
-			cerr << "Error while parsing file: %s" << endl
-					<< csv_strerror(csv_error(&csv_in.csv_file_parser)) << endl;
+			std::cerr << "Error while parsing file: %s" << "\n"
+					<< csv_strerror(csv_error(&csv_in.csv_file_parser)) << "\n";
 			exit(EXIT_FAILURE);
 		}
 	}

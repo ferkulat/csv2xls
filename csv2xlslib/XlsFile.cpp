@@ -45,7 +45,7 @@ void xls_new_sheet(xls_file_t *file)
 }
 
 void xls_append_cell(	xls_file_t *file,
-						string label)
+						std::string label)
 {
 	//ignore columns > XLS_MAX_COLUMNS
 	if (XLS_MAX_COLUMNS > file->current_column)
@@ -71,7 +71,7 @@ void xls_dump_worksheet(xls_file_t *file)
 {
 	if (!xls_sheet_is_empty(file))
 	{
-		string fname = xls_filename(file->filename, file->page_number,
+		std::string fname = xls_filename(file->filename, file->page_number,
 				file->digit_count);
 		file->wbook->write_to_file(fname);
 	}
@@ -81,8 +81,8 @@ void xls_add_headline(xls_file_t *file)
 {
 	if (file->headline.size())
 	{
-		vector<string>::iterator it = file->headline.begin();
-		const vector<string>::iterator end = file->headline.end();
+		std::vector<std::string>::iterator it = file->headline.begin();
+		const std::vector<std::string>::iterator end = file->headline.end();
 		for (; it != end; ++it)
 		{
 			xls_append_cell(file, *it);

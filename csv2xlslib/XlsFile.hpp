@@ -41,7 +41,6 @@ namespace csv2xls
 {
 #define XLS_MAX_ROWS    65536U
 #define XLS_MAX_COLUMNS 256U
-using namespace std;
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
@@ -53,9 +52,9 @@ typedef struct
 	unsigned long page_number;
 	unsigned long xls_row_limit;
 	unsigned long digit_count;
-	string sheet_name;
-	string filename;
-	vector<string> headline;
+	std::string sheet_name;
+	std::string filename;
+	std::vector<std::string> headline;
 } xls_file_t;
 
 /**
@@ -97,7 +96,7 @@ xls_init(xls_file_t *file);
  */
 void
 xls_append_cell(xls_file_t *xlsfile,
-				string val);
+				std::string val);
 
 /**
  * \brief Point to the next line at column 0 in xls data
