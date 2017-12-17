@@ -31,7 +31,7 @@ namespace csv2xls
 
 using namespace std;
 
-#define FILE_TYPE_NAME_LENGHT 4
+constexpr size_t FILE_TYPE_NAME_LENGTH = 4;
 
 string ConvertCountToStringWithLeadingZero(	unsigned long numberOfDigits,
                                             unsigned long count)
@@ -57,7 +57,7 @@ string xls_filename(string wish_name,
     {
         wish_name.append(".xls");
     }
-    basename_length = wish_name.size() - FILE_TYPE_NAME_LENGHT;
+    basename_length = wish_name.size() - FILE_TYPE_NAME_LENGTH;
 
     /**
      * make comparisons case insensitive
@@ -66,7 +66,7 @@ string xls_filename(string wish_name,
     std::transform(tmp_name.begin(), tmp_name.end(), tmp_name.begin(),
             ::tolower);
 
-    tmp_type.assign(tmp_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
+    tmp_type.assign(tmp_name.substr(basename_length, FILE_TYPE_NAME_LENGTH));
 
     /*
      * separate base name from file type name, if possible
@@ -76,7 +76,7 @@ string xls_filename(string wish_name,
         /* devide wish_name into basename and file type name*/
         basename.assign(wish_name.substr(0, basename_length));
         filetype.assign(
-                wish_name.substr(basename_length, FILE_TYPE_NAME_LENGHT));
+                wish_name.substr(basename_length, FILE_TYPE_NAME_LENGTH));
     }
     else if (0 == tmp_type.compare(".csv"))
     {

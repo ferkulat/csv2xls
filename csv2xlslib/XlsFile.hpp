@@ -39,8 +39,8 @@ class worksheet;
 
 namespace csv2xls
 {
-#define XLS_MAX_ROWS    65536U
-#define XLS_MAX_COLUMNS 256U
+    constexpr unsigned long XLS_MAX_ROWS    = 65536;
+    constexpr unsigned long XLS_MAX_COLUMNS = 256;
 /**
  * \brief information about xls file to be passed to csv call back functions
  */

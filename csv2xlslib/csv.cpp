@@ -20,6 +20,8 @@
  * Boston
  * MA  02110-1301  USA
  */
+#include <cstdio>
+#include <cstdlib>
 #include "csv.hpp"
 namespace csv2xls
 {
@@ -47,11 +49,10 @@ static int csv_is_term(unsigned char c)
 void csv_init_parser(csv_file_t &csvin)
 {
 #if CSV_MAJOR >= 3
-#define PARSER_OPTIONS CSV_APPEND_NULL
+    constexpr unsigned char parser_options = CSV_APPEND_NULL;
 #else
-#define PARSER_OPTIONS 0
+    constexpr unsigned char parser_options = 0;
 #endif
-    unsigned char parser_options = PARSER_OPTIONS;
 
     if (csv_init(&csvin.csv_file_parser, parser_options) != 0)
     {
