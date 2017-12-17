@@ -31,14 +31,14 @@ namespace csv2xls
 
 typedef struct
 {
-    char csv_tab_delimiter;
     std::string csv_file_name;
     std::string xls_file_name;
-    bool csv_file_has_headline;
-    unsigned long xls_row_limit;
     std::string xls_sheet_name;
+    unsigned long xls_row_limit;
     unsigned long input_buffer_size;
     unsigned long xls_digit_count;
+    bool csv_file_has_headline;
+    char csv_tab_delimiter;
 } opts_t;
 
 
