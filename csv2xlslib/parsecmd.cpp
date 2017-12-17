@@ -37,22 +37,6 @@ namespace csv2xls
 
 using namespace std;
 bool isDir(string path);
-void csv_set_default_values(opts_t &opts)
-{
-    opts.csv_file_has_headline = false;
-    opts.csv_tab_delimiter = DEFAULT_CSV_TAB_DELIMITER;
-    opts.input_buffer_size = DEFAULT_CSV_BUFFER_SIZE;
-    opts.csv_file_name.clear();
-}
-
-void xls_set_default_values(opts_t &opts)
-{
-    opts.xls_row_limit = DEFAULT_XLS_MAX_LINES;
-    opts.xls_digit_count = DEFAULT_XLS_DIGIT_COUNT;
-    opts.xls_file_name.clear();
-    opts.xls_sheet_name.clear();
-}
-
 void print_version()
 {
     cout << gGIT_VERSION << endl;
@@ -105,8 +89,6 @@ int parse_commandline(	opts_t &opts,
                         char**argv)
 {
     int optind;
-    csv_set_default_values(opts);
-    xls_set_default_values(opts);
     //We need at least an input file
     if (argc < 2)
         return 0;
@@ -124,8 +106,6 @@ int parsecmd_getopts(	opts_t &opts,
                         int argc,
                         char**argv)
 {
-    csv_set_default_values(opts);
-    xls_set_default_values(opts);
     int opt;
     while ((opt = getopt(argc, argv, "b:d:thHl:o:w:D:v")) != -1)
     {

@@ -10,8 +10,6 @@ struct TheFixture
     opts_t opts;
     TheFixture()
     {
-        csv_set_default_values(opts);
-        xls_set_default_values(opts);
     }
 
     virtual ~TheFixture() {

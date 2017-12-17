@@ -34,11 +34,11 @@ typedef struct
     std::string csv_file_name;
     std::string xls_file_name;
     std::string xls_sheet_name;
-    unsigned long xls_row_limit;
-    unsigned long input_buffer_size;
-    unsigned long xls_digit_count;
-    bool csv_file_has_headline;
-    char csv_tab_delimiter;
+    unsigned long xls_row_limit     = DEFAULT_XLS_MAX_LINES;
+    unsigned long input_buffer_size = DEFAULT_CSV_BUFFER_SIZE;
+    unsigned long xls_digit_count   = DEFAULT_XLS_DIGIT_COUNT;
+    bool csv_file_has_headline      = false;
+    char csv_tab_delimiter          = DEFAULT_CSV_TAB_DELIMITER;
 } opts_t;
 
 
@@ -46,16 +46,6 @@ int
 checkOptions(opts_t &opts);
 
 
-/**
- * \brief initialize the option struct with default values
- * @param opts
- * Reference to the option struct
- */
-void
-csv_set_default_values(opts_t &opts);
-
-void
-xls_set_default_values(opts_t &opts);
 /**
  * \brief parse command line paramets and set the values of option struct
  * @param opts
