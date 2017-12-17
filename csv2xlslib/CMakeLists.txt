@@ -4,6 +4,7 @@ add_library(csv2xlslib
         callback.hpp
         csv.cpp
         csv.hpp
+        default_values.h
         filename.cpp
         filename.hpp
         memory.cpp
