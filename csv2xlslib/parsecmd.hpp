@@ -41,25 +41,10 @@ typedef struct
     unsigned long xls_digit_count;
 } opts_t;
 
-typedef struct
-{
-    char *input_buffer_size;
-    char *csv_tab_delimiter;
-    char *xls_row_limit;
-    char *xls_file_name;
-    char *xls_sheet_name;
-    char *xls_digit_count;
-    char *csv_file_name;
-
-    bool csv_file_has_headline;
-
-} cmd_opts_t;
 
 int
 checkOptions(opts_t &opts);
 
-void
-reset_cmd_opts(cmd_opts_t &cmd_opts);
 
 /**
  * \brief initialize the option struct with default values
