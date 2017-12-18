@@ -36,7 +36,7 @@ namespace csv2xls
 {
 
 using namespace std;
-bool isDir(string path);
+bool isDir(string const& path);
 void print_version()
 {
     cout << gGIT_VERSION << endl;
@@ -191,7 +191,7 @@ int determine_xls_filename(opts_t &opts)
     return 1;
 }
 
-bool isDir(string path)
+bool isDir(string const& path)
 {
     char lastchar = path[path.size() - 1];
 
