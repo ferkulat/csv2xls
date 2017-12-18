@@ -51,9 +51,8 @@ using namespace std;
 
     FileNameParts SplitIntoParts(std::string const& filename)
     {
-        std::regex  file_type_regex(R"(\..{3}$)");
         std::smatch file_type_match;
-        if(std::regex_search(filename, file_type_match, file_type_regex))
+        if(std::regex_search(filename, file_type_match, std::regex(R"(\..{3}$)")))
         {
             return FileNameParts(file_type_match.prefix(), file_type_match[0]);
         }
@@ -74,6 +73,7 @@ using namespace std;
         }
         return parts;
     }
+    
     auto AddNumberToBaseName(unsigned long count, unsigned long digits)
     {
         return [count, digits](FileNameParts parts){
@@ -81,7 +81,6 @@ using namespace std;
                 parts.base.append(ConvertCountToStringWithLeadingZero(digits, count));
             return parts;
         };
-
     }
 
     std::string BuildXlsFilename(FileNameParts parts)
