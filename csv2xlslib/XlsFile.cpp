@@ -81,11 +81,9 @@ void xls_add_headline(xls_file_t *file)
 {
     if (file->headline.size())
     {
-        std::vector<std::string>::iterator it = file->headline.begin();
-        const std::vector<std::string>::iterator end = file->headline.end();
-        for (; it != end; ++it)
+        for (auto const& column_name : file->headline)
         {
-            xls_append_cell(file, *it);
+            xls_append_cell(file, column_name);
         }
         xls_newline(file);
     }

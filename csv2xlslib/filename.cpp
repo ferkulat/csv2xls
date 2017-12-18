@@ -51,13 +51,12 @@ string xls_filename(string wish_name,
     string tmp_type;
     string basename;
     string filetype;
-    int basename_length;
 
     if (4 > wish_name.size())
     {
         wish_name.append(".xls");
     }
-    basename_length = wish_name.size() - FILE_TYPE_NAME_LENGTH;
+    auto const basename_length = wish_name.size() - FILE_TYPE_NAME_LENGTH;
 
     /**
      * make comparisons case insensitive
