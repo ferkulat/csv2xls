@@ -25,79 +25,78 @@
 #include "filename.hpp"
 #include <sstream>
 #include <algorithm>
-
+#include <regex>
 namespace csv2xls
 {
 
 using namespace std;
 
-constexpr size_t FILE_TYPE_NAME_LENGTH = 4;
-
-string ConvertCountToStringWithLeadingZero(	unsigned long numberOfDigits,
-                                            unsigned long count)
-{
-    stringstream numstream;
-    numstream.width(numberOfDigits);
-    numstream.fill('0');
-    numstream << count;
-    return numstream.str();
-}
-
-string xls_filename(string wish_name,
-                    unsigned long count,
-                    unsigned long digits)
-{
-    string tmp_name;
-    string tmp_type;
-    string basename;
-    string filetype;
-
-    if (4 > wish_name.size())
+    string ConvertCountToStringWithLeadingZero( unsigned long numberOfDigits,
+                                                unsigned long count)
     {
-        wish_name.append(".xls");
-    }
-    auto const basename_length = wish_name.size() - FILE_TYPE_NAME_LENGTH;
-
-    /**
-     * make comparisons case insensitive
-     */
-    tmp_name.assign(wish_name);
-    std::transform(tmp_name.begin(), tmp_name.end(), tmp_name.begin(),
-            ::tolower);
-
-    tmp_type.assign(tmp_name.substr(basename_length, FILE_TYPE_NAME_LENGTH));
-
-    /*
-     * separate base name from file type name, if possible
-     */
-    if (0 == tmp_type.compare(".xls"))
-    {
-        /* devide wish_name into basename and file type name*/
-        basename.assign(wish_name.substr(0, basename_length));
-        filetype.assign(
-                wish_name.substr(basename_length, FILE_TYPE_NAME_LENGTH));
-    }
-    else if (0 == tmp_type.compare(".csv"))
-    {
-        /* take base name and set file type name to '.xls'*/
-        basename.assign(wish_name.substr(0, basename_length));
-        filetype.assign(".xls");
-    }
-    else
-    {
-        /* take whole wish name for basename and set file type name to 'xls'. */
-        basename.assign(wish_name);
-        filetype.assign(".xls");
+        stringstream numstream;
+        numstream.width(numberOfDigits);
+        numstream.fill('0');
+        numstream << count;
+        return numstream.str();
     }
 
-    /*
-     * Construct the file name from base name , number and file type name
-     */
-    if (count)
-        basename.append(ConvertCountToStringWithLeadingZero(digits, count));
-    basename.append(filetype);
+    struct FileNameParts{
+        FileNameParts() = default;
+        FileNameParts(std::string base, std::string type)
+                :base(base), type(type){}
+        std::string base;
+        std::string type;
+    };
 
-    return basename;
-}/* ----- end of function xls_filename ----- */
+    FileNameParts SplitIntoParts(std::string const& filename)
+    {
+        std::regex  file_type_regex(R"(\..{3}$)");
+        std::smatch file_type_match;
+        if(std::regex_search(filename, file_type_match, file_type_regex))
+        {
+            return FileNameParts(file_type_match.prefix(), file_type_match[0]);
+        }
+        return FileNameParts(filename,"");
+    }
+
+    FileNameParts SetOutputFileNameParts(FileNameParts parts)
+    {
+        if (parts.type.empty()||
+            std::regex_match(parts.type, std::regex(".csv", std::regex::icase)))
+        {
+            parts.type = ".xls";
+        }
+        else if(!std::regex_match(parts.type, std::regex(".xls", std::regex::icase)))
+        {
+            parts.base.append(parts.type);
+            parts.type = ".xls";
+        }
+        return parts;
+    }
+    auto AddNumberToBaseName(unsigned long count, unsigned long digits)
+    {
+        return [count, digits](FileNameParts parts){
+            if (count && digits)
+                parts.base.append(ConvertCountToStringWithLeadingZero(digits, count));
+            return parts;
+        };
+
+    }
+
+    std::string BuildXlsFilename(FileNameParts parts)
+    {
+        return parts.base + parts.type;
+    }
+
+    string xls_filename(string wish_name,
+                        unsigned long count,
+                        unsigned long digits)
+    {
+        return BuildXlsFilename(
+                AddNumberToBaseName(count, digits)(
+                        SetOutputFileNameParts(
+                                SplitIntoParts(wish_name))));
+    }
 
 }/*---namespace csv2xls---*/
