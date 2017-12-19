@@ -24,39 +24,40 @@
 
 #include "xls_workbook.hpp"
 #include <xlslib.h>
-
 namespace csv2xls
 {
-
-xls_workbook::xls_workbook()
-{
-    this->wbook = nullptr;
-    this->wsheet = nullptr;
-}
-
-xls_workbook::~xls_workbook()
-{
-    delete (this->wbook);
-    this->wbook = nullptr;
-}
+struct xls_workbook::Impl{
+    std::unique_ptr<xlslib_core::workbook> wbook;
+    xlslib_core::worksheet* wsheet;
+};
 
 void xls_workbook::clear_sheet(const std::string& sheetname)
 {
-    delete (this->wbook);
-    this->wbook = nullptr;
-    this->wbook = new xlslib_core::workbook();
-    this->wsheet = this->wbook->sheet(sheetname);
+    this->pimpl->wbook  = std::make_unique<xlslib_core::workbook>();
+    this->pimpl->wsheet = this->pimpl->wbook->sheet(sheetname);
 }
 
 void xls_workbook::label(unsigned32_t row,
                          unsigned32_t col,
                          const std::string& strlabel)
 {
-    this->wsheet->label(row, col, strlabel);
+    this->pimpl->wsheet->label(row, col, strlabel);
 }
 
 int xls_workbook::write_to_file(const std::string& file_name)
 {
-    return this->wbook->Dump(file_name);
+    return this->pimpl->wbook->Dump(file_name);
 }
+
+    xls_workbook::xls_workbook() : pimpl(new Impl, &PimplDeleter) {
+    }
+
+    xls_workbook::~xls_workbook() {
+
+    }
+    void xls_workbook::PimplDeleter(Impl*p)
+    {
+        delete p;
+    }
+
 }

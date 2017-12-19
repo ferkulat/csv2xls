@@ -22,33 +22,29 @@
  * MA  02110-1301  USA *
  */
 
+#include <memory>
 #include "workbook.hpp"
-namespace xlslib_core
-{
-class workbook;
-class worksheet;
-}
 
 namespace csv2xls
 {
 
-class xls_workbook: public workbook
+class xls_workbook final: public workbook
 {
 public:
     xls_workbook();
-
-    ~xls_workbook() override;
+    ~xls_workbook();
 
     void clear_sheet(const std::string& sheetname) override;
 
     int write_to_file(const std::string &file_name) override;
 
     void label( unsigned int row,
-                        unsigned int col,
-                        const std::string& strlabel) override;
+                unsigned int col,
+                const std::string& strlabel) override;
 private:
-    xlslib_core::workbook *wbook;
-    xlslib_core::worksheet *wsheet;
+    struct Impl;
+    static void PimplDeleter(Impl*p);
+    std::unique_ptr<Impl, void(*)(Impl*)>  pimpl;
 
 };
 }
