@@ -33,9 +33,9 @@ public:
 
 };
 
-void read_CSV_into(	csv2xls::xls_file_t *xlsfile,
-                       int row_count,
-                       int column_count)
+void read_CSV_into(csv2xls::xls_file_t *xlsfile,
+                   int row_count,
+                   int column_count)
 {
     for (int row = 0; row < row_count; row++)
     {
@@ -64,29 +64,26 @@ struct Group1
         xls_file.current_row = 0;
         xls_file.digit_count = 3;
         xls_file.page_number = 0;
-
-        // Init stuff
     }
 
     virtual ~Group1() = default;
 };
-/*
 TEST_CASE_FIXTURE(Group1,"xls_append_cell_increases_column")
 {
     xls_file.current_column = 0;
     xls_file.current_row = 0;
     csv2xls::xls_append_cell(&xls_file, "lol");
-            CHECK_EQ(0, xls_file.current_row);
-            CHECK_EQ(1, xls_file.current_column);
+    CHECK_EQ(0, xls_file.current_row);
+    CHECK_EQ(1, xls_file.current_column);
 }
 
 TEST_CASE_FIXTURE(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_COLUMNS" )
 {
-    xls_file.current_column = XLS_MAX_COLUMNS;
+    xls_file.current_column = csv2xls::XLS_MAX_COLUMNS;
     xls_file.current_row = 0;
     csv2xls::xls_append_cell(&xls_file, "lol");
-            CHECK_EQ(0, xls_file.current_row);
-            CHECK_EQ(XLS_MAX_COLUMNS, xls_file.current_column);
+    CHECK_EQ(0, xls_file.current_row);
+    CHECK_EQ(csv2xls::XLS_MAX_COLUMNS, xls_file.current_column);
 }
 
 TEST_CASE_FIXTURE(Group1, "xls_newline_increases_row" )
@@ -94,10 +91,10 @@ TEST_CASE_FIXTURE(Group1, "xls_newline_increases_row" )
     xls_file.current_column = 0;
     xls_file.current_row = 0;
     csv2xls::xls_newline(&xls_file);
-            CHECK_EQ(0, xls_file.current_column);
-            CHECK_EQ(1, xls_file.current_row);
-            CHECK_EQ(0, test_workbook->called_clear_sheet);
-            CHECK_EQ(0, test_workbook->called_write_to_file);
+    CHECK_EQ(0, xls_file.current_column);
+    CHECK_EQ(1, xls_file.current_row);
+    CHECK_EQ(0, test_workbook->called_clear_sheet);
+    CHECK_EQ(0, test_workbook->called_write_to_file);
 
 }
 
@@ -123,9 +120,6 @@ TEST_CASE_FIXTURE(Group1, "xls_add_headline_includes_a_newline")
     CHECK(0 == xls_file.current_column);
     CHECK(1 == xls_file.current_row);
 }
-
-*/
-//failling tests
 
 TEST_CASE_FIXTURE(Group1, "xls_newline_writes_sheet_into_file_and_makes_a_new_sheet_if_row_is_XLS_MAX_ROWS" )
 {
