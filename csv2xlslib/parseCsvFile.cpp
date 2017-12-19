@@ -55,25 +55,44 @@ namespace csv2xls
         };
     }
 
-    int DoTheHardWork(std::fstream &csv_input, Parser const& parser, char_buf_t input_buffer, xls_file_t xls_out)
+    size_t ReadBuffer(std::fstream &csv_input, char_buf_t &input_buffer)
     {
+        csv_input.read(input_buffer.mem.get(), input_buffer.size);
+        return ConvertTo<size_t>(csv_input.gcount());
+    }
 
-        while (csv_input.good())
-        {
-            csv_input.read(input_buffer.mem.get(), input_buffer.size);
-            auto bytes_read = ConvertTo<size_t>(csv_input.gcount());
-
-            if (csv_parse(parser.csv_file_parser.get(), input_buffer.mem.get(), bytes_read,
+    auto ParseBuffer(Parser const& parser, char_buf_t &input_buffer, xls_file_t &xls_out)
+    {
+        return [&parser, &input_buffer, &xls_out](size_t bytes_to_parse){
+            return csv_parse(parser.csv_file_parser.get(), input_buffer.mem.get(), bytes_to_parse,
                     /* register call back function for end of csv field*/
-                          csv_cb_end_of_field,
+                             csv_cb_end_of_field,
                     /* register call back function for end of csv row*/
-                          csv_cb_end_of_row,
+                             csv_cb_end_of_row,
                     /* to be passed to the call back functions*/
-                          &xls_out) != bytes_read)
+                             &xls_out) == bytes_to_parse;
+        };
+    }
+
+    auto checkParserResult(Parser const& parser)
+    {
+        return [&parser](bool ok){
+            if(!ok)
             {
                 std::cerr << "Error while parsing file: %s" << "\n"
                           << csv_strerror(csv_error(parser.csv_file_parser.get())) << "\n";
             }
+        };
+    }
+
+    int DoTheHardWork(std::fstream &csv_input, Parser const& parser, char_buf_t input_buffer, xls_file_t xls_out)
+    {
+        auto const parse_buffer = ParseBuffer(parser, input_buffer, xls_out);
+        auto const warn_on_fail = checkParserResult(parser);
+
+        while (csv_input.good())
+        {
+            warn_on_fail(parse_buffer(ReadBuffer(csv_input, input_buffer)));
         }
         xls_dump_worksheet(&xls_out);
         return 0;
