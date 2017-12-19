@@ -10,10 +10,10 @@ namespace csv2xls
     struct char_buf_t
     {
         explicit char_buf_t(std::streamsize size)
-                :size(size)
+                : size(size)
                  ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size))) {}
-        std::streamsize size; /**< number of bytes [to allocate|allocated]*/
-        std::unique_ptr<char[]> mem; /**< pointer to allocated memory*/
+        std::streamsize size;
+        std::unique_ptr<char[]> mem;
     } ;
 
     std::fstream openCsvFile(std::string const &file_name)
