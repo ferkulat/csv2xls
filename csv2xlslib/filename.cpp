@@ -61,15 +61,17 @@ using namespace std;
 
     FileNameParts SetOutputFileNameParts(FileNameParts parts)
     {
+        constexpr auto xls_txt = ".xls";
+
         if (parts.type.empty()||
-            std::regex_match(parts.type, std::regex(".csv", std::regex::icase)))
+            std::regex_match(parts.type, std::regex(R"(\.csv$)", std::regex::icase)))
         {
-            parts.type = ".xls";
+            parts.type = xls_txt;
         }
-        else if(!std::regex_match(parts.type, std::regex(".xls", std::regex::icase)))
+        else if(!std::regex_match(parts.type, std::regex(R"(\.xls$)", std::regex::icase)))
         {
             parts.base.append(parts.type);
-            parts.type = ".xls";
+            parts.type = xls_txt;
         }
         return parts;
     }
