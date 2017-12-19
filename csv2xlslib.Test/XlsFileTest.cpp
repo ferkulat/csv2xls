@@ -12,18 +12,18 @@ public:
         called_label = 0;
     }
 
-    void clear_sheet(const std::string& sheetname) override
+    void clear_sheet(const std::string& /*sheetname*/) override
     {
         called_clear_sheet++;
     }
-    int write_to_file(const std::string &file_name) override
+    int write_to_file(const std::string&/*file_name*/) override
     {
         called_write_to_file++;
         return 0;
     }
-    void label( unsigned int row,
-                unsigned int col,
-                const std::string& strlabel) override
+    void label( unsigned int /*row*/,
+                unsigned int /*col*/,
+                const std::string& /*strlabel*/) override
     {
         called_label++;
     }

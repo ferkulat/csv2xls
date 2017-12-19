@@ -73,7 +73,7 @@ namespace csv2xls
         csv_set_term_func(csvin.csv_file_parser.get(), csv_is_term);
 
         csv_set_delim(csvin.csv_file_parser.get(), csvin.tab_delimiter);
-        return  std::move(csvin);
+        return  csvin;
     }/* ----- end of function csv_init_parser ----- */
 
 }/* ----- end of namespace csv2xls ----- */

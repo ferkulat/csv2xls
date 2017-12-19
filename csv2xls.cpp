@@ -24,6 +24,7 @@
  */
 
 #include <iostream>
+#include <conversion.h>
 #include "parsecmd.hpp"
 #include "parseCsvFile.hpp"
 
@@ -39,6 +40,11 @@ int main(int argc, char *argv[])
         return 1;
     }
     catch(csv2xls::FileNotOpen const& e)
+    {
+        std::cerr << e.what() << "\n";
+        return 1;
+    }
+    catch (BadNumericConversion const& e)
     {
         std::cerr << e.what() << "\n";
         return 1;

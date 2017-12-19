@@ -29,41 +29,29 @@
 #include "default_values.h"
 namespace csv2xls
 {
+     class BadCommandLineOption : public std::logic_error
+     {
+     public:
+         explicit BadCommandLineOption(char const *what);
+     };
 
-    typedef struct
+    struct opts_t
     {
         std::string csv_file_name;
         std::string xls_file_name;
         std::string xls_sheet_name;
-        unsigned long xls_row_limit     = DEFAULT_XLS_MAX_LINES;
-        unsigned long input_buffer_size = DEFAULT_CSV_BUFFER_SIZE;
-        unsigned long xls_digit_count   = DEFAULT_XLS_DIGIT_COUNT;
+        uint32_t xls_row_limit          = DEFAULT_XLS_MAX_LINES;
+        int input_buffer_size           = DEFAULT_CSV_BUFFER_SIZE;
+        int xls_digit_count             = DEFAULT_XLS_DIGIT_COUNT;
         unsigned char csv_tab_delimiter = DEFAULT_CSV_TAB_DELIMITER;
         bool csv_file_has_headline      = false;
-        bool exit_clean        = false;
-    } opts_t;
-
-
-     class BadCommandLineOption : public std::logic_error{
-     public:
-         explicit BadCommandLineOption(char const *what);
-     };
+        bool exit_clean                 = false;
+    };
 
     opts_t
     checkOptions(opts_t opts);
 
 
-    /**
-     * \brief parse command line paramets and set the values of option struct
-     * @param opts
-     * Refeence to the options struct
-     * @param argc
-     * The  count of command  line parameters
-     * @param argv
-     * The char* array of commanad line
-     * @return
-     * Returns 1 if succeded. Otherwise 0.
-     */
     opts_t
     parse_commandline(int argc,
                       char **argv);

@@ -52,7 +52,7 @@ void xls_append_cell(	xls_file_t *file,
         file->wbook->label(file->current_row, file->current_column, label);
         file->current_column++;
     }
-}/* ----- end of function xls_append_cell ----- */
+}
 
 void xls_newline(xls_file_t *file)
 {
@@ -64,7 +64,7 @@ void xls_newline(xls_file_t *file)
         xls_dump_worksheet(file);
         xls_new_sheet(file);
     }
-}/* ----- end of function xls_newline ----- */
+}
 
 void xls_dump_worksheet(xls_file_t *file)
 {
@@ -74,7 +74,7 @@ void xls_dump_worksheet(xls_file_t *file)
                 file->digit_count);
         file->wbook->write_to_file(fname);
     }
-}/* ----- end of function xls_dump_worksheet ----- */
+}
 
 void xls_add_headline(xls_file_t *file)
 {
@@ -86,7 +86,7 @@ void xls_add_headline(xls_file_t *file)
         }
         xls_newline(file);
     }
-}/* ----- end of function xls_add_headline ----- */
+}
 
 bool xls_sheet_is_empty(xls_file_t *file)
 {

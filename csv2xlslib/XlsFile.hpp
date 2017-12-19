@@ -32,30 +32,24 @@
 
 #include "workbook.hpp"
 
-namespace xlslib_core
-{
-class workbook;
-class worksheet;
-}
-
 namespace csv2xls
 {
-    constexpr unsigned long XLS_MAX_ROWS    = 65536;
-    constexpr unsigned long XLS_MAX_COLUMNS = 256;
+    constexpr int XLS_MAX_ROWS    = 65536;
+    constexpr int XLS_MAX_COLUMNS = 256;
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
 struct xls_file_t
 {
-    unsigned long current_column;
-    unsigned long current_row;
+    std::vector<std::string>  headline;
     std::unique_ptr<workbook> wbook;
-    long          page_number;
-    unsigned long xls_row_limit;
-    unsigned long digit_count;
-    std::string sheet_name;
-    std::string filename;
-    std::vector<std::string> headline;
+    std::string               sheet_name;
+    std::string               filename;
+    int                       page_number;
+    int                       digit_count;
+    uint32_t                  current_column;
+    uint32_t                  current_row;
+    uint32_t                  xls_row_limit;
 } ;
 
 /**

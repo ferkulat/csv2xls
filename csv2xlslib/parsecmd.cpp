@@ -22,7 +22,6 @@
  * MA  02110-1301  USA
  */
 
-#include <strings.h>
 #include "parsecmd.hpp"
 #include <unistd.h>     /* To parse command line options. */
 #include <iostream>
@@ -101,7 +100,7 @@ namespace csv2xls
                 ss >> opts.input_buffer_size;
                 break;
             case 'd':
-                opts.csv_tab_delimiter = optarg[0];
+                opts.csv_tab_delimiter = (unsigned char)optarg[0];
                 break;
             case 't':
                 opts.csv_tab_delimiter = CHAR_TABULATOR;

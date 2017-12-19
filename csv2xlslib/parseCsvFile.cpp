@@ -1,18 +1,18 @@
-#include <unordered_map>
 #include <sstream>
 #include "parseCsvFile.hpp"
 #include "callback.hpp"
 #include "readHeadLine.hpp"
 #include "xls_workbook.hpp"
+#include "conversion.h"
 
 namespace csv2xls
 {
     struct char_buf_t
     {
-        explicit char_buf_t(size_t size)
+        explicit char_buf_t(std::streamsize size)
                 :size(size)
-                 ,mem(std::make_unique<char[]>(size)) {}
-        size_t size; /**< number of bytes [to allocate|allocated]*/
+                 ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size))) {}
+        std::streamsize size; /**< number of bytes [to allocate|allocated]*/
         std::unique_ptr<char[]> mem; /**< pointer to allocated memory*/
     } ;
 
@@ -57,12 +57,11 @@ namespace csv2xls
 
     int DoTheHardWork(std::fstream &csv_input, Parser const& parser, char_buf_t input_buffer, xls_file_t xls_out)
     {
-        unsigned long bytes_read;
 
         while (csv_input.good())
         {
             csv_input.read(input_buffer.mem.get(), input_buffer.size);
-            bytes_read = csv_input.gcount();
+            auto bytes_read = ConvertTo<size_t>(csv_input.gcount());
 
             if (csv_parse(parser.csv_file_parser.get(), input_buffer.mem.get(), bytes_read,
                     /* register call back function for end of csv field*/

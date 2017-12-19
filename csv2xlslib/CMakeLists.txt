@@ -19,4 +19,7 @@ add_library(csv2xlslib
         XlsFile.hpp
         xls_workbook.cpp
         xls_workbook.hpp
-        callback.hpp)
+        callback.hpp
+        conversion.h
+        version.h)
+target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )

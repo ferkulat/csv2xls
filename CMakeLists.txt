@@ -24,12 +24,21 @@ set(version_file "${CMAKE_CURRENT_BINARY_DIR}/version.cpp")
 
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/csv2xlslib)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+if( CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU" )
+    set( WARNINGOPTS -Wall -Wextra -Wpedantic -Wimplicit-fallthrough -Warray-bounds -Wshadow -Wconversion -Wsign-conversion -Wparentheses -Werror )
+endif()
+if( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+    set( WARNINGOPTS  /W4 /WX )
+endif()
+
 add_subdirectory(doc)
 add_subdirectory(csv2xlslib)
 add_subdirectory(csv2xlslib.Test EXCLUDE_FROM_ALL)
 add_executable(csv2xls csv2xls.cpp ${version_file})
+target_compile_options( csv2xls PUBLIC ${WARNINGOPTS} )
 target_link_libraries(csv2xls csv2xlslib xls csv)
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
 

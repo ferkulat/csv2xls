@@ -66,12 +66,12 @@ using namespace std;
         if (parts.type.empty()||
             std::regex_match(parts.type, std::regex(R"(\.csv$)", std::regex::icase)))
         {
-            parts.type = xls_txt;
+            parts.type.assign(xls_txt);
         }
         else if(!std::regex_match(parts.type, std::regex(R"(\.xls$)", std::regex::icase)))
         {
             parts.base.append(parts.type);
-            parts.type = xls_txt;
+            parts.type.assign(xls_txt);
         }
         return parts;
     }

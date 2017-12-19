@@ -44,8 +44,8 @@ namespace csv2xls
     struct Parser
     {
         explicit Parser(unsigned char tab_delimiter)
-                :tab_delimiter(tab_delimiter)
-                , csv_file_parser(std::unique_ptr<csv_parser, ParserDeleter>(new csv_parser()))
+                :csv_file_parser(std::unique_ptr<csv_parser, ParserDeleter>(new csv_parser()))
+                ,tab_delimiter(tab_delimiter)
         {
         }
         std::unique_ptr<csv_parser, ParserDeleter> csv_file_parser; /** < the parser */
