@@ -33,18 +33,11 @@ namespace csv2xls
 class workbook
 {
 public:
-    workbook()
-    {
-    }
-    ;
-    virtual ~workbook()
-    {
-    }
-    ;
+    virtual ~workbook() =default;
 
     virtual void clear_sheet(const std::string& sheetname)= 0;
     virtual int write_to_file(const std::string &file_name) = 0;
-    virtual void label(	unsigned int row,
+    virtual void label( unsigned int row,
                         unsigned int col,
                         const std::string& strlabel) = 0;
 };

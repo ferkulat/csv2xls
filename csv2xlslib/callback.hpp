@@ -25,7 +25,7 @@
 #ifndef CALLBACK_HPP
 #define CALLBACK_HPP
 
-#include <stddef.h> // for type 'size_t'
+#include <cstddef> // for type 'size_t'
 
 namespace csv2xls
 {

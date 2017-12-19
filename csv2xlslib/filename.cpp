@@ -31,8 +31,8 @@ namespace csv2xls
 
 using namespace std;
 
-    string ConvertCountToStringWithLeadingZero( unsigned long numberOfDigits,
-                                                unsigned long count)
+    string ConvertCountToStringWithLeadingZero(long numberOfDigits,
+                                               long count)
     {
         stringstream numstream;
         numstream.width(numberOfDigits);
@@ -44,7 +44,7 @@ using namespace std;
     struct FileNameParts{
         FileNameParts() = default;
         FileNameParts(std::string base, std::string type)
-                :base(base), type(type){}
+                :base(std::move(base)), type(std::move(type)){}
         std::string base;
         std::string type;
     };
@@ -74,7 +74,7 @@ using namespace std;
         return parts;
     }
 
-    auto AddNumberToBaseName(unsigned long count, unsigned long digits)
+    auto AddNumberToBaseName(long count, long digits)
     {
         return [count, digits](FileNameParts parts){
             if (count && digits)
@@ -89,8 +89,8 @@ using namespace std;
     }
 
     string xls_filename(string wish_name,
-                        unsigned long count,
-                        unsigned long digits)
+                        long count,
+                        long digits)
     {
         return BuildXlsFilename(
                 AddNumberToBaseName(count, digits)(

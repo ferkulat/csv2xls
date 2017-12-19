@@ -3,6 +3,6 @@
 
 #include <string>
 
-extern const std::string gGIT_VERSION;
+extern const char* gGIT_VERSION;
 
 #endif //VERSION_H

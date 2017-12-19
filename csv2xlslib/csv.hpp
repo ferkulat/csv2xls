@@ -42,24 +42,24 @@ namespace csv2xls
     };
 
     struct Parser
-{
-    Parser(char tab_delimiter)
-            :tab_delimiter(tab_delimiter)
-            , csv_file_parser(std::unique_ptr<csv_parser, ParserDeleter>(new csv_parser()))
     {
-    }
-    std::unique_ptr<csv_parser, ParserDeleter> csv_file_parser; /** < the parser */
-    char tab_delimiter;
+        explicit Parser(unsigned char tab_delimiter)
+                :tab_delimiter(tab_delimiter)
+                , csv_file_parser(std::unique_ptr<csv_parser, ParserDeleter>(new csv_parser()))
+        {
+        }
+        std::unique_ptr<csv_parser, ParserDeleter> csv_file_parser; /** < the parser */
+        unsigned char tab_delimiter;
 
-} ;
+    } ;
 
-/**
- * \brief hides some low lowlevel of libcsv
- *
- * @param parser
- */
-Parser
-createParser(char tab_delimiter);
+    /**
+     * \brief hides some low lowlevel of libcsv
+     *
+     * @param parser
+     */
+    Parser
+    createParser(unsigned char tab_delimiter);
 
 } /* ----- end of namesace csv2xls ----- */
 #endif   /* ----- #ifndef CSV_HPP  ----- */

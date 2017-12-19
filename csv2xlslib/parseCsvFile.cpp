@@ -4,13 +4,12 @@
 #include "callback.hpp"
 #include "readHeadLine.hpp"
 #include "xls_workbook.hpp"
-#include "parsecmd.hpp"
 
 namespace csv2xls
 {
     struct char_buf_t
     {
-        char_buf_t(size_t size)
+        explicit char_buf_t(size_t size)
                 :size(size)
                  ,mem(std::make_unique<char[]>(size)) {}
         size_t size; /**< number of bytes [to allocate|allocated]*/

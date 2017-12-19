@@ -1,7 +1,8 @@
 #ifndef DEFAULT_VALUES_H
 #define DEFAULT_VALUES_H
 
-#include <limits.h>
+#include <climits>
+
 namespace csv2xls
 {
     constexpr char CHAR_TABULATOR            = 9;

@@ -27,7 +27,7 @@
 
 #include <string>
 #include <vector>
-#include <stdint.h>
+#include <cstdint>
 #include <memory>
 
 #include "workbook.hpp"
@@ -50,7 +50,7 @@ struct xls_file_t
     unsigned long current_column;
     unsigned long current_row;
     std::unique_ptr<workbook> wbook;
-    unsigned long page_number;
+    long          page_number;
     unsigned long xls_row_limit;
     unsigned long digit_count;
     std::string sheet_name;
@@ -65,24 +65,6 @@ struct xls_file_t
 void
 xls_new_sheet(xls_file_t *file);
 
-/**
- * \brief Set some parameters for the xls output file.
- *
- * Since this function is used to reinitialize the worksheet after dumping it to disk,
- * it does only
- * * xlsfile->current_column = 0
- * * xlsfile->current_row = 0
- * * constructs a new `xlsfile->workbook`
- * * constructs a new `xlsfile->worksheet` in `xlsfile->workbook`
- *
- * @param
- * xlsfile
- * @return
- * lol
- * Pointer to the struct xls_file_t.
- */
-void
-xls_init(xls_file_t *file);
 
 /**
  * \brief Write into the current xls data cell

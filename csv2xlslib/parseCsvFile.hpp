@@ -11,7 +11,7 @@ namespace csv2xls
     class FileNotOpen : public std::runtime_error
     {
     public:
-        FileNotOpen(char const *);
+        explicit FileNotOpen(char const *);
 
     };
 int

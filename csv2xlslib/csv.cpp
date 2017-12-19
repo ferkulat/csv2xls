@@ -33,48 +33,48 @@ namespace csv2xls
         delete p;
     }
 
-/**
- * \brief needed by the csv parser
- */
-static int csv_is_space(unsigned char c)
-{
-    if ((c == CSV_SPACE) || (c == CSV_TAB))
-        return 1;
-    return 0;
-}/* ----- end of function csv_is_space ----- */
-
-/**
- * \brief needed by the csv parser
- */
-static int csv_is_term(unsigned char c)
-{
-    if ((c == CSV_CR) || (c == CSV_LF))
-        return 1;
-    return 0;
-}/* ----- end of function csv_is_term ----- */
-
-Parser createParser(char tab_delimiter)
-{
-    Parser csvin(tab_delimiter);
-#if CSV_MAJOR >= 3
-    constexpr unsigned char parser_options = CSV_APPEND_NULL;
-#else
-    constexpr unsigned char parser_options = 0;
-#endif
-
-    if (csv_init(csvin.csv_file_parser.get(), parser_options) != 0)
+    /**
+     * \brief needed by the csv parser
+     */
+    static int csv_is_space(unsigned char c)
     {
-        fprintf(stderr, "Failed to initialize csv parser\n");
-        exit(EXIT_FAILURE);
-    }
+        if ((c == CSV_SPACE) || (c == CSV_TAB))
+            return 1;
+        return 0;
+    }/* ----- end of function csv_is_space ----- */
 
-    csv_set_space_func(csvin.csv_file_parser.get(), csv_is_space);
+    /**
+     * \brief needed by the csv parser
+     */
+    static int csv_is_term(unsigned char c)
+    {
+        if ((c == CSV_CR) || (c == CSV_LF))
+            return 1;
+        return 0;
+    }/* ----- end of function csv_is_term ----- */
 
-    csv_set_term_func(csvin.csv_file_parser.get(), csv_is_term);
+    Parser createParser(unsigned char tab_delimiter)
+    {
+        Parser csvin(tab_delimiter);
+    #if CSV_MAJOR >= 3
+        constexpr unsigned char parser_options = CSV_APPEND_NULL;
+    #else
+        constexpr unsigned char parser_options = 0;
+    #endif
 
-    csv_set_delim(csvin.csv_file_parser.get(), csvin.tab_delimiter);
-    return  std::move(csvin);
-}/* ----- end of function csv_init_parser ----- */
+        if (csv_init(csvin.csv_file_parser.get(), parser_options) != 0)
+        {
+            fprintf(stderr, "Failed to initialize csv parser\n");
+            exit(EXIT_FAILURE);
+        }
+
+        csv_set_space_func(csvin.csv_file_parser.get(), csv_is_space);
+
+        csv_set_term_func(csvin.csv_file_parser.get(), csv_is_term);
+
+        csv_set_delim(csvin.csv_file_parser.get(), csvin.tab_delimiter);
+        return  std::move(csvin);
+    }/* ----- end of function csv_init_parser ----- */
 
 }/* ----- end of namespace csv2xls ----- */
 

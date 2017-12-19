@@ -22,7 +22,6 @@
  * MA  02110-1301  USA
  */
 #include "XlsFile.hpp"
-#include "xls_workbook.hpp"
 #include "filename.hpp"
 #include <iostream>
 namespace csv2xls
@@ -79,7 +78,7 @@ void xls_dump_worksheet(xls_file_t *file)
 
 void xls_add_headline(xls_file_t *file)
 {
-    if (file->headline.size())
+    if (!file->headline.empty())
     {
         for (auto const& column_name : file->headline)
         {
@@ -91,16 +90,9 @@ void xls_add_headline(xls_file_t *file)
 
 bool xls_sheet_is_empty(xls_file_t *file)
 {
-    if ((file->current_column == 0)
-            && ((file->headline.size() && file->current_row == 1)
-                    || (file->current_row == 0)))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return ((file->current_column == 0)
+            && ((!file->headline.empty() && file->current_row == 1)
+                    || (file->current_row == 0)));
 }
 
 }/* ---- end of namespace csv2xls ---- */

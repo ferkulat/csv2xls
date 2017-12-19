@@ -22,11 +22,10 @@
  * MA  02110-1301  USA
  */
 
+#include <strings.h>
 #include "parsecmd.hpp"
 #include <unistd.h>     /* To parse command line options. */
-#include <stdlib.h>
 #include <iostream>
-#include <strings.h>
 #include <libgen.h>     /* basename() */
 #include "version.h"
 #include "filename.hpp"
@@ -154,12 +153,12 @@ namespace csv2xls
     {
         string tmpstr;
         tmpstr.assign(opts.csv_file_name);
-        char *inputname = (char*) tmpstr.c_str();
+        auto *inputname = (char*) tmpstr.c_str();
 
         if (opts.xls_file_name.empty())
         {
-            char *output_name = NULL;
-            if (NULL != (output_name = basename(inputname)))
+            char *output_name = nullptr;
+            if (nullptr != (output_name = basename(inputname)))
             {
                 opts.xls_file_name.assign(output_name);
             }
@@ -181,11 +180,8 @@ namespace csv2xls
     {
         char lastchar = path[path.size() - 1];
 
-        if (('/' == lastchar) /* *nix */
-        || ('\\' == lastchar)) /* windows */
-            return true;
-        else
-            return false;
+        return (   ('/' == lastchar) /* *nix */
+                || ('\\' == lastchar)) /* windows */;
     }
 
     BadCommandLineOption::BadCommandLineOption(char const * what)

@@ -2,7 +2,7 @@
 #include "doctest.h"
 
 using namespace std;
-class dummy_workbook: public csv2xls::workbook
+class dummy_workbook final : public csv2xls::workbook
 {
 public:
     dummy_workbook()
@@ -11,24 +11,19 @@ public:
         called_write_to_file = 0;
         called_label = 0;
     }
-    ;
-    virtual ~dummy_workbook()
-    {
-    }
-    ;
 
-    virtual void clear_sheet(const std::string& sheetname)
+    void clear_sheet(const std::string& sheetname) override
     {
         called_clear_sheet++;
     }
-    virtual int write_to_file(const std::string &file_name)
+    int write_to_file(const std::string &file_name) override
     {
         called_write_to_file++;
         return 0;
     }
-    virtual void label(	unsigned int row,
-                        unsigned int col,
-                        const std::string& strlabel)
+    void label( unsigned int row,
+                unsigned int col,
+                const std::string& strlabel) override
     {
         called_label++;
     }
@@ -73,10 +68,7 @@ struct Group1
         // Init stuff
     }
 
-    virtual ~Group1()
-    {
-        // Uninit stuff
-    }
+    virtual ~Group1() = default;
 };
 /*
 TEST_CASE_FIXTURE(Group1,"xls_append_cell_increases_column")
@@ -204,7 +196,6 @@ TEST_CASE_FIXTURE(Group1, "make_3x2_lines_sheets_out_of_4_inputlines_with_headli
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 4;
-    constexpr size_t HEADLINE             = 1;
     constexpr size_t LINE_LIMIT_PER_SHEET = 2;
 
     std::vector<string> tmp(INPUT_COLUMNS, "head");

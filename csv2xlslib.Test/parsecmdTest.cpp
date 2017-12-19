@@ -8,13 +8,9 @@ using namespace csv2xls;
 struct TheFixture
 {
     opts_t opts;
-    TheFixture()
-    {
-    }
+    TheFixture() = default;
 
-    virtual ~TheFixture() {
-        // teardown here
-    }
+    virtual ~TheFixture() = default;
 };
 
 

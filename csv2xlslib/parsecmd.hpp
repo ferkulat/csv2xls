@@ -38,7 +38,7 @@ namespace csv2xls
         unsigned long xls_row_limit     = DEFAULT_XLS_MAX_LINES;
         unsigned long input_buffer_size = DEFAULT_CSV_BUFFER_SIZE;
         unsigned long xls_digit_count   = DEFAULT_XLS_DIGIT_COUNT;
-        char csv_tab_delimiter          = DEFAULT_CSV_TAB_DELIMITER;
+        unsigned char csv_tab_delimiter = DEFAULT_CSV_TAB_DELIMITER;
         bool csv_file_has_headline      = false;
         bool exit_clean        = false;
     } opts_t;
@@ -46,7 +46,7 @@ namespace csv2xls
 
      class BadCommandLineOption : public std::logic_error{
      public:
-         BadCommandLineOption(char const *what);
+         explicit BadCommandLineOption(char const *what);
      };
 
     opts_t

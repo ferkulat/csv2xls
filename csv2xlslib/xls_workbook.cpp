@@ -30,20 +30,20 @@ namespace csv2xls
 
 xls_workbook::xls_workbook()
 {
-    this->wbook = NULL;
-    this->wsheet = NULL;
+    this->wbook = nullptr;
+    this->wsheet = nullptr;
 }
 
 xls_workbook::~xls_workbook()
 {
     delete (this->wbook);
-    this->wbook = NULL;
+    this->wbook = nullptr;
 }
 
 void xls_workbook::clear_sheet(const std::string& sheetname)
 {
     delete (this->wbook);
-    this->wbook = NULL;
+    this->wbook = nullptr;
     this->wbook = new xlslib_core::workbook();
     this->wsheet = this->wbook->sheet(sheetname);
 }
