@@ -8,7 +8,7 @@
 namespace csv2xls
 {
 void readHeadLine(std::fstream &csv_input,
-                  csv_file_t &csv_in,
+                  Parser const& csv_in,
                   xls_file_t &xls_out);
 }
 #endif

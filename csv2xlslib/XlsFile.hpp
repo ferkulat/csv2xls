@@ -28,6 +28,7 @@
 #include <string>
 #include <vector>
 #include <stdint.h>
+#include <memory>
 
 #include "workbook.hpp"
 
@@ -44,18 +45,18 @@ namespace csv2xls
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
-typedef struct
+struct xls_file_t
 {
     unsigned long current_column;
     unsigned long current_row;
-    workbook *wbook;
+    std::unique_ptr<workbook> wbook;
     unsigned long page_number;
     unsigned long xls_row_limit;
     unsigned long digit_count;
     std::string sheet_name;
     std::string filename;
     std::vector<std::string> headline;
-} xls_file_t;
+} ;
 
 /**
  *

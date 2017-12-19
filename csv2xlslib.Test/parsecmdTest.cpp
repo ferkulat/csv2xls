@@ -26,23 +26,24 @@ TEST_CASE_FIXTURE(TheFixture, "When_no_commandline_options_are_given then set_de
 {
     opts.csv_file_name = "input1.csv";
 
-    CHECK(checkOptions(opts));
-    CHECK(!opts.csv_file_has_headline);
-    CHECK_EQ(DEFAULT_CSV_TAB_DELIMITER, opts.csv_tab_delimiter);
-    CHECK_EQ(DEFAULT_XLS_MAX_LINES, opts.xls_row_limit);
-    CHECK_EQ(DEFAULT_XLS_DIGIT_COUNT, opts.xls_digit_count);
-    CHECK_EQ(DEFAULT_CSV_BUFFER_SIZE, opts.input_buffer_size);
-    CHECK_EQ(DEFAULT_XLS_SHEET_NAME, opts.xls_sheet_name);
+    opts_t actual;
+    REQUIRE_NOTHROW(actual = checkOptions(opts));
+    CHECK(!actual.csv_file_has_headline);
+    CHECK_EQ(DEFAULT_CSV_TAB_DELIMITER, actual.csv_tab_delimiter);
+    CHECK_EQ(DEFAULT_XLS_MAX_LINES,     actual.xls_row_limit);
+    CHECK_EQ(DEFAULT_XLS_DIGIT_COUNT,   actual.xls_digit_count);
+    CHECK_EQ(DEFAULT_CSV_BUFFER_SIZE,   actual.input_buffer_size);
+    CHECK_EQ(DEFAULT_XLS_SHEET_NAME,    actual.xls_sheet_name);
 
 }
 
 TEST_CASE_FIXTURE(TheFixture, "When_no_commandline_options_are_given then guess_output_name_from_inputname")
 {
     opts.csv_file_name = "input1.csv";
-
-    CHECK(checkOptions(opts));
-    CHECK_EQ("input1.csv", opts.csv_file_name);
-    CHECK_EQ("input1.xls", opts.xls_file_name);
+    opts_t actual;
+    REQUIRE_NOTHROW(actual = set_xls_filename(checkOptions(opts)));
+    CHECK_EQ("input1.csv", actual.csv_file_name);
+    CHECK_EQ("input1.xls", actual.xls_file_name);
 }
 
 TEST_CASE_FIXTURE(TheFixture, "When_output_name_is_a_directory, guess_output_name_from_inputname")
@@ -50,9 +51,10 @@ TEST_CASE_FIXTURE(TheFixture, "When_output_name_is_a_directory, guess_output_nam
     opts.csv_file_name = "input1.csv";
     opts.xls_file_name = "tmp/";
 
-    CHECK(checkOptions(opts));
-    CHECK_EQ("input1.csv", opts.csv_file_name);
-    CHECK_EQ("tmp/input1.xls", opts.xls_file_name);
+    opts_t actual;
+    REQUIRE_NOTHROW(actual = set_xls_filename(checkOptions(opts)));
+    CHECK_EQ("input1.csv",     actual.csv_file_name);
+    CHECK_EQ("tmp/input1.xls", actual.xls_file_name);
 }
 
 TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_headline then it_should_fail_with_line_limit_1")
@@ -61,7 +63,7 @@ TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_headline then it_should_fail_w
     opts.xls_row_limit = 1;
     opts.csv_file_has_headline = true;
 
-    CHECK(!checkOptions(opts));
+    REQUIRE_THROWS(checkOptions(opts));
 }
 
 TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_headline then it_accepts_line_limit_set_to_2")
@@ -70,7 +72,7 @@ TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_headline then it_accepts_line_
     opts.xls_row_limit = 2;
     opts.csv_file_has_headline = true;
 
-    CHECK(checkOptions(opts));
+    REQUIRE_NOTHROW(checkOptions(opts));
 }
 
 TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_not_headline then it_accepts_line_limit_set_to_1")
@@ -79,7 +81,7 @@ TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_not_headline then it_accepts_l
     opts.xls_row_limit = 1;
     opts.csv_file_has_headline = false;
 
-    CHECK(checkOptions(opts));
+    REQUIRE_NOTHROW(checkOptions(opts));
 }
 
 TEST_CASE_FIXTURE(TheFixture, "When_line_limit_is_0 then it_should_fail")
@@ -87,5 +89,5 @@ TEST_CASE_FIXTURE(TheFixture, "When_line_limit_is_0 then it_should_fail")
     opts.csv_file_name = "input1.csv";
     opts.xls_row_limit = 0;
 
-    CHECK(!checkOptions(opts));
+    REQUIRE_THROWS(checkOptions(opts));
 }

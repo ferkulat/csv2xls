@@ -25,50 +25,55 @@
 #ifndef PARSECMD_HPP
 #define PARSECMD_HPP
 #include <string>
+#include <stdexcept>
 #include "default_values.h"
 namespace csv2xls
 {
 
-typedef struct
-{
-    std::string csv_file_name;
-    std::string xls_file_name;
-    std::string xls_sheet_name;
-    unsigned long xls_row_limit     = DEFAULT_XLS_MAX_LINES;
-    unsigned long input_buffer_size = DEFAULT_CSV_BUFFER_SIZE;
-    unsigned long xls_digit_count   = DEFAULT_XLS_DIGIT_COUNT;
-    bool csv_file_has_headline      = false;
-    char csv_tab_delimiter          = DEFAULT_CSV_TAB_DELIMITER;
-} opts_t;
+    typedef struct
+    {
+        std::string csv_file_name;
+        std::string xls_file_name;
+        std::string xls_sheet_name;
+        unsigned long xls_row_limit     = DEFAULT_XLS_MAX_LINES;
+        unsigned long input_buffer_size = DEFAULT_CSV_BUFFER_SIZE;
+        unsigned long xls_digit_count   = DEFAULT_XLS_DIGIT_COUNT;
+        char csv_tab_delimiter          = DEFAULT_CSV_TAB_DELIMITER;
+        bool csv_file_has_headline      = false;
+        bool exit_clean        = false;
+    } opts_t;
 
 
-int
-checkOptions(opts_t &opts);
+     class BadCommandLineOption : public std::logic_error{
+     public:
+         BadCommandLineOption(char const *what);
+     };
+
+    opts_t
+    checkOptions(opts_t opts);
 
 
-/**
- * \brief parse command line paramets and set the values of option struct
- * @param opts
- * Refeence to the options struct
- * @param argc
- * The  count of command  line parameters
- * @param argv
- * The char* array of commanad line
- * @return
- * Returns 1 if succeded. Otherwise 0.
- */
-int
-parse_commandline(	opts_t &opts,
-                    int argc,
-                    char **argv);
+    /**
+     * \brief parse command line paramets and set the values of option struct
+     * @param opts
+     * Refeence to the options struct
+     * @param argc
+     * The  count of command  line parameters
+     * @param argv
+     * The char* array of commanad line
+     * @return
+     * Returns 1 if succeded. Otherwise 0.
+     */
+    opts_t
+    parse_commandline(int argc,
+                      char **argv);
 
-int
-parsecmd_getopts(	opts_t &opts,
-                    int argc,
-                    char**argv);
+    opts_t
+    parsecmd_getopts(int argc,
+                     char**argv);
 
-int
-determine_xls_filename(opts_t &opts);
+    opts_t
+    set_xls_filename(opts_t opts);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*PARSECMD_HPP*/
 

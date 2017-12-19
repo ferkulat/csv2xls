@@ -32,174 +32,162 @@
 #include "filename.hpp"
 #include "print_help.h"
 #include <sstream>
+
 namespace csv2xls
 {
 
-using namespace std;
-bool isDir(string const& path);
-void print_version()
-{
-    cout << gGIT_VERSION << endl;
-}
-
-int checkOptions(opts_t &opts)
-{
-    if (0 == opts.input_buffer_size)
+    using namespace std;
+    bool isDir(string const& path);
+    void print_version()
     {
-        cerr << "failed to get parameter for option 'b'" << endl;
-        return 0;
+        cout << gGIT_VERSION << endl;
     }
 
-    if (0 == opts.xls_row_limit)
+    opts_t checkOptions(opts_t opts)
     {
-        cerr << "failed to get parameter for option 'l'" << endl;
-        return 0;
-    }
-    else
-    {
-        if (DEFAULT_XLS_MAX_LINES < opts.xls_row_limit)
+        if (0 == opts.input_buffer_size)
         {
-            cerr << "DEFAULT_XLS_MAX_LINES is maximum value for option 'l'";
-            cerr << endl;
-            return 0;
+            throw BadCommandLineOption( "failed to get parameter for option 'b'" );
         }
-        if ((opts.csv_file_has_headline) && (opts.xls_row_limit < 2))
+
+        if (0 == opts.xls_row_limit)
         {
-            cerr << "if first line is head line, minimum line limit is 2";
-            cerr << endl;
-            return 0;
-        }
-    }
-
-    determine_xls_filename(opts);
-
-    if (opts.xls_sheet_name.empty())
-        opts.xls_sheet_name.assign(DEFAULT_XLS_SHEET_NAME);
-
-    if (MAX_XLS_DIGIT_COUNT < opts.xls_digit_count)
-    {
-        cerr << "failed to get parameter for option 'D'" << endl;
-        return 0;
-    }
-    return 1;
-}
-
-int parse_commandline(	opts_t &opts,
-                        int argc,
-                        char**argv)
-{
-    int optind;
-    //We need at least an input file
-    if (argc < 2)
-        return 0;
-
-    if (!(optind = parsecmd_getopts(opts, argc, argv)))
-        return 0;
-
-    if (!checkOptions(opts))
-        return 0;
-
-    return 1;
-}/* -----  end of function parse_commandline  ----- */
-
-int parsecmd_getopts(	opts_t &opts,
-                        int argc,
-                        char**argv)
-{
-    int opt;
-    while ((opt = getopt(argc, argv, "b:d:thHl:o:w:D:v")) != -1)
-    {
-        stringstream ss;
-
-        switch (opt)
-        {
-        case 'b':
-            ss << optarg;
-            ss >> opts.input_buffer_size;
-            break;
-        case 'd':
-            opts.csv_tab_delimiter = optarg[0];
-            break;
-        case 't':
-            opts.csv_tab_delimiter = CHAR_TABULATOR;
-            break;
-        case 'H':
-            opts.csv_file_has_headline = true;
-            break;
-        case 'l':
-            ss << optarg;
-            ss >> opts.xls_row_limit;
-            break;
-        case 'o':
-            opts.xls_file_name = optarg;
-            break;
-        case 'w':
-            opts.xls_sheet_name = optarg;
-            break;
-        case 'D':
-            ss << optarg;
-            ss >> opts.xls_digit_count;
-            break;
-        case 'v':
-            print_version();
-            exit(EXIT_SUCCESS);
-
-        default: /* '?' */
-            return 0;
-        }
-    }
-
-    if (optind < argc)
-    {
-        opts.csv_file_name = argv[optind];
-    }
-    else
-    {
-        cerr << "error: missing input file" << endl;
-        return 0;
-    }
-
-    return optind;
-
-}/* -----  end of function parsecmd_getopts  ----- */
-
-int determine_xls_filename(opts_t &opts)
-{
-    string tmpstr;
-    tmpstr.assign(opts.csv_file_name);
-    char *inputname = (char*) tmpstr.c_str();
-
-    if (opts.xls_file_name.empty())
-    {
-        char *output_name = NULL;
-        if (NULL != (output_name = basename(inputname)))
-        {
-            opts.xls_file_name.assign(output_name);
+            throw BadCommandLineOption("failed to get parameter for option 'l'" );
         }
         else
         {
-            cerr << "Error determining output file name" << endl;
-            return 0;
+            if (DEFAULT_XLS_MAX_LINES < opts.xls_row_limit)
+            {
+                throw BadCommandLineOption("DEFAULT_XLS_MAX_LINES is maximum value for option 'l'");
+            }
+            if ((opts.csv_file_has_headline) && (opts.xls_row_limit < 2))
+            {
+                throw BadCommandLineOption("if first line is head line, then minimum line limit is 2");
+            }
         }
+
+        if (opts.xls_sheet_name.empty())
+            opts.xls_sheet_name.assign(DEFAULT_XLS_SHEET_NAME);
+
+        if (MAX_XLS_DIGIT_COUNT < opts.xls_digit_count)
+        {
+            throw BadCommandLineOption("failed to get parameter for option 'D'");
+        }
+        return opts;
     }
-    else
+
+    opts_t parse_commandline(int argc, char**argv)
     {
-        if (isDir(opts.xls_file_name))
-            opts.xls_file_name.append(basename(inputname));
+        //We need at least an input file
+        if (argc < 2)
+            throw BadCommandLineOption("too few arguments");
+
+        return set_xls_filename(checkOptions(parsecmd_getopts(argc, argv)));
+
+    }/* -----  end of function parse_commandline  ----- */
+
+    opts_t parsecmd_getopts(int argc, char**argv)
+    {
+        opts_t opts;
+
+        int opt;
+        while ((opt = getopt(argc, argv, "b:d:thHl:o:w:D:v")) != -1)
+        {
+            stringstream ss;
+
+            switch (opt)
+            {
+            case 'b':
+                ss << optarg;
+                ss >> opts.input_buffer_size;
+                break;
+            case 'd':
+                opts.csv_tab_delimiter = optarg[0];
+                break;
+            case 't':
+                opts.csv_tab_delimiter = CHAR_TABULATOR;
+                break;
+            case 'H':
+                opts.csv_file_has_headline = true;
+                break;
+            case 'l':
+                ss << optarg;
+                ss >> opts.xls_row_limit;
+                break;
+            case 'o':
+                opts.xls_file_name = optarg;
+                break;
+            case 'w':
+                opts.xls_sheet_name = optarg;
+                break;
+            case 'D':
+                ss << optarg;
+                ss >> opts.xls_digit_count;
+                break;
+            case 'v':
+                opts.exit_clean = true;
+                print_version();
+                break;
+            case 'h':
+                opts.exit_clean = true;
+                print_help(argv[0]);
+                break;
+            default:
+                throw BadCommandLineOption("");
+            }
+        }
+
+        if (optind < argc)
+        {
+            opts.csv_file_name = argv[optind];
+        }
+        else
+        {
+            throw BadCommandLineOption("error: missing input file");
+        }
+
+        return opts;
+
+    }/* -----  end of function parsecmd_getopts  ----- */
+
+    opts_t set_xls_filename(opts_t opts)
+    {
+        string tmpstr;
+        tmpstr.assign(opts.csv_file_name);
+        char *inputname = (char*) tmpstr.c_str();
+
+        if (opts.xls_file_name.empty())
+        {
+            char *output_name = NULL;
+            if (NULL != (output_name = basename(inputname)))
+            {
+                opts.xls_file_name.assign(output_name);
+            }
+            else
+            {
+                throw BadCommandLineOption("Error determining output file name");
+            }
+        }
+        else
+        {
+            if (isDir(opts.xls_file_name))
+                opts.xls_file_name.append(basename(inputname));
+        }
+        opts.xls_file_name = xls_filename(opts.xls_file_name, 0, 0);
+        return opts;
     }
-    opts.xls_file_name = xls_filename(opts.xls_file_name, 0, 0);
-    return 1;
-}
 
-bool isDir(string const& path)
-{
-    char lastchar = path[path.size() - 1];
+    bool isDir(string const& path)
+    {
+        char lastchar = path[path.size() - 1];
 
-    if (('/' == lastchar) /* *nix */
-    || ('\\' == lastchar)) /* windows */
-        return 1;
-    else
-        return 0;
-}
+        if (('/' == lastchar) /* *nix */
+        || ('\\' == lastchar)) /* windows */
+            return true;
+        else
+            return false;
+    }
 
+    BadCommandLineOption::BadCommandLineOption(char const * what)
+            : logic_error(what) {}
 }/* -----  end of namespace csv2xls  ----- */

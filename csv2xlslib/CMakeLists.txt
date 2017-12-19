@@ -7,8 +7,6 @@ add_library(csv2xlslib
         default_values.h
         filename.cpp
         filename.hpp
-        memory.cpp
-        memory.hpp
         parsecmd.cpp
         parsecmd.hpp
         parseCsvFile.cpp

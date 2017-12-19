@@ -62,7 +62,7 @@ struct Group1
     Group1()
     {
         test_workbook = new dummy_workbook();
-        xls_file.wbook = test_workbook;
+        xls_file.wbook.reset(test_workbook);
         xls_file.filename = "file";
         xls_file.xls_row_limit = csv2xls::XLS_MAX_ROWS;
         xls_file.current_column = 0;
@@ -75,7 +75,6 @@ struct Group1
 
     virtual ~Group1()
     {
-        delete xls_file.wbook;
         // Uninit stuff
     }
 };

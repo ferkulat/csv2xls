@@ -23,65 +23,24 @@
  * MA  02110-1301  USA
  */
 
-#include "parsecmd.hpp"
-#include "XlsFile.hpp"
-#include "csv.hpp"
-#include <errno.h>
-#include "xls_workbook.hpp"
 #include <iostream>
-#include <fstream>
-#include <string>
-#include "readHeadLine.hpp"
+#include "parsecmd.hpp"
 #include "parseCsvFile.hpp"
-#include "print_help.h"
-using namespace csv2xls;
 
 int main(int argc, char *argv[])
 {
-
-    xls_file_t xls_out;
-    csv_file_t csv_in;
-    opts_t options;
-
-    if (!parse_commandline(options, argc, argv))
+    try
     {
-        print_help(argv[0]);
-        exit(EXIT_FAILURE);
+        return csv2xls::parseCsvFile(csv2xls::parse_commandline(argc, argv));
     }
-
-    xls_out.filename = options.xls_file_name;
-    xls_out.xls_row_limit = options.xls_row_limit;
-    xls_out.sheet_name = options.xls_sheet_name;
-    xls_out.digit_count = options.xls_digit_count;
-    xls_out.wbook = new xls_workbook();
-    xls_out.page_number = -1;
-    xls_new_sheet(&xls_out);
-
-    csv_in.tab_delimter = options.csv_tab_delimiter;
-    csv_init_parser(csv_in);
-
-    std::fstream csv_input(options.csv_file_name.c_str(),
-            std::ifstream::in | std::ifstream::binary);
-    if (!csv_input.is_open())
+    catch(csv2xls::BadCommandLineOption const& e)
     {
-        std::cerr << "Failed to open file " << options.csv_file_name << "\n";
-        exit(EXIT_FAILURE);
+        std::cerr << e.what() << "\n";
+        return 1;
     }
-
-    if (options.csv_file_has_headline)
+    catch(csv2xls::FileNotOpen const& e)
     {
-        readHeadLine(csv_input, csv_in, xls_out);
+        std::cerr << e.what() << "\n";
+        return 1;
     }
-
-    parseCsvFile(csv_input, csv_in, xls_out, options);
-
-    /**
-     *  cleaning up memory and exit
-     */
-    csv_free(&csv_in.csv_file_parser);
-
-    xls_dump_worksheet(&xls_out);
-    delete (xls_out.wbook);
-    csv_input.close();
-    exit(EXIT_SUCCESS);
 }/* ----- end of function main ----- */

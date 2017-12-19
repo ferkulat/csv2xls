@@ -73,7 +73,7 @@ using namespace std;
         }
         return parts;
     }
-    
+
     auto AddNumberToBaseName(unsigned long count, unsigned long digits)
     {
         return [count, digits](FileNameParts parts){

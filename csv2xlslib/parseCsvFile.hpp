@@ -8,11 +8,14 @@
 namespace csv2xls
 {
 
-void
-parseCsvFile(std::fstream &csv_input,
-             csv_file_t &csv_in,
-             xls_file_t &xls_out,
-             opts_t &options);
+    class FileNotOpen : public std::runtime_error
+    {
+    public:
+        FileNotOpen(char const *);
+
+    };
+int
+parseCsvFile(opts_t options);
 
 }
 #endif
