@@ -39,7 +39,7 @@ namespace csv2xls
     {
         std::string csv_file_name;
         std::string xls_file_name;
-        std::string xls_sheet_name;
+        std::string xls_sheet_name      = DEFAULT_XLS_SHEET_NAME;
         uint32_t xls_row_limit          = DEFAULT_XLS_MAX_LINES;
         int input_buffer_size           = DEFAULT_CSV_BUFFER_SIZE;
         int xls_digit_count             = DEFAULT_XLS_DIGIT_COUNT;

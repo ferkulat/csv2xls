@@ -37,7 +37,7 @@ TEST_CASE_FIXTURE(TheFixture, "When_no_commandline_options_are_given then guess_
 {
     opts.csv_file_name = "input1.csv";
     opts_t actual;
-    REQUIRE_NOTHROW(actual = set_xls_filename(checkOptions(opts)));
+    REQUIRE_NOTHROW(actual = set_xls_filename(opts));
     CHECK_EQ("input1.csv", actual.csv_file_name);
     CHECK_EQ("input1.xls", actual.xls_file_name);
 }
@@ -48,7 +48,7 @@ TEST_CASE_FIXTURE(TheFixture, "When_output_name_is_a_directory, guess_output_nam
     opts.xls_file_name = "tmp/";
 
     opts_t actual;
-    REQUIRE_NOTHROW(actual = set_xls_filename(checkOptions(opts)));
+    REQUIRE_NOTHROW(actual = set_xls_filename(opts));
     CHECK_EQ("input1.csv",     actual.csv_file_name);
     CHECK_EQ("tmp/input1.xls", actual.xls_file_name);
 }

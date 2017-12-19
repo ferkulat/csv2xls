@@ -52,20 +52,16 @@ namespace csv2xls
         {
             throw BadCommandLineOption("failed to get parameter for option 'l'" );
         }
-        else
+
+        if (DEFAULT_XLS_MAX_LINES < opts.xls_row_limit)
         {
-            if (DEFAULT_XLS_MAX_LINES < opts.xls_row_limit)
-            {
-                throw BadCommandLineOption("DEFAULT_XLS_MAX_LINES is maximum value for option 'l'");
-            }
-            if ((opts.csv_file_has_headline) && (opts.xls_row_limit < 2))
-            {
-                throw BadCommandLineOption("if first line is head line, then minimum line limit is 2");
-            }
+            throw BadCommandLineOption("DEFAULT_XLS_MAX_LINES is maximum value for option 'l'");
         }
 
-        if (opts.xls_sheet_name.empty())
-            opts.xls_sheet_name.assign(DEFAULT_XLS_SHEET_NAME);
+        if ((opts.csv_file_has_headline) && (opts.xls_row_limit < 2))
+        {
+            throw BadCommandLineOption("if first line is head line, then minimum line limit is 2");
+        }
 
         if (MAX_XLS_DIGIT_COUNT < opts.xls_digit_count)
         {
