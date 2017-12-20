@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(/usr/include/xlslib)
+INCLUDE_DIRECTORIES(SYSTEM /usr/include/xlslib)
 add_library(csv2xlslib
         callback.cpp
         callback.hpp
