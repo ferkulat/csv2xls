@@ -7,14 +7,6 @@
 
 namespace csv2xls
 {
-    struct char_buf_t
-    {
-        explicit char_buf_t(std::streamsize size)
-                : size(size)
-                 ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size))) {}
-        std::streamsize size;
-        std::unique_ptr<char[]> mem;
-    } ;
 
     std::fstream openCsvFile(std::string const &file_name)
     {
@@ -45,7 +37,7 @@ namespace csv2xls
         return xls_out;
     }
 
-    auto SetUpHeadLine(std::fstream &csv_input, Parser const& parser, bool has_had_line)
+    auto SetUpHeadLine(std::istream &csv_input, Parser const& parser, bool has_had_line)
     {
         return [has_had_line, &parser, &csv_input](xls_file_t xls_out){
             if (has_had_line) {
@@ -55,7 +47,7 @@ namespace csv2xls
         };
     }
 
-    size_t ReadBuffer(std::fstream &csv_input, char_buf_t &input_buffer)
+    size_t ReadBuffer(std::istream &csv_input, char_buf_t &input_buffer)
     {
         csv_input.read(input_buffer.mem.get(), input_buffer.size);
         return ConvertTo<size_t>(csv_input.gcount());
@@ -85,7 +77,7 @@ namespace csv2xls
         };
     }
 
-    int DoTheHardWork(std::fstream &csv_input, Parser const& parser, char_buf_t input_buffer, xls_file_t xls_out)
+    int DoTheHardWork(std::istream &csv_input, Parser const& parser, char_buf_t input_buffer, xls_file_t xls_out)
     {
         auto const parse_buffer = ParseBuffer(parser, input_buffer, xls_out);
         auto const warn_on_fail = checkParserResult(parser);
@@ -114,4 +106,8 @@ namespace csv2xls
 
     FileNotOpen::FileNotOpen(char const *what)
             : runtime_error(what) {}
+
+    char_buf_t::char_buf_t(std::streamsize size)
+            : size(size)
+            ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size))) {}
 }

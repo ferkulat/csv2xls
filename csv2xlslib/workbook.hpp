@@ -25,7 +25,6 @@
 #ifndef WORKBOOK_HPP
 #define	WORKBOOK_HPP
 #include <string>
-//#include <common/xlstypes.h>
 
 namespace csv2xls
 {

@@ -1,21 +1,28 @@
 #ifndef PARSE_CSV_FILE_HPP
 #define PARSE_CSV_FILE_HPP
-#include <iostream>
-#include <fstream>
-#include "XlsFile.hpp"
 #include "parsecmd.hpp"
-#include "csv.hpp"
+#include "XlsFile.hpp"
+
 namespace csv2xls
 {
+    struct Parser;
+    struct char_buf_t
+    {
+        explicit char_buf_t(std::streamsize size);
+        std::streamsize size;
+        std::unique_ptr<char[]> mem;
+    } ;
 
     class FileNotOpen : public std::runtime_error
     {
     public:
         explicit FileNotOpen(char const *);
-
     };
-int
-parseCsvFile(opts_t options);
 
+    int
+    parseCsvFile(opts_t options);
+
+    int
+    DoTheHardWork(std::istream &csv_input, Parser const& parser, char_buf_t input_buffer, xls_file_t xls_out);
 }
 #endif
