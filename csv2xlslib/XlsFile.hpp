@@ -30,7 +30,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "workbook.hpp"
+#include "OutPutDoc.h"
 
 namespace csv2xls
 {
@@ -39,17 +39,19 @@ namespace csv2xls
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
+using HeadLineType = std::vector<std::string>;
 struct xls_file_t
 {
-    std::vector<std::string>  headline;
-    std::unique_ptr<workbook> wbook;
-    std::string               sheet_name;
-    std::string               filename;
-    int                       page_number;
-    int                       digit_count;
-    uint32_t                  current_column;
-    uint32_t                  current_row;
-    uint32_t                  xls_row_limit;
+    xls_file_t(OutPutDoc wbook):wbook(std::move(wbook)){}
+    HeadLineType headline;
+    OutPutDoc   wbook;
+    std::string sheet_name;
+    std::string filename;
+    int         page_number;
+    int         digit_count;
+    uint32_t    current_column;
+    uint32_t    current_row;
+    uint32_t    xls_row_limit;
 } ;
 
 /**

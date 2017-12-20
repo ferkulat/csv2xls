@@ -31,11 +31,11 @@ void xls_new_sheet(xls_file_t *file)
 {
     if (!file->sheet_name.empty())
     {
-        file->wbook->clear_sheet(file->sheet_name);
+        file->wbook.clear_sheet(file->sheet_name);
     }
     else
     {
-        file->wbook->clear_sheet("Table 1");
+        file->wbook.clear_sheet("Table 1");
     }
     file->current_column = 0;
     file->current_row = 0;
@@ -49,7 +49,7 @@ void xls_append_cell(	xls_file_t *file,
     //ignore columns > XLS_MAX_COLUMNS
     if (XLS_MAX_COLUMNS > file->current_column)
     {
-        file->wbook->label(file->current_row, file->current_column, label);
+        file->wbook.label(file->current_row, file->current_column, label);
         file->current_column++;
     }
 }
@@ -70,9 +70,10 @@ void xls_dump_worksheet(xls_file_t *file)
 {
     if (!xls_sheet_is_empty(file))
     {
-        std::string fname = xls_filename(file->filename, file->page_number,
-                file->digit_count);
-        file->wbook->write_to_file(fname);
+        std::string fname = xls_filename(file->filename,
+                                         file->page_number,
+                                         file->digit_count);
+        file->wbook.write_to_file(fname);
     }
 }
 

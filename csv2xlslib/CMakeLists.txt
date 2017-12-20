@@ -21,5 +21,7 @@ add_library(csv2xlslib
         xls_workbook.hpp
         callback.hpp
         conversion.h
-        version.h)
+        version.h
+        OutPutDoc.cpp
+        OutPutDoc.h)
 target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )

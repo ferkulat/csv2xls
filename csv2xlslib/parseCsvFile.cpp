@@ -21,16 +21,15 @@ namespace csv2xls
         }
         return csv_input;
     }
-
-    xls_file_t createCallBackData(opts_t const &options)
+    template<typename T>
+    xls_file_t createCallBackData(T&& doctype, opts_t const &options)
     {
-        xls_file_t xls_out;
+        xls_file_t xls_out(OutPutDoc(std::forward<T>(doctype)));
 
         xls_out.filename      = options.xls_file_name;
         xls_out.xls_row_limit = options.xls_row_limit;
         xls_out.sheet_name    = options.xls_sheet_name;
         xls_out.digit_count   = options.xls_digit_count;
-        xls_out.wbook         = std::make_unique<xls_workbook>();
         xls_out.page_number   = -1;
 
         xls_new_sheet(&xls_out);
@@ -101,7 +100,7 @@ namespace csv2xls
         return DoTheHardWork(csv_input,
                              parser,
                              char_buf_t (options.input_buffer_size),
-                             set_head_line(createCallBackData(options)));
+                             set_head_line(createCallBackData(xls_workbook(),options)));
     }
 
     FileNotOpen::FileNotOpen(char const *what)

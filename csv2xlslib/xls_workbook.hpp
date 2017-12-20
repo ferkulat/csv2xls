@@ -33,7 +33,7 @@ class xls_workbook final: public workbook
 public:
     xls_workbook();
     ~xls_workbook();
-
+    xls_workbook(xls_workbook && workbook) = default;
     void clear_sheet(const std::string& sheetname) override;
 
     int write_to_file(const std::string &file_name) override;
