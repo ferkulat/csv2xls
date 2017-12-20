@@ -23,24 +23,23 @@
  */
 
 #include <memory>
-#include "workbook.hpp"
 
 namespace csv2xls
 {
 
-class xls_workbook final: public workbook
+class xls_workbook
 {
 public:
     xls_workbook();
     ~xls_workbook();
     xls_workbook(xls_workbook && workbook) = default;
-    void clear_sheet(const std::string& sheetname) override;
+    void clear_sheet(const std::string& sheetname);
 
-    int write_to_file(const std::string &file_name) override;
+    int write_to_file(const std::string &file_name);
 
     void label( unsigned int row,
                 unsigned int col,
-                const std::string& strlabel) override;
+                const std::string& strlabel);
 private:
     struct Impl;
     static void PimplDeleter(Impl*p);

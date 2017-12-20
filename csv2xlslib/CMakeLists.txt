@@ -14,7 +14,6 @@ add_library(csv2xlslib
         print_help.cpp
         readHeadLine.cpp
         readHeadLine.hpp
-        workbook.hpp
         XlsFile.cpp
         XlsFile.hpp
         xls_workbook.cpp
@@ -22,6 +21,5 @@ add_library(csv2xlslib
         callback.hpp
         conversion.h
         version.h
-        OutPutDoc.cpp
         OutPutDoc.h)
 target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )

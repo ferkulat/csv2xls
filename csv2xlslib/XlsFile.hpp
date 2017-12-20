@@ -44,14 +44,14 @@ struct xls_file_t
 {
     xls_file_t(OutPutDoc wbook):wbook(std::move(wbook)){}
     HeadLineType headline;
-    OutPutDoc   wbook;
-    std::string sheet_name;
-    std::string filename;
-    int         page_number;
-    int         digit_count;
-    uint32_t    current_column;
-    uint32_t    current_row;
-    uint32_t    xls_row_limit;
+    OutPutDoc    wbook;
+    std::string  sheet_name;
+    std::string  filename;
+    int          page_number;
+    int          digit_count;
+    uint32_t     current_column;
+    uint32_t     current_row;
+    uint32_t     xls_row_limit;
 } ;
 
 /**
