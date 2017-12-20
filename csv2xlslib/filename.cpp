@@ -43,8 +43,8 @@ using namespace std;
 
     struct FileNameParts{
         FileNameParts() = default;
-        FileNameParts(std::string base, std::string type)
-                :base(std::move(base)), type(std::move(type)){}
+        FileNameParts(std::string base_, std::string type_)
+                :base(std::move(base_)), type(std::move(type_)){}
         std::string base;
         std::string type;
     };

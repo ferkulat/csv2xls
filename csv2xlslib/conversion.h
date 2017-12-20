@@ -100,5 +100,5 @@ TargetType ConvertTo(SourceType source)
         }
     }
     return static_cast<TargetType>(source);
-};
+}
 #endif //CSV2XLS_CONVERSION_H

@@ -37,7 +37,7 @@ private:
     class doc_type : public concept_t
     {
     public:
-        doc_type(T x):x(std::move(x)){}
+        doc_type(T x_):x(std::move(x_)){}
 
         void clear_sheet(const std::string &sheetname) override {
             x.clear_sheet(sheetname);

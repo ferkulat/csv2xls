@@ -42,7 +42,7 @@ namespace csv2xls
 using HeadLineType = std::vector<std::string>;
 struct xls_file_t
 {
-    xls_file_t(OutPutDoc wbook):wbook(std::move(wbook)){}
+    xls_file_t(OutPutDoc wbook_):wbook(std::move(wbook_)){}
     HeadLineType headline;
     OutPutDoc    wbook;
     std::string  sheet_name;

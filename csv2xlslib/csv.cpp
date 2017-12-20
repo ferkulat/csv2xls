@@ -41,9 +41,9 @@ namespace csv2xls
         delete p;
 
     }
-    Parser::Parser(unsigned char tab_delimiter)
+    Parser::Parser(unsigned char tab_delimiter_)
             :csv_file_parser(std::unique_ptr<csv_parser, ParserDeleter>(new csv_parser()))
-             ,tab_delimiter(tab_delimiter)
+             ,tab_delimiter(tab_delimiter_)
     {
     }
     /**

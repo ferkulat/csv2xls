@@ -106,7 +106,7 @@ namespace csv2xls
     FileNotOpen::FileNotOpen(char const *what)
             : runtime_error(what) {}
 
-    char_buf_t::char_buf_t(std::streamsize size)
-            : size(size)
-            ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size))) {}
+    char_buf_t::char_buf_t(std::streamsize size_)
+            : size(size_)
+            ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size_))) {}
 }

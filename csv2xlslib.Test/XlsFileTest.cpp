@@ -37,8 +37,8 @@ class wrapper_workbook
 {
     std::shared_ptr<T> wrapped;
 public:
-    wrapper_workbook(std::shared_ptr<T> wrapped)
-    :wrapped(wrapped)
+    wrapper_workbook(std::shared_ptr<T> wrapped_)
+    :wrapped(wrapped_)
     {}
 
     void clear_sheet(const std::string& sheetname)
