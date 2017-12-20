@@ -25,29 +25,18 @@
 #ifndef  CSV_HPP
 #define  CSV_HPP
 
-#include <csv.h>
 #include <memory>
 #include <iostream>
-
+struct csv_parser;
 namespace csv2xls
 {
     struct ParserDeleter {
-        void operator()(struct csv_parser *p){
-            if(p) {
-                csv_free(p);
-            }
-            delete p;
-
-        }
+        void operator()(struct csv_parser *p);
     };
 
     struct Parser
     {
-        explicit Parser(unsigned char tab_delimiter)
-                :csv_file_parser(std::unique_ptr<csv_parser, ParserDeleter>(new csv_parser()))
-                ,tab_delimiter(tab_delimiter)
-        {
-        }
+        explicit Parser(unsigned char tab_delimiter);
         std::unique_ptr<csv_parser, ParserDeleter> csv_file_parser; /** < the parser */
         unsigned char tab_delimiter;
 

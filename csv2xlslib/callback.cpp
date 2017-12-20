@@ -24,7 +24,7 @@
 
 #include "callback.hpp"
 #include "XlsFile.hpp"
-#include "csv.hpp"
+#include <csv.h>
 namespace csv2xls
 {
 void csv_cb_end_of_field(void *s, size_t , void *data)

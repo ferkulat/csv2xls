@@ -22,6 +22,8 @@
  */
 #include <cstdio>
 #include <cstdlib>
+#include <csv.h>
+
 #include "csv.hpp"
 namespace csv2xls
 {
@@ -32,7 +34,18 @@ namespace csv2xls
         }
         delete p;
     }
+    void ParserDeleter::operator()(struct csv_parser *p){
+        if(p) {
+            csv_free(p);
+        }
+        delete p;
 
+    }
+    Parser::Parser(unsigned char tab_delimiter)
+            :csv_file_parser(std::unique_ptr<csv_parser, ParserDeleter>(new csv_parser()))
+             ,tab_delimiter(tab_delimiter)
+    {
+    }
     /**
      * \brief needed by the csv parser
      */

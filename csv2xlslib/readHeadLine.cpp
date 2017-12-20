@@ -1,6 +1,8 @@
 #include <iostream>
 #include "readHeadLine.hpp"
 #include "callback.hpp"
+#include <csv.h>
+
 namespace csv2xls
 {
 void readHeadLine( std::istream &csv_input,

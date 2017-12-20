@@ -13,16 +13,13 @@ public:
     template<typename T>
     OutPutDoc(T&& x) : self_(new doc_type<T>(std::move(x))){}
 
-    void clear_sheet(const std::string& sheetname)
-    {self_->clear_sheet(sheetname);}
+    void clear_sheet(const std::string& sheetname);
 
-    int write_to_file(const std::string &file_name)
-    {return self_->write_to_file(file_name);}
+    int write_to_file(const std::string &file_name);
 
     void label( unsigned int row,
                 unsigned int col,
-                const std::string& strlabel)
-    {self_->label(row, col, strlabel);}
+                const std::string& strlabel);
 private:
 
     class concept_t

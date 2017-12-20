@@ -39,7 +39,7 @@ add_subdirectory(csv2xlslib)
 add_subdirectory(csv2xlslib.Test EXCLUDE_FROM_ALL)
 add_executable(csv2xls csv2xls.cpp ${version_file})
 target_compile_options( csv2xls PUBLIC ${WARNINGOPTS} )
-target_link_libraries(csv2xls csv2xlslib xls csv)
+target_link_libraries(csv2xls csv2xlslib)
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
 
 add_test( csv2xlslibTest  csv2xlslib.Test/csv2xlslibTest)

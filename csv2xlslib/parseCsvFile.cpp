@@ -4,7 +4,7 @@
 #include "readHeadLine.hpp"
 #include "xls_workbook.hpp"
 #include "conversion.h"
-
+#include <csv.h>
 namespace csv2xls
 {
 
