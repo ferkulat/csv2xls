@@ -24,6 +24,7 @@
 #include "XlsFile.hpp"
 #include "filename.hpp"
 #include <iostream>
+#include <algorithm>
 namespace csv2xls
 {
 
@@ -43,57 +44,57 @@ void xls_new_sheet(xls_file_t *file)
     file->page_number++;
 }
 
-void xls_append_cell(	xls_file_t *file,
-                        std::string label)
-{
-    //ignore columns > XLS_MAX_COLUMNS
-    if (XLS_MAX_COLUMNS > file->current_column)
+    void xls_append_cell(xls_file_t *file,
+                         std::string label)
     {
+        //ignore columns > XLS_MAX_COLUMNS
+        if (XLS_MAX_COLUMNS <= file->current_column) return;
+
         file->wbook.label(file->current_row, file->current_column, label);
         file->current_column++;
     }
-}
 
-void xls_newline(xls_file_t *file)
-{
-    file->current_column = 0;
-    file->current_row++;
-    if ((file->current_row >= file->xls_row_limit)
-            || (file->current_row >= XLS_MAX_ROWS))
+    bool isWithinRowLimit(xls_file_t const *file) {
+        return file->current_row < std::min(file->xls_row_limit, XLS_MAX_ROWS);
+    }
+
+    void xls_newline(xls_file_t *file)
     {
+        file->current_column = 0;
+        file->current_row++;
+
+        if (isWithinRowLimit(file)) return;
+
         xls_dump_worksheet(file);
         xls_new_sheet(file);
     }
-}
 
-void xls_dump_worksheet(xls_file_t *file)
-{
-    if (!xls_sheet_is_empty(file))
+
+    void xls_dump_worksheet(xls_file_t *file)
     {
+        if (xls_sheet_is_empty(file)) return;
+
         std::string fname = xls_filename(file->filename,
                                          file->page_number,
                                          file->digit_count);
         file->wbook.write_to_file(fname);
     }
-}
 
-void xls_add_headline(xls_file_t *file)
-{
-    if (!file->headline.empty())
+    void xls_add_headline(xls_file_t *file)
     {
+        if (file->headline.empty()) return;
+
         for (auto const& column_name : file->headline)
-        {
             xls_append_cell(file, column_name);
-        }
+
         xls_newline(file);
     }
-}
 
-bool xls_sheet_is_empty(xls_file_t *file)
-{
-    return ((file->current_column == 0)
-            && ((!file->headline.empty() && file->current_row == 1)
-                    || (file->current_row == 0)));
-}
+    bool xls_sheet_is_empty(xls_file_t *file)
+    {
+        return ((file->current_column == 0)
+                && ((!file->headline.empty() && file->current_row == 1)
+                        || (file->current_row == 0)));
+    }
 
 }/* ---- end of namespace csv2xls ---- */

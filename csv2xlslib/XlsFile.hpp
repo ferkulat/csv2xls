@@ -34,7 +34,7 @@
 
 namespace csv2xls
 {
-    constexpr int XLS_MAX_ROWS    = 65536;
+    constexpr uint32_t XLS_MAX_ROWS    = 65536;
     constexpr int XLS_MAX_COLUMNS = 256;
 /**
  * \brief information about xls file to be passed to csv call back functions
