@@ -27,19 +27,25 @@
 #include <csv.h>
 namespace csv2xls
 {
-void csv_cb_end_of_field(void *s, size_t , void *data)
+#if CSV_MAJOR < 3
+    #define CSV2XLS_LEN len
+#else
+    #define CSV2XLS_LEN
+#endif
+
+void csv_cb_end_of_field(void *s, size_t CSV2XLS_LEN, void *data)
 {
-    auto *csv_field = (char*) s;
+      auto *csv_field = (char*) s;
+#if CSV_MAJOR < 3
+      *(csv_field + CSV2XLS_LEN ) = '\0'; /*terminate string*/
+#endif
     auto *xls_file = (xls_file_t*) data;
 
-#if  CSV_MAJOR < 3
-    *(csv_field+len) ='\0'; /*terminate string*/
-#endif
 
     xls_append_cell(xls_file, csv_field);
 }/* ----- end of function csv_cb_end_of_field ----- */
 
-void csv_cb_headline_field(void *s, size_t , void *data)
+void csv_cb_headline_field(void *s, size_t CSV2XLS_LEN, void *data)
 {
     auto *csv_field = (char*) s;
     auto *xls_file = (xls_file_t*) data;
@@ -47,7 +53,7 @@ void csv_cb_headline_field(void *s, size_t , void *data)
     if (XLS_MAX_COLUMNS >= xls_file->headline.size())
     {
 #if  CSV_MAJOR < 3
-        *(csv_field+len) ='\0'; /*terminate string*/
+        *(csv_field + CSV2XLS_LEN) = '\0'; /*terminate string*/
 #endif
         xls_append_cell(xls_file, csv_field);
         xls_file->headline.emplace_back(csv_field);
