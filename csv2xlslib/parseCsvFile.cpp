@@ -55,7 +55,9 @@ namespace csv2xls
     auto ParseBuffer(Parser const& parser, char_buf_t &input_buffer, xls_file_t &xls_out)
     {
         return [&parser, &input_buffer, &xls_out](size_t bytes_to_parse){
-            return csv_parse(parser.csv_file_parser.get(), input_buffer.mem.get(), bytes_to_parse,
+            return csv_parse(parser.csv_file_parser.get(),
+                             input_buffer.mem.get(),
+                             bytes_to_parse,
                     /* register call back function for end of csv field*/
                              csv_cb_end_of_field,
                     /* register call back function for end of csv row*/
