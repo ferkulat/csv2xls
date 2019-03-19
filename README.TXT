@@ -2,7 +2,7 @@
 =========== Description ===========
 
 csv2xls (csv to xls) is a command line utility which converts csv files into one
-(or more if splitted) Excel(TM) file(s).
+(or more if maximum rows are exceeded) Excel(TM) file(s).
 
 	-= Features =-
 
@@ -16,7 +16,7 @@ csv2xls (csv to xls) is a command line utility which converts csv files into one
 - produces only Excel(TM) 97/2000/XP/2003 files
 - no cell formatting, just plain text
 
-        -= Prequisites =-
+        -= Prerequisites =-
 
 libiconv: http://ftp.gnu.org/pub/gnu/libiconv/ (Optional to get UTF-8 support)
 xlslib:   http://sourceforge.net/projects/xlslib/
@@ -42,4 +42,3 @@ Or try to fix it and send me pull requests or patches.
     -= In General =-
 Fork this project and let us collaborate.
 If you have an advise, I will listen to you and maybe follow :).
-Maybe you can give me a hand on topics in ToDo.TXT.

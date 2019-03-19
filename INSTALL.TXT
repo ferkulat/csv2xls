@@ -2,7 +2,7 @@
 =========== Building ==============
 
 
-	-= Prequisites =-
+	-= Prerequisites =-
 
 xlslib: http://sourceforge.net/projects/xlslib/
 libcsv: http://sourceforge.net/projects/libcsv/
