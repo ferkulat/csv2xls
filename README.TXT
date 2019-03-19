@@ -21,6 +21,7 @@ csv2xls (csv to xls) is a command line utility which converts csv files into one
 libiconv: http://ftp.gnu.org/pub/gnu/libiconv/ (Optional to get UTF-8 support)
 xlslib:   http://sourceforge.net/projects/xlslib/
 libcsv:   http://sourceforge.net/projects/libcsv/
+cmake:    to build/compile
 
 =========== Documentaion ==============
 

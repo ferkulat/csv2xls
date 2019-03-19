@@ -6,11 +6,14 @@
 
 xlslib: http://sourceforge.net/projects/xlslib/
 libcsv: http://sourceforge.net/projects/libcsv/
+Compiler: C++17 compiler (gcc 7, clang 5)
+cmake
 
+If you have an older compiler, you will be able to compile tag 0.3.5.
 
         -= Compile =-
 
-./configure
+cmake .
 make
         -= Install =-
 
@@ -37,7 +40,7 @@ We assume this folder is unzipped and its path is 'C:\csv2xls-0.0.0'.
 Open MSYS console and type
 
   cd  /C/csv2xls-0.0.0
-  ./configure
+  cmake .
   make
   make install-strip
 
