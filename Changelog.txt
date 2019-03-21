@@ -1,6 +1,11 @@
+Version: 0.4.0
+    * fix issue #13: switched to cmake and doctest
+    * updated man page for option -t
+    * use C++17
+
 Date:    Sun Feb 18 21:06:00 CET 2015
 Version: 0.3.5
-    * new option -t for tab as delmiter (thanks to Jakub Macek)
+    * new option -t for tab as delimiter (thanks to Jakub Macek)
 
 Date:    Sun Mar  2 15:12:48 CET 2014
 Version: 0.3.4
