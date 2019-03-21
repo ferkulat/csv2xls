@@ -1,3 +1,7 @@
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <getopt.h>
 #include "../csv2xlslib/parsecmd.hpp"
 #include "doctest.h"
 
@@ -12,8 +16,6 @@ struct TheFixture
 
     virtual ~TheFixture() = default;
 };
-
-
 
 
 
@@ -86,4 +88,29 @@ TEST_CASE_FIXTURE(TheFixture, "When_line_limit_is_0 then it_should_fail")
     opts.xls_row_limit = 0;
 
     REQUIRE_THROWS(checkOptions(opts));
+}
+auto CmdArgsArray(std::vector<std::string>&args){
+    optind = 1;
+    std::vector<char *> arg_ptrs(args.size(), nullptr);
+    auto const IntoPtr = [](std::string & str){ return str.data();};
+    std::transform(std::begin(args), std::end(args),std::begin(arg_ptrs), IntoPtr);
+    return arg_ptrs;
+}
+
+TEST_CASE("Option v should not throw")
+{
+    std::vector<std::string> args{"prgname", "-v"};
+    auto arg_ptrs = CmdArgsArray(args);
+
+    REQUIRE_NOTHROW(parsecmd_getopts(static_cast<int>(arg_ptrs.size()), arg_ptrs.data()));
+
+}
+
+TEST_CASE("Option h should not throw")
+{
+    std::vector<std::string> args{"prgname", "-h"};
+    auto arg_ptrs = CmdArgsArray(args);
+
+    REQUIRE_NOTHROW(parsecmd_getopts(static_cast<int>(arg_ptrs.size()), arg_ptrs.data()));
+
 }

@@ -131,6 +131,8 @@ namespace csv2xls
             }
         }
 
+        if(opts.exit_clean) return opts;
+
         if (optind < argc)
         {
             opts.csv_file_name = argv[optind];
