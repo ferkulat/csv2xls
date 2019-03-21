@@ -23,7 +23,7 @@
  */
 
 #include <memory>
-
+#include <string>
 namespace csv2xls
 {
 
