@@ -1,4 +1,3 @@
-INCLUDE_DIRECTORIES(SYSTEM /usr/include/xlslib)
 add_library(csv2xlslib
         callback.cpp
         callback.hpp
@@ -24,4 +23,5 @@ add_library(csv2xlslib
         OutPutDoc.hpp
         OutPutDoc.cpp)
 target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )
+target_include_directories(csv2xlslib SYSTEM PRIVATE ${CMAKE_PREFIX_PATH}/include/xlslib)
 target_link_libraries(csv2xlslib  xls csv)
