@@ -25,6 +25,7 @@
 #ifndef PARSECMD_HPP
 #define PARSECMD_HPP
 #include <string>
+#include <filesystem>
 #include <stdexcept>
 #include "default_values.h"
 namespace csv2xls
@@ -37,8 +38,8 @@ namespace csv2xls
 
     struct opts_t
     {
-        std::string csv_file_name;
-        std::string xls_file_name;
+        std::filesystem::path csv_file_name;
+        std::filesystem::path xls_file_name;
         std::string xls_sheet_name      = DEFAULT_XLS_SHEET_NAME;
         uint32_t xls_row_limit          = DEFAULT_XLS_MAX_LINES;
         int input_buffer_size           = DEFAULT_CSV_BUFFER_SIZE;

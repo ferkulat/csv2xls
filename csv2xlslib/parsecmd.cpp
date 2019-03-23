@@ -25,7 +25,7 @@
 #include "parsecmd.hpp"
 #include <unistd.h>     /* To parse command line options. */
 #include <iostream>
-#include <libgen.h>     /* basename() */
+#include <filesystem>
 #include "version.h"
 #include "filename.hpp"
 #include "print_help.h"
@@ -148,37 +148,26 @@ namespace csv2xls
 
     opts_t set_xls_filename(opts_t opts)
     {
-        string tmpstr;
-        tmpstr.assign(opts.csv_file_name);
-        auto *inputname = (char*) tmpstr.c_str();
+        auto const csvfilename = std::filesystem::path(opts.csv_file_name);
 
         if (opts.xls_file_name.empty())
         {
-            char *output_name = nullptr;
-            if (nullptr != (output_name = basename(inputname)))
+
+            if (csvfilename.has_filename())
             {
-                opts.xls_file_name.assign(output_name);
+                opts.xls_file_name.assign(csvfilename.filename());
             }
             else
             {
                 throw BadCommandLineOption("Error determining output file name");
             }
         }
-        else
+        else if (!opts.xls_file_name.has_filename())
         {
-            if (isDir(opts.xls_file_name))
-                opts.xls_file_name.append(basename(inputname));
+                opts.xls_file_name /= csvfilename.filename();
         }
         opts.xls_file_name = xls_filename(opts.xls_file_name, 0, 0);
         return opts;
-    }
-
-    bool isDir(string const& path)
-    {
-        char lastchar = path[path.size() - 1];
-
-        return (   ('/' == lastchar) /* *nix */
-                || ('\\' == lastchar)) /* windows */;
     }
 
     BadCommandLineOption::BadCommandLineOption(char const * what)
