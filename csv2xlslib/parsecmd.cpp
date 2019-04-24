@@ -152,14 +152,11 @@ namespace csv2xls
 
     opts_t set_xls_filename(opts_t opts)
     {
-        auto const csvfilename = std::filesystem::path(opts.csv_file_name);
-
         if (opts.xls_file_name.empty())
         {
-
-            if (csvfilename.has_filename())
+            if (opts.csv_file_name.has_filename())
             {
-                opts.xls_file_name.assign(csvfilename.filename());
+                opts.xls_file_name = opts.csv_file_name.filename();
             }
             else
             {
@@ -168,7 +165,7 @@ namespace csv2xls
         }
         else if (isDir(opts.xls_file_name))
         {
-                opts.xls_file_name /= csvfilename.filename();
+                opts.xls_file_name /= opts.csv_file_name.filename();
         }
         opts.xls_file_name = xls_filename(opts.xls_file_name, 0, 0);
         return opts;

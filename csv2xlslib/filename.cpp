@@ -26,6 +26,7 @@
 #include <sstream>
 #include <algorithm>
 #include <regex>
+#include <filesystem>
 namespace csv2xls
 {
 
@@ -49,14 +50,9 @@ using namespace std;
         std::string type;
     };
 
-    FileNameParts SplitIntoParts(std::string const& filename)
+    FileNameParts SplitIntoParts(std::filesystem::path const& filename)
     {
-        std::smatch file_type_match;
-        if(std::regex_search(filename, file_type_match, std::regex(R"(\..{3}$)")))
-        {
-            return FileNameParts(file_type_match.prefix(), file_type_match[0]);
-        }
-        return FileNameParts(filename,"");
+        return FileNameParts(filename.parent_path() /= filename.stem(), filename.extension());
     }
 
     FileNameParts SetOutputFileNameParts(FileNameParts parts)
