@@ -1,7 +1,6 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.11)
 find_package(Git)
 project(csv2xls)
-enable_testing()
 
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
 set(VERSION_UPDATE_FROM_GIT "TRUE")
@@ -14,7 +13,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 # Make a version file containing the current version from git.
 #
 include(GetVersionFromGitTag)
-
+include(doctest)
+include(CTestConfig)
+include(CTest)
+include(warnings)
+enable_testing()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/version.cpp.in
         ${CMAKE_CURRENT_BINARY_DIR}/version.cpp)
