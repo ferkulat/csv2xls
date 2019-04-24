@@ -146,6 +146,10 @@ namespace csv2xls
 
     }/* -----  end of function parsecmd_getopts  ----- */
 
+    bool isDir(std::filesystem::path const& path){
+        return !path.has_filename();
+    }
+
     opts_t set_xls_filename(opts_t opts)
     {
         auto const csvfilename = std::filesystem::path(opts.csv_file_name);
@@ -162,7 +166,7 @@ namespace csv2xls
                 throw BadCommandLineOption("Error determining output file name");
             }
         }
-        else if (!opts.xls_file_name.has_filename())
+        else if (isDir(opts.xls_file_name))
         {
                 opts.xls_file_name /= csvfilename.filename();
         }
