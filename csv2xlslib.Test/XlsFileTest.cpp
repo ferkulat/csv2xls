@@ -81,7 +81,7 @@ struct Group1
     Group1()
     {
         test_workbook            = std::make_shared<dummy_workbook>() ;
-        xls_file                 = std::make_unique<csv2xls::xls_file_t>(wrapper_workbook(test_workbook));
+        xls_file                 = std::make_unique<csv2xls::xls_file_t>(OutPutDoc(wrapper_workbook(test_workbook)));
         xls_file->filename       = "file";
         xls_file->xls_row_limit  = csv2xls::XLS_MAX_ROWS;
         xls_file->current_column = 0;

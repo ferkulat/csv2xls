@@ -11,7 +11,7 @@
 class OutPutDoc {
 public:
     template<typename T>
-    OutPutDoc(T&& x) : self_(new doc_type<T>(std::move(x))){}
+    explicit OutPutDoc(T&& x) : self_(new doc_type<T>(std::forward<T>(x))){}
 
     void clear_sheet(const std::string& sheetname);
 
