@@ -30,13 +30,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/csv2xlslib)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-if( CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU" )
-    set( WARNINGOPTS -Wall -Wextra -Wpedantic -Wimplicit-fallthrough -Warray-bounds -Wshadow -Wconversion -Wsign-conversion -Wparentheses -Werror )
-endif()
-if( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
-    set( WARNINGOPTS  /W4 /WX )
-endif()
-
 add_subdirectory(doc)
 add_subdirectory(csv2xlslib)
 add_subdirectory(csv2xlslib.Test EXCLUDE_FROM_ALL)
