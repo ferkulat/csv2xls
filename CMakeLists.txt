@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.11)
 find_package(Git)
-project(csv2xls)
+project(csv2xls LANGUAGES CXX)
 
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
 set(VERSION_UPDATE_FROM_GIT "TRUE")
