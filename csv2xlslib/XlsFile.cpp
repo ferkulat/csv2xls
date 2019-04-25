@@ -30,14 +30,7 @@ namespace csv2xls
 
 void xls_new_sheet(xls_file_t *file)
 {
-    if (!file->sheet_name.empty())
-    {
-        file->wbook.clear_sheet(file->sheet_name);
-    }
-    else
-    {
-        file->wbook.clear_sheet("Table 1");
-    }
+    file->wbook.clear_sheet(file->sheet_name.Get());
     file->current_column = 0;
     file->current_row = 0;
     xls_add_headline(file);
@@ -55,7 +48,7 @@ void xls_new_sheet(xls_file_t *file)
     }
 
     bool isWithinRowLimit(xls_file_t const *file) {
-        return file->current_row < std::min(file->xls_row_limit, XLS_MAX_ROWS);
+        return file->current_row < std::min(file->xls_row_limit.Get(), XLS_MAX_ROWS);
     }
 
     void xls_newline(xls_file_t *file)
@@ -76,7 +69,7 @@ void xls_new_sheet(xls_file_t *file)
 
         std::string fname = xls_filename(file->filename,
                                          file->page_number,
-                                         file->digit_count);
+                                         file->digit_count.Get());
         file->wbook.write_to_file(fname);
     }
 

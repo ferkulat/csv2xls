@@ -8,8 +8,8 @@ namespace csv2xls
     struct Parser;
     struct char_buf_t
     {
-        explicit char_buf_t(std::streamsize size);
-        std::streamsize size;
+        explicit char_buf_t(InputBufferSize size);
+        InputBufferSize size;
         std::unique_ptr<char[]> mem;
     } ;
 
@@ -20,7 +20,7 @@ namespace csv2xls
     };
 
     int
-    parseCsvFile(opts_t options);
+    parseCsvFile(Config options);
 
     int
     DoTheHardWork(std::istream &csv_input, Parser const& parser, char_buf_t input_buffer, xls_file_t xls_out);

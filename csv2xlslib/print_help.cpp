@@ -16,7 +16,7 @@
 namespace csv2xls
 
 {
-void print_help(char*executable)
+void print_help(char const* executable)
 {
     std::cout << "Usage: " << executable << " [options] file" << std::endl
             << std::endl

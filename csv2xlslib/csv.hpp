@@ -27,6 +27,8 @@
 
 #include <memory>
 #include <iostream>
+#include "csv2xls_types.h"
+
 struct csv_parser;
 namespace csv2xls
 {
@@ -36,13 +38,13 @@ namespace csv2xls
 
     struct Parser
     {
-        explicit Parser(unsigned char tab_delimiter);
+        explicit Parser(CsvSeparator tab_delimiter);
         std::unique_ptr<csv_parser, ParserDeleter> csv_file_parser;
-        unsigned char tab_delimiter;
+        CsvSeparator tab_delimiter;
     } ;
 
     Parser
-    createParser(unsigned char tab_delimiter);
+    createParser(CsvSeparator tab_delimiter);
 
 } /* ----- end of namesace csv2xls ----- */
 #endif   /* ----- #ifndef CSV_HPP  ----- */

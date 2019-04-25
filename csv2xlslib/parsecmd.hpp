@@ -28,41 +28,44 @@
 #include <filesystem>
 #include <stdexcept>
 #include "default_values.h"
+#include "csv2xls_types.h"
+
 namespace csv2xls
 {
-     class BadCommandLineOption : public std::logic_error
+
+    class BadCommandLineOption : public std::logic_error
      {
      public:
-         explicit BadCommandLineOption(char const *what);
+         explicit BadCommandLineOption(std::string const& what);
      };
 
-    struct opts_t
+    struct Config
     {
-        std::filesystem::path csv_file_name;
-        std::filesystem::path xls_file_name;
-        std::string xls_sheet_name      = DEFAULT_XLS_SHEET_NAME;
-        uint32_t xls_row_limit          = DEFAULT_XLS_MAX_LINES;
-        int input_buffer_size           = DEFAULT_CSV_BUFFER_SIZE;
-        int xls_digit_count             = DEFAULT_XLS_DIGIT_COUNT;
-        unsigned char csv_tab_delimiter = DEFAULT_CSV_TAB_DELIMITER;
-        bool csv_file_has_headline      = false;
-        bool exit_clean                 = false;
+        InputFile                csv_file_name;
+        std::filesystem::path    xls_file_name;
+        XlsSheetName             xls_sheet_name        = XlsSheetName("Table1");
+        OutPutRowLimit           xls_row_limit         = DEFAULT_XLS_MAX_LINES;
+        InputBufferSize          input_buffer_size     = DEFAULT_CSV_BUFFER_SIZE;
+        OutPutFileNameDigitCount xls_digit_count       = DEFAULT_XLS_DIGIT_COUNT;
+        CsvSeparator             csv_tab_delimiter     = DEFAULT_CSV_TAB_DELIMITER;
+        InputHasHeadLine         csv_file_has_headline = InputHasHeadLine(false);
+        bool exit_clean                                = false;
     };
 
-    opts_t
-    checkOptions(opts_t opts);
+    Config
+    checkOptions(Config opts);
 
 
-    opts_t
+    Config
     parse_commandline(int argc,
                       char **argv);
 
-    opts_t
+    Config
     parsecmd_getopts(int argc,
                      char**argv);
 
-    opts_t
-    set_xls_filename(opts_t opts);
+    Config
+    set_xls_filename(Config opts);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*PARSECMD_HPP*/
 

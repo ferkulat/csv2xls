@@ -1,4 +1,5 @@
 #include <XlsFile.hpp>
+#include <default_values.h>
 #include "doctest.h"
 
 using namespace std;
@@ -83,10 +84,10 @@ struct Group1
         test_workbook            = std::make_shared<dummy_workbook>() ;
         xls_file                 = std::make_unique<csv2xls::xls_file_t>(OutPutDoc(wrapper_workbook(test_workbook)));
         xls_file->filename       = "file";
-        xls_file->xls_row_limit  = csv2xls::XLS_MAX_ROWS;
+        xls_file->xls_row_limit  = csv2xls::DEFAULT_XLS_MAX_LINES;
         xls_file->current_column = 0;
         xls_file->current_row    = 0;
-        xls_file->digit_count    = 3;
+        xls_file->digit_count    = OutPutFileNameDigitCount(3);
         xls_file->page_number    = 0;
     }
 
@@ -163,7 +164,7 @@ TEST_CASE_FIXTURE(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
-    constexpr size_t LINE_LIMIT_PER_SHEET = 5;
+    constexpr auto LINE_LIMIT_PER_SHEET = OutPutRowLimit(5);
 
     xls_file->xls_row_limit = LINE_LIMIT_PER_SHEET;
     read_CSV_into(xls_file.get(), INPUT_ROWS, INPUT_COLUMNS);
@@ -180,7 +181,7 @@ TEST_CASE_FIXTURE(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
     constexpr size_t INPUT_COLUMNS         = 3;
     constexpr size_t INPUT_ROWS            = 8;
     constexpr size_t HEADLINE              = 1;
-    constexpr size_t LINE_LIMIT_PER_SHEET  = 5;
+    constexpr auto LINE_LIMIT_PER_SHEET = OutPutRowLimit(5);
 
     std::vector<string> tmp(INPUT_COLUMNS, "head");
     xls_file->headline = tmp;
@@ -192,7 +193,7 @@ TEST_CASE_FIXTURE(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
 
     CHECK(1 == test_workbook->called_write_to_file);
     CHECK(0 == xls_file->current_column);
-    CHECK(INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET == xls_file->current_row);
+    CHECK(INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET.Get() == xls_file->current_row);
 }
 
 
@@ -200,7 +201,7 @@ TEST_CASE_FIXTURE(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_hea
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
-    constexpr size_t LINE_LIMIT_PER_SHEET = 4;
+    constexpr auto LINE_LIMIT_PER_SHEET = OutPutRowLimit(4);
 
     xls_file->xls_row_limit = LINE_LIMIT_PER_SHEET;
     read_CSV_into(xls_file.get(), INPUT_ROWS, INPUT_COLUMNS);
@@ -215,7 +216,7 @@ TEST_CASE_FIXTURE(Group1, "make_3x2_lines_sheets_out_of_4_inputlines_with_headli
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 4;
-    constexpr size_t LINE_LIMIT_PER_SHEET = 2;
+    constexpr auto LINE_LIMIT_PER_SHEET = OutPutRowLimit(2);
 
     std::vector<string> tmp(INPUT_COLUMNS, "head");
     xls_file->headline = tmp;

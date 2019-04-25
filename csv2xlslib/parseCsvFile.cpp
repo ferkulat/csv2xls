@@ -8,9 +8,9 @@
 namespace csv2xls
 {
 
-    std::fstream openCsvFile(std::string const &file_name)
+    std::fstream openCsvFile(InputFile const &file_name)
     {
-        std::fstream csv_input(file_name.c_str(),
+        std::fstream csv_input(file_name.Get(),
                                std::ifstream::in | std::ifstream::binary);
         if (!csv_input.is_open())
         {
@@ -22,7 +22,7 @@ namespace csv2xls
         return csv_input;
     }
     template<typename T>
-    xls_file_t createCallBackData(T&& doctype, opts_t const &options)
+    xls_file_t createCallBackData(T&& doctype, Config const &options)
     {
         xls_file_t xls_out(OutPutDoc(std::forward<T>(doctype)));
 
@@ -36,10 +36,10 @@ namespace csv2xls
         return xls_out;
     }
 
-    auto SetUpHeadLine(std::istream &csv_input, Parser const& parser, bool has_had_line)
+    auto SetUpHeadLine(std::istream &csv_input, Parser const& parser, InputHasHeadLine has_had_line)
     {
         return [has_had_line, &parser, &csv_input](xls_file_t xls_out){
-            if (has_had_line) {
+            if (has_had_line.Get()) {
                 readHeadLine(csv_input, parser, xls_out);
             }
             return xls_out;
@@ -48,7 +48,7 @@ namespace csv2xls
 
     size_t ReadBuffer(std::istream &csv_input, char_buf_t &input_buffer)
     {
-        csv_input.read(input_buffer.mem.get(), input_buffer.size);
+        csv_input.read(input_buffer.mem.get(), input_buffer.size.Get());
         return ConvertTo<size_t>(csv_input.gcount());
     }
 
@@ -91,7 +91,7 @@ namespace csv2xls
         return 0;
     }
 
-    int parseCsvFile(opts_t options)
+    int parseCsvFile(Config options)
     {
         if (options.exit_clean) return 0;
 
@@ -108,7 +108,7 @@ namespace csv2xls
     FileNotOpen::FileNotOpen(char const *what)
             : runtime_error(what) {}
 
-    char_buf_t::char_buf_t(std::streamsize size_)
+    char_buf_t::char_buf_t(InputBufferSize size_)
             : size(size_)
-            ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size_))) {}
+            ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size_.Get()))) {}
 }

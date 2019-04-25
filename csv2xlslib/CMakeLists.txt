@@ -21,7 +21,8 @@ add_library(csv2xlslib
         conversion.h
         version.h
         OutPutDoc.hpp
-        OutPutDoc.cpp)
+        OutPutDoc.cpp
+        csv2xls_types.cpp)
 target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )
 target_include_directories(csv2xlslib SYSTEM PRIVATE ${CMAKE_PREFIX_PATH}/include/xlslib)
-target_link_libraries(csv2xlslib  xls csv stdc++fs)
+target_link_libraries(csv2xlslib xls csv stdc++fs)

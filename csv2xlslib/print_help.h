@@ -5,7 +5,7 @@ namespace csv2xls
 
 {
 void
-print_help(char*executable);
+print_help(char const* executable);
 }
 
 #endif /* PRINT_HELP_H_ */

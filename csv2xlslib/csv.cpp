@@ -25,6 +25,8 @@
 #include <csv.h>
 
 #include "csv.hpp"
+#include "csv2xls_types.h"
+
 namespace csv2xls
 {
     void ParserDeleter::operator()(struct csv_parser *p){
@@ -34,7 +36,7 @@ namespace csv2xls
         delete p;
     }
 
-    Parser::Parser(unsigned char tab_delimiter_)
+    Parser::Parser(CsvSeparator tab_delimiter_)
             :csv_file_parser(std::unique_ptr<csv_parser, ParserDeleter>(new csv_parser()))
              ,tab_delimiter(tab_delimiter_)
     {
@@ -50,7 +52,7 @@ namespace csv2xls
         return ((c == CSV_CR) || (c == CSV_LF));
     }
 
-    Parser createParser(unsigned char tab_delimiter)
+    Parser createParser(CsvSeparator tab_delimiter)
     {
         Parser csvin(tab_delimiter);
 
@@ -66,7 +68,7 @@ namespace csv2xls
 
         csv_set_term_func(csvin.csv_file_parser.get(), csv_is_term);
 
-        csv_set_delim(csvin.csv_file_parser.get(), csvin.tab_delimiter);
+        csv_set_delim(csvin.csv_file_parser.get(), static_cast<unsigned char>(csvin.tab_delimiter.Get()));
         return  csvin;
     }
 

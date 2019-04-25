@@ -12,11 +12,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 #
 # Make a version file containing the current version from git.
 #
+set(EXTERN_DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern)
+set(EXTERN_CHECKED_CMD_DIR ${EXTERN_DEPENDENCIES_DIR}/checked_cmd)
+set(EXTERN_DOCTEST_HEADER_DIR ${EXTERN_DEPENDENCIES_DIR}/doctest)
 include(GetVersionFromGitTag)
 include(doctest)
 include(CTestConfig)
 include(CTest)
 include(warnings)
+include(checkedcmd)
 enable_testing()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/version.cpp.in
@@ -27,6 +31,8 @@ set(version_file "${CMAKE_CURRENT_BINARY_DIR}/version.cpp")
 
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/csv2xlslib)
+include_directories(SYSTEM ${EXTERN_CHECKED_CMD_DIR}/extern/clara)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
