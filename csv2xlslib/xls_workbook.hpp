@@ -24,6 +24,7 @@
 
 #include <memory>
 #include <string>
+#include <filesystem>
 namespace csv2xls
 {
 
@@ -35,7 +36,7 @@ public:
     xls_workbook(xls_workbook && workbook) = default;
     void clear_sheet(const std::string& sheetname);
 
-    int write_to_file(const std::string &file_name);
+    int write_to_file(const std::filesystem::path &file_name);
 
     void label( unsigned int row,
                 unsigned int col,

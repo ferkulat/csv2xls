@@ -67,7 +67,7 @@ void xls_new_sheet(xls_file_t *file)
     {
         if (xls_sheet_is_empty(file)) return;
 
-        std::string fname = xls_filename(file->filename,
+        auto fname = xls_filename(file->filename,
                                          file->page_number,
                                          file->digit_count.Get());
         file->wbook.write_to_file(fname);

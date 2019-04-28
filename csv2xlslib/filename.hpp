@@ -22,6 +22,7 @@
  * MA  02110-1301  USA
  */
 #include <string>
+#include <filesystem>
 namespace csv2xls
 {
 /**
@@ -39,8 +40,8 @@ namespace csv2xls
  *
  * The resulting file name.
  */
-std::string
-xls_filename(std::string wish_name,
+std::filesystem::path
+xls_filename(std::filesystem::path wish_name,
              long count, /** the number added to file name */
              long digits);/** minimum digits of the number  */
 

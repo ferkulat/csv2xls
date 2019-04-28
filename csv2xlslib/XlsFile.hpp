@@ -47,7 +47,7 @@ struct xls_file_t
     HeadLineType headline;
     OutPutDoc    wbook;
     XlsSheetName sheet_name;
-    std::string  filename;
+    std::filesystem::path  filename;
     int          page_number;
     OutPutFileNameDigitCount digit_count;
     uint32_t     current_column;

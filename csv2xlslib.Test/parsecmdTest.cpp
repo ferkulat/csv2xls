@@ -1,7 +1,6 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <getopt.h>
 #include "../csv2xlslib/parsecmd.hpp"
 #include "doctest.h"
 
@@ -9,7 +8,6 @@ using namespace std;
 
 using namespace csv2xls;
 auto CmdArgsArray(std::vector<std::string>&args){
-    optind = 1;
     std::vector<char *> arg_ptrs(args.size(), nullptr);
     auto const IntoPtr = [](std::string & str){ return str.data();};
     std::transform(std::begin(args), std::end(args),std::begin(arg_ptrs), IntoPtr);

@@ -7,6 +7,7 @@
 
 #include <string>
 #include <memory>
+#include <filesystem>
 
 class OutPutDoc {
 public:
@@ -15,7 +16,7 @@ public:
 
     void clear_sheet(const std::string& sheetname);
 
-    int write_to_file(const std::string &file_name);
+    int write_to_file(const std::filesystem::path &file_name);
 
     void label( unsigned int row,
                 unsigned int col,
@@ -28,7 +29,7 @@ private:
         virtual ~concept_t() = default;
 
         virtual void clear_sheet(const std::string& sheetname)= 0;
-        virtual int write_to_file(const std::string &file_name) = 0;
+        virtual int write_to_file(const std::filesystem::path &file_name) = 0;
         virtual void label( unsigned int row,
                             unsigned int col,
                             const std::string& strlabel) = 0;
@@ -43,7 +44,7 @@ private:
             x.clear_sheet(sheetname);
         }
 
-        int write_to_file(const std::string &file_name) override {
+        int write_to_file(const std::filesystem::path &file_name) override {
             return x.write_to_file(file_name);
         }
 

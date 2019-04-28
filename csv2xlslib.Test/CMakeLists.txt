@@ -11,6 +11,6 @@ set(TEST_SOURCE_FILES
 add_executable(csv2xlslibTest ${TEST_SOURCE_FILES} ${version_file})
 target_link_libraries(csv2xlslibTest csv2xlslib)
 add_test(
-        NAME tests
-        COMMAND tests
+        NAME csv2xlslibTest
+        COMMAND csv2xlslibTest
 )

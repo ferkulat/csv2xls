@@ -17,7 +17,7 @@ public:
     {
         called_clear_sheet++;
     }
-    int write_to_file(const std::string&/*file_name*/)
+    int write_to_file(const std::filesystem::path&/*file_name*/)
     {
         called_write_to_file++;
         return 0;
@@ -46,7 +46,7 @@ public:
     {
         wrapped->clear_sheet(sheetname);
     }
-    int write_to_file(const std::string& file_name)
+    int write_to_file(const std::filesystem::path& file_name)
     {
         return wrapped->write_to_file(file_name) ;
     }

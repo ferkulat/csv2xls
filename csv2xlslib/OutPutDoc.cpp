@@ -9,7 +9,7 @@ void OutPutDoc::clear_sheet(const std::string& sheetname)
     self_->clear_sheet(sheetname);
 }
 
-int OutPutDoc::write_to_file(const std::string &file_name)
+int OutPutDoc::write_to_file(const std::filesystem::path &file_name)
 {
     return self_->write_to_file(file_name);
 }
