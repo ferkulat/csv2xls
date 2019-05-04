@@ -26,6 +26,7 @@
 #include <sstream>
 #include <algorithm>
 #include <regex>
+#include <filesystem>
 namespace csv2xls
 {
 
@@ -43,20 +44,15 @@ using namespace std;
 
     struct FileNameParts{
         FileNameParts() = default;
-        FileNameParts(std::string base_, std::string type_)
+        FileNameParts(std::filesystem::path base_, std::filesystem::path type_)
                 :base(std::move(base_)), type(std::move(type_)){}
-        std::string base;
-        std::string type;
+        std::filesystem::path base;
+        std::filesystem::path type;
     };
 
-    FileNameParts SplitIntoParts(std::string const& filename)
+    FileNameParts SplitIntoParts(std::filesystem::path const& filename)
     {
-        std::smatch file_type_match;
-        if(std::regex_search(filename, file_type_match, std::regex(R"(\..{3}$)")))
-        {
-            return FileNameParts(file_type_match.prefix(), file_type_match[0]);
-        }
-        return FileNameParts(filename,"");
+        return FileNameParts(filename.parent_path() /= filename.stem(), filename.extension());
     }
 
     FileNameParts SetOutputFileNameParts(FileNameParts parts)
@@ -64,13 +60,13 @@ using namespace std;
         constexpr auto xls_txt = ".xls";
 
         if (parts.type.empty()||
-            std::regex_match(parts.type, std::regex(R"(\.csv$)", std::regex::icase)))
+            std::regex_match(parts.type.string(), std::regex(R"(\.csv$)", std::regex::icase)))
         {
             parts.type.assign(xls_txt);
         }
-        else if(!std::regex_match(parts.type, std::regex(R"(\.xls$)", std::regex::icase)))
+        else if(!std::regex_match(parts.type.string(), std::regex(R"(\.xls$)", std::regex::icase)))
         {
-            parts.base.append(parts.type);
+            parts.base = parts.base.string() + parts.type.string();
             parts.type.assign(xls_txt);
         }
         return parts;
@@ -80,17 +76,17 @@ using namespace std;
     {
         return [count, digits](FileNameParts parts){
             if (count && digits)
-                parts.base.append(ConvertCountToStringWithLeadingZero(digits, count));
+                parts.base += ConvertCountToStringWithLeadingZero(digits, count);
             return parts;
         };
     }
 
-    std::string BuildXlsFilename(FileNameParts parts)
+    std::filesystem::path BuildXlsFilename(FileNameParts parts)
     {
-        return parts.base + parts.type;
+        return parts.base.string() + parts.type.string();
     }
 
-    string xls_filename(string wish_name,
+    std::filesystem::path xls_filename(std::filesystem::path wish_name,
                         long count,
                         long digits)
     {

@@ -44,9 +44,9 @@ void xls_workbook::label(unsigned32_t row,
     this->pimpl->wsheet->label(row, col, strlabel);
 }
 
-int xls_workbook::write_to_file(const std::string& file_name)
+int xls_workbook::write_to_file(const std::filesystem::path& file_name)
 {
-    return this->pimpl->wbook->Dump(file_name);
+    return this->pimpl->wbook->Dump(file_name.string());
 }
 
     xls_workbook::xls_workbook() : pimpl(new Impl, &PimplDeleter) {

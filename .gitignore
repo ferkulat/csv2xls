@@ -1,3 +1,4 @@
+extern
 src/csv2xls
 *.swp
 *.o
@@ -14,3 +15,4 @@ Makefile
 .idea
 cmake-build-debug
 cmake-build-release
+VERSION

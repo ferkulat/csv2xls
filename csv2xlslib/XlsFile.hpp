@@ -31,6 +31,7 @@
 #include <memory>
 
 #include "OutPutDoc.hpp"
+#include "csv2xls_types.h"
 
 namespace csv2xls
 {
@@ -45,13 +46,13 @@ struct xls_file_t
     xls_file_t(OutPutDoc wbook_):wbook(std::move(wbook_)){}
     HeadLineType headline;
     OutPutDoc    wbook;
-    std::string  sheet_name;
-    std::string  filename;
+    XlsSheetName sheet_name;
+    std::filesystem::path  filename;
     int          page_number;
-    int          digit_count;
+    OutPutFileNameDigitCount digit_count;
     uint32_t     current_column;
     uint32_t     current_row;
-    uint32_t     xls_row_limit;
+    OutPutRowLimit xls_row_limit;
 } ;
 
 /**

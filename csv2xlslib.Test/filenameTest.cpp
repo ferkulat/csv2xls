@@ -28,14 +28,24 @@
 using namespace csv2xls;
 
 
-TEST_CASE("no_xls_ending")
+TEST_SUITE("no_xls_ending")
 {
-    CHECK_EQ("input.xls", xls_filename("input.csv", 0, 4));
-    CHECK_EQ("input.xls", xls_filename("input", 0, 4));
-    CHECK_EQ("input0001.xls", xls_filename("input", 1, 4));
-    CHECK_EQ("inp.xls", xls_filename("inp", 0, 4));
-    CHECK_EQ("i.p.xls", xls_filename("i.p", 0, 4));
-    CHECK_EQ("i.p0001.xls", xls_filename("i.p", 1, 4));
+    TEST_CASE("given input.csv gives input.xls") {
+        auto const actual = xls_filename("input.csv", 0, 4);
+        CHECK_EQ("input.xls", actual);
+        CHECK_EQ("input.xls", xls_filename("input", 0, 4));
+        CHECK_EQ("inp.xls", xls_filename("inp", 0, 4));
+        CHECK_EQ("i.p0001.xls", xls_filename("i.p", 1, 4));
+    }
+    TEST_CASE("given second outfile adds numbering") {
+        auto const actual = xls_filename("input", 1, 4);
+        CHECK_EQ("input0001.xls", actual);
+    }
+    TEST_CASE("given first outfile adds no numbering") {
+        auto const actual = xls_filename("i.p", 0, 4);
+        CHECK_EQ("i.p.xls", actual);
+    }
+
 }
 
 TEST_CASE("with_xls_ending")
@@ -49,7 +59,7 @@ TEST_CASE("with_xls_ending")
 
 TEST_CASE("numbering")
 {
-    CHECK_EQ("input4294967295.XLS", xls_filename("input.XLS", 4294967295U, 4));
-    CHECK_EQ("input0429496729.XLS", xls_filename("input.XLS", 429496729U, 10));
+    CHECK_EQ("input429496729.XLS",  xls_filename("input.XLS", 429496729, 4));
+    CHECK_EQ("input0429496729.XLS", xls_filename("input.XLS", 429496729, 10));
 }
 

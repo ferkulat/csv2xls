@@ -1,9 +1,15 @@
-Date:    Sun Feb 18 21:06:00 CET 2015
-Version: 0.3.5
-    * new option -t for tab as delmiter (thanks to Jakub Macek)
+### Version: 0.4.0
+    * fix issue #13: switched to cmake and doctest
+    * updated man page for option -t
+    * use C++17
+    * libcsv and xlslib will be built as part of the build process
+    * csv2xls can now be built with msvc2017 and msvc2019
+    * use CheckedCmd for command line parsing
 
-Date:    Sun Mar  2 15:12:48 CET 2014
-Version: 0.3.4
+### Version: 0.3.5
+    * new option -t for tab as delimiter (thanks to Jakub Macek)
+
+### Version: 0.3.4
     * issue #8: crash on missing input file
                 It was not enough to check on minimum one command line parameter.
                 Given any valid option it passes this check, and tries to access a
@@ -11,8 +17,7 @@ Version: 0.3.4
     * issue #9: crash if inputfile name length is less than 4 chars
     * fix:      If option -H is not set, allow option -l1
  
-Date:    Do 11. Jun 18:07:51 CET 2013
-Version: 0.3.3
+### Version: 0.3.3
     * issue #5: empty xls file
                 Don't write a worksheet to a file, if it is empty or with just a head line.
     * issue #4: Failed to open file csv2xls (on Mac OSX)
@@ -23,38 +28,39 @@ Version: 0.3.3
     * fix:      memory leaks
     * build:    make use of config.h
 
-Date:    Do 27. Dez 00:57:36 CET 2012
-Version: 0.3.2
+### Version: 0.3.2
     * build: remove automake as dependency
     * build: native on Windows (MinGW) works now
 
-Date:    Di 27. Nov 20:24:25 CET 2012
-Version: 0.3.1
+### Version: 0.3.1
+
     * allow directory as output path
     * Issue #3: write output files into current working directory
 
-Date:    Sa 17. Nov 23:18:35 CET 2012
-Version: 0.3
+### Version: 0.3
+
     * options: added option -v to show program version
     * fixed issue #1:  make build target 'testing' optional
     * fixed issue #2: [parse command line] Dont print help twice
 
-Date:    Sa 10. Nov 19:08:15 CET 2012
-Version: 0.2
+### Version: 0.2
+
     * removed boost as dependency
     * Don't allow less than 2 lines in xls file
       - If parameter '-H' is set and -l1 and csv input file has at least 2 lines,
         we end up in endless numbers of xls files with just the head line.
 
-Date:    Sun  4. Nov 05:25:11 CET 2012
-Version: 0.1
+### Version: 0.1
+
     * added option '-D' to set digit count for file numbering
       - leading zeros help to sort output files by name
+      
     * check command line parameters
       - max 10 digits for xls file numbering
       - max 65536 lines for one xls file
       - ignore columns > 256 in xls file
       - max 4GB for input buffer
+      
     * crosscompiling
       - added mingwbuild.sh to make mingw builds easier
 

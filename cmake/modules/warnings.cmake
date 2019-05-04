@@ -1,0 +1,6 @@
+if( CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU" )
+    set( WARNINGOPTS -Wall -Wextra -Wpedantic -Wimplicit-fallthrough -Warray-bounds -Wshadow -Wconversion -Wsign-conversion -Wparentheses -Werror -ftemplate-backtrace-limit=0)
+endif()
+if( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+    set( WARNINGOPTS  /W4 /WX )
+endif()

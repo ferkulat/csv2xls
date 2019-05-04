@@ -1,4 +1,3 @@
-INCLUDE_DIRECTORIES(SYSTEM /usr/include/xlslib)
 add_library(csv2xlslib
         callback.cpp
         callback.hpp
@@ -11,7 +10,6 @@ add_library(csv2xlslib
         parsecmd.hpp
         parseCsvFile.cpp
         parseCsvFile.hpp
-        print_help.cpp
         readHeadLine.cpp
         readHeadLine.hpp
         XlsFile.cpp
@@ -22,6 +20,13 @@ add_library(csv2xlslib
         conversion.h
         version.h
         OutPutDoc.hpp
-        OutPutDoc.cpp)
+        OutPutDoc.cpp
+        csv2xls_types.cpp)
 target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )
-target_link_libraries(csv2xlslib  xls csv)
+target_include_directories(csv2xlslib SYSTEM PRIVATE ${CMAKE_PREFIX_PATH}/include/xlslib)
+if( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+	target_link_libraries(csv2xlslib xlslib csv )
+endif()
+if( CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU" )
+    target_link_libraries(csv2xlslib xlslib csv stdc++fs)
+endif()
