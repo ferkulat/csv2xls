@@ -6,12 +6,12 @@
 
 csv2xls (csv to xls) is a command line utility which converts csv files into one
 (or more if maximum rows are exceeded) Excel(TM) file(s).
+
  ### Features
 
 - split output in several files, if max line limit exceeded
 - set work sheet name of xls output file
 - noninteractive -> useful for automated tasks
-- if you want UTF-8 support, you need to compile and link xlslib with libiconv
 
 ### Limitations
 
@@ -20,9 +20,17 @@ csv2xls (csv to xls) is a command line utility which converts csv files into one
 
 ### Prerequisites
 
-- libiconv: http://ftp.gnu.org/pub/gnu/libiconv/ (Optional to get UTF-8 support)
-- cmake:    to build/compile
-- compiler: gcc8, clang6, msvc2017
+- libiconv:   http://ftp.gnu.org/pub/gnu/libiconv/ (Optional to get UTF-8 support)
+- compiler: gcc8, clang6, msvc2017, msvc2019
+- cmake-3.14
+
+### Building
+    git checkout https://github.com/ferkulat/csv2xls.git
+    cd csv2xls
+    mkdir build
+    cd build
+    cmake ..
+    cmake --build .
 
 ### Documentaion
 
