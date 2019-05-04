@@ -167,7 +167,6 @@ namespace csv2xls
 
         if(std::get<CheckedCmd::Help>(cmdConfig).value()){
             config.exit_clean = true;
-            //print_help("prgname");
             return config;
         }
 
@@ -182,7 +181,11 @@ namespace csv2xls
         if(std::get<CmdCsvSeparatorIsTab>(cmdConfig).value().Get()){
             config.csv_tab_delimiter = CsvSeparator(CHAR_TABULATOR);
         }
-        else if(std::get<CmdXlsSheetName>(cmdConfig).has_value()){
+        else if(std::get<CmdCsvSeparator>(cmdConfig).has_value()){
+           config.csv_tab_delimiter = std::get<CmdCsvSeparator>(cmdConfig).value();
+        }
+
+        if(std::get<CmdXlsSheetName>(cmdConfig).has_value()){
             config.xls_sheet_name = std::get<CmdXlsSheetName>(cmdConfig).value();
         }
 
@@ -208,30 +211,11 @@ namespace csv2xls
     {
         if (opts.exit_clean) return opts;
 
-        if (0 == opts.input_buffer_size.Get())
-        {
-            throw BadCommandLineOption( "failed to get parameter for option 'b'" );
-        }
-
-        if (0 == opts.xls_row_limit.Get())
-        {
-            throw BadCommandLineOption("failed to get parameter for option 'l'" );
-        }
-
-        if (DEFAULT_XLS_MAX_LINES < opts.xls_row_limit)
-        {
-            throw BadCommandLineOption(std::to_string(DEFAULT_XLS_MAX_LINES.Get()) + " is maximum value for option 'l'");
-        }
-
         if ((opts.csv_file_has_headline.Get()) && (opts.xls_row_limit.Get() < 2))
         {
             throw BadCommandLineOption("if first line is head line, then minimum line limit is 2");
         }
 
-        if (MAX_XLS_DIGIT_COUNT < opts.xls_digit_count)
-        {
-            throw BadCommandLineOption("failed to get parameter for option 'D'");
-        }
         return opts;
     }
 

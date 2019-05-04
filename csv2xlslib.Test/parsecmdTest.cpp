@@ -136,3 +136,43 @@ TEST_CASE("Option h should not throw")
     REQUIRE_NOTHROW(parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data()));
 
 }
+
+TEST_CASE_FIXTURE(TheFixture, "Given option -d ',' Config.csv_tab_delimiter is set to ','")
+{
+    std::vector<std::string> args{"prgname", "-d ','", "input1.csv"};
+
+    auto arg_ptrs      = CmdArgsArray(args);
+    auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
+
+    CHECK_EQ(my_opts.csv_tab_delimiter, CsvSeparator (','));
+}
+
+TEST_CASE_FIXTURE(TheFixture, "Given option -t Config.csv_tab_delimiter is set to '\t'")
+{
+    std::vector<std::string> args{"prgname", "-t", "input1.csv"};
+
+    auto arg_ptrs      = CmdArgsArray(args);
+    auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
+
+    CHECK_EQ(my_opts.csv_tab_delimiter, CsvSeparator ('\t'));
+}
+
+TEST_CASE_FIXTURE(TheFixture, "Given option -t overrides option -d ',' and sets Config.csv_tab_delimiter to '\t'")
+{
+    std::vector<std::string> args{"prgname", "-t","-d ','", "input1.csv"};
+
+    auto arg_ptrs      = CmdArgsArray(args);
+    auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
+
+    CHECK_EQ(my_opts.csv_tab_delimiter, CsvSeparator ('\t'));
+}
+
+TEST_CASE_FIXTURE(TheFixture, R"(Given option -w Tab1 Config.xls_sheet_name to "Tab1")")
+{
+    std::vector<std::string> args{"prgname", "-t", R"(-w Tab1)", "input1.csv"};
+
+    auto arg_ptrs      = CmdArgsArray(args);
+    auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
+
+    CHECK_EQ(my_opts.xls_sheet_name, XlsSheetName ("Tab1"));
+}
