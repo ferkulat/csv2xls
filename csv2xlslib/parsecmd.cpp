@@ -27,7 +27,6 @@
 #include <filesystem>
 #include "version.h"
 #include "filename.hpp"
-#include "print_help.h"
 #include <sstream>
 #include <regex>
 
@@ -61,16 +60,19 @@ namespace csv2xls
         };
 
         auto const isValidOutPutRowLimit = [](OutPutRowLimit const& outPutRowLimit){
-            return (outPutRowLimit.Get() > 0);
+            return (outPutRowLimit.Get() < DEFAULT_XLS_MIN_LINES.Get())? false:
+                   (outPutRowLimit.Get() > DEFAULT_XLS_MAX_LINES.Get())? false:
+                                                                         true;
         };
 
         auto const isValidInPutBufferSize = [](InputBufferSize const& inputBufferSize){
-            return (inputBufferSize.Get() < 500*1024*1024)
-                   &&(inputBufferSize.Get() > 0);
+            return (inputBufferSize.Get() <  MIN_CSV_BUFFER_SIZE.Get())? false:
+                   (inputBufferSize.Get() <= MAX_CSV_BUFFER_SIZE.Get())? true:
+                                                                         false;
         };
 
-        auto const isValidOutPutFileNameDigitCount = [](OutPutFileNameDigitCount const& inputBufferSize){
-            return (inputBufferSize.Get() < 11);
+        auto const isValidOutPutFileNameDigitCount = [](OutPutFileNameDigitCount const& out_put_file_name_digit_count){
+            return (out_put_file_name_digit_count.Get() < 11);
         };
 
         auto const NoChecks = [](auto const& ){ return true;};
@@ -86,7 +88,7 @@ namespace csv2xls
                         Hint(R"("Table1")")
                         , ShortName("-w")
                         , LongName("--WorkSheetName")
-                        , Description("")
+                        , Description("Sets the name of the excel work sheet")
                         , IsValidSheetName
                 )
 
@@ -99,7 +101,7 @@ namespace csv2xls
                 )
 
                 ,CmdOutPutRowLimit(
-                        Hint("")
+                        Hint(std::to_string(DEFAULT_XLS_MIN_LINES.Get()) + ".." + std::to_string(DEFAULT_XLS_MAX_LINES.Get()))
                         , ShortName("-l")
                         , LongName("--LineLimit")
                         , Description("max. Number of lines in excel outputfile")
@@ -115,10 +117,10 @@ namespace csv2xls
                 )
 
                 ,CmdInputBufferSize(
-                        Hint("")
+                        Hint("N")
                         , ShortName("-b")
                         , LongName("--BufferSize")
-                        , Description("Number of bytes used for input buffer")
+                        , Description("Number of bytes used for input buffer to N")
                         , isValidInPutBufferSize
                 )
 
@@ -137,14 +139,14 @@ namespace csv2xls
                 ,CmdCsvSeparatorIsTab(
                         ShortName("-t")
                         , LongName("--Tab")
-                        , Description("This sets ")
+                        , Description(R"(This sets \t as column separator for csv input and overrides option '-d')")
                 )
 
                 ,CmdOutPutFileNameDigitCount(
-                        Hint("")
+                        Hint("N")
                         , ShortName("-D")
                         , LongName("--DigitCount")
-                        , Description("If the excel file gets split, each file gets a number in its filename ")
+                        , Description("If the excel file gets split, each file gets a number with min. N digits in its filename ")
                         , isValidOutPutFileNameDigitCount
                 )
                 ,Help()
@@ -165,7 +167,7 @@ namespace csv2xls
 
         if(std::get<CheckedCmd::Help>(cmdConfig).value()){
             config.exit_clean = true;
-            print_help("prgname");
+            //print_help("prgname");
             return config;
         }
 
@@ -241,7 +243,8 @@ namespace csv2xls
         auto parser_result = CheckedCmd::ParseCmdArgsTuple(argc, argv, MakeCmdConfig());
         if(!parser_result)
             throw BadCommandLineOption("error parsing command line");
-
+        if (std::get<CheckedCmd::Help>(parser_result.value()).value())
+            std::cout << std::get<CheckedCmd::Help>(parser_result.value()).GetDescription() << "\n";
         return set_xls_filename(checkOptions(IntoConfig(parser_result.value())));
 
     }/* -----  end of function parse_commandline  ----- */

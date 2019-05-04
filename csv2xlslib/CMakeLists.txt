@@ -10,7 +10,6 @@ add_library(csv2xlslib
         parsecmd.hpp
         parseCsvFile.cpp
         parseCsvFile.hpp
-        print_help.cpp
         readHeadLine.cpp
         readHeadLine.hpp
         XlsFile.cpp
