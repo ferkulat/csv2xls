@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 cmake_minimum_required( VERSION 3.0.0 )
+find_package(Git)
 
 include( CMakeParseArguments )
 
@@ -53,7 +54,7 @@ function( version_from_git )
 
   # Git describe
   execute_process(
-    COMMAND           "${GIT_EXECUTABLE}" describe --tags
+    COMMAND           "${GIT_EXECUTABLE}" describe --tags --dirty
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     RESULT_VARIABLE   git_result
     OUTPUT_VARIABLE   git_describe
@@ -166,3 +167,10 @@ function( version_from_git )
   set( GIT_DESCRIBE  ${git_describe}  PARENT_SCOPE )
 
 endfunction( version_from_git )
+version_from_git(
+        LOG       ON
+        TIMESTAMP "%Y%m%d%H%M%S"
+)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/version.cpp.in
+        ${CMAKE_CURRENT_BINARY_DIR}/version.cpp)
+set(version_file "${CMAKE_CURRENT_BINARY_DIR}/version.cpp")

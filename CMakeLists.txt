@@ -1,18 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
-find_package(Git)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
-include( MunkeiVersionFromGit )
-
-version_from_git(
-  LOG       ON
-  TIMESTAMP "%Y%m%d%H%M%S"
-)
-
-project(csv2xls VERSION ${VERSION} LANGUAGES CXX)
+project(csv2xls LANGUAGES CXX)
 
 set(EXTERN_DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern)
 
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+include(MunkeiVersionFromGit)
 include(msvc_cplusplus)
 include(doctest)
 include(CTestConfig)
@@ -23,12 +16,6 @@ include(libcsv)
 include(xlslib)
 
 enable_testing()
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/version.cpp.in
-        ${CMAKE_CURRENT_BINARY_DIR}/version.cpp)
-set(version_file "${CMAKE_CURRENT_BINARY_DIR}/version.cpp")
-
-
 
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/csv2xlslib)
