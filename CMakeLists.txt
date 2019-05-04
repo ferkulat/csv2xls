@@ -11,22 +11,9 @@ version_from_git(
 
 project(csv2xls VERSION ${VERSION} LANGUAGES CXX)
 
-#if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
-#set(VERSION_UPDATE_FROM_GIT "TRUE")
-#else()
-#set(VERSION_UPDATE_FROM_GIT "FALSE")
-#endif()
-
-#
-# Make a version file containing the current version from git.
-#
-include(msvc_cplusplus)
 set(EXTERN_DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern)
-set(EXTERN_CHECKED_CMD_DIR ${EXTERN_DEPENDENCIES_DIR}/checked_cmd)
-set(EXTERN_DOCTEST_HEADER_DIR ${EXTERN_DEPENDENCIES_DIR}/doctest)
-set(EXTERN_LIBCSV_DIR ${EXTERN_DEPENDENCIES_DIR}/libcsv)
-set(EXTERN_XLSLIB_DIR ${EXTERN_DEPENDENCIES_DIR}/xlslib)
 
+include(msvc_cplusplus)
 include(doctest)
 include(CTestConfig)
 include(CTest)
@@ -45,7 +32,6 @@ set(version_file "${CMAKE_CURRENT_BINARY_DIR}/version.cpp")
 
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/csv2xlslib)
-include_directories(SYSTEM ${EXTERN_CHECKED_CMD_DIR}/extern/clara)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)

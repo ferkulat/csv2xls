@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 include(FetchContent)
+set(EXTERN_LIBCSV_DIR ${EXTERN_DEPENDENCIES_DIR}/libcsv)
 
 FetchContent_Declare(
   libcsv

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 include(FetchContent)
+set(EXTERN_DOCTEST_HEADER_DIR ${EXTERN_DEPENDENCIES_DIR}/doctest)
 
 set(EXTERN_DOCTEST_TAG 2.3.1)
 set(DOCTEST_PROJECT_NAME extern_doctest)
