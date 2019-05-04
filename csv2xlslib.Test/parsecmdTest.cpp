@@ -176,3 +176,12 @@ TEST_CASE_FIXTURE(TheFixture, R"(Given option -w Tab1 Config.xls_sheet_name to "
 
     CHECK_EQ(my_opts.xls_sheet_name, XlsSheetName ("Tab1"));
 }
+
+TEST_CASE_FIXTURE(TheFixture, "Given no argument then it_should_fail")
+{
+    std::vector<std::string> args{"prgname"};
+
+    auto arg_ptrs = CmdArgsArray(args);
+
+    REQUIRE_THROWS(parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data()));
+}
