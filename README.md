@@ -1,5 +1,9 @@
-[![Build Status](https://travis-ci.org/ferkulat/csv2xls.svg?branch=master)](https://travis-ci.org/ferkulat/csv2xls)
+master: [![Build Status](https://travis-ci.org/ferkulat/csv2xls.svg?branch=master)](https://travis-ci.org/ferkulat/csv2xls)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/ferkulat/csv2xls?brach=master&svg=true)](https://ci.appveyor.com/project/ferkulat/csv2xls)
+
+devel: [![Build Status](https://travis-ci.org/ferkulat/csv2xls.svg?branch=devel)](https://travis-ci.org/ferkulat/csv2xls)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/ferkulat/csv2xls?brach=devel&svg=true)](https://ci.appveyor.com/project/ferkulat/csv2xls)
+
 
 # csv2xls
 ### Description 
