@@ -69,7 +69,7 @@ void xls_new_sheet(xls_file_t *file)
 
         auto fname = xls_filename(file->filename,
                                          file->page_number,
-                                         file->digit_count.Get());
+                                         file->digit_count);
         file->out_put_doc.write_to_file(fname);
     }
 

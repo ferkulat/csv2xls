@@ -23,6 +23,7 @@
  */
 #include <string>
 #include <filesystem>
+#include "csv2xls_types.h"
 namespace csv2xls
 {
 /**
@@ -43,6 +44,6 @@ namespace csv2xls
 std::filesystem::path
 xls_filename(std::filesystem::path wish_name,
              long count, /** the number added to file name */
-             long digits);/** minimum digits of the number  */
+             OutPutFileNameDigitCount digits);/** minimum digits of the number  */
 
 } /* ----- end of namespace csv2xls ----- */

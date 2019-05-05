@@ -23,20 +23,20 @@
  */
 
 #include "filename.hpp"
-#include <sstream>
 #include <algorithm>
-#include <regex>
 #include <filesystem>
+#include <regex>
+#include <sstream>
 namespace csv2xls
 {
 
 using namespace std;
 
-    string ConvertCountToStringWithLeadingZero(long numberOfDigits,
+    string ConvertCountToStringWithLeadingZero(OutPutFileNameDigitCount numberOfDigits,
                                                long count)
     {
         stringstream numstream;
-        numstream.width(numberOfDigits);
+        numstream.width(numberOfDigits.Get());
         numstream.fill('0');
         numstream << count;
         return numstream.str();
@@ -72,10 +72,10 @@ using namespace std;
         return parts;
     }
 
-    auto AddNumberToBaseName(long count, long digits)
+    auto AddNumberToBaseName(long count, OutPutFileNameDigitCount digits)
     {
         return [count, digits](FileNameParts parts){
-            if (count && digits)
+            if (count && digits.Get())
                 parts.base += ConvertCountToStringWithLeadingZero(digits, count);
             return parts;
         };
@@ -87,8 +87,8 @@ using namespace std;
     }
 
     std::filesystem::path xls_filename(std::filesystem::path wish_name,
-                        long count,
-                        long digits)
+                                        long count,
+                                       OutPutFileNameDigitCount digits)
     {
         return BuildXlsFilename(
                 AddNumberToBaseName(count, digits)(

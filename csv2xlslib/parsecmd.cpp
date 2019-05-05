@@ -273,7 +273,7 @@ namespace csv2xls
         {
             opts.xls_file_name /= opts.csv_file_name.Get().filename();
         }
-        opts.xls_file_name = xls_filename(opts.xls_file_name, 0, 0);
+        opts.xls_file_name = xls_filename(opts.xls_file_name, 0, OutPutFileNameDigitCount(0));
         return opts;
     }
 
