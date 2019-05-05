@@ -5,6 +5,7 @@
 #ifndef CSV2XLS_CSV2XLS_TYPES_H
 #define CSV2XLS_CSV2XLS_TYPES_H
 
+#include "TypeSafeSkillSet.h"
 #include <checked_cmd.h>
 #include <filesystem>
 
@@ -22,6 +23,11 @@ TYPE_SAFE(OutPutRowLimit          , std::uint32_t)
 TYPE_SAFE(OutPutFile              , std::filesystem::path)
 TYPE_SAFE(InputFile               , std::filesystem::path)
 
+using Row = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t
+                                                     , struct TypeTagRow
+                                                     , type_safe_skill_set::ComparableWith<OutPutRowLimit>::templ
+                                                     , type_safe_skill_set::PreIncrementable
+                                                     >;
 
 bool operator<(OutPutRowLimit v1, OutPutRowLimit v2);
 bool operator<(OutPutFileNameDigitCount v1, OutPutFileNameDigitCount v2);
