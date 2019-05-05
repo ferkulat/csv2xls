@@ -28,6 +28,6 @@ add_subdirectory(csv2xlslib)
 add_subdirectory(csv2xlslib.Test )
 add_executable(csv2xls csv2xls.cpp ${version_file})
 target_compile_options( csv2xls PUBLIC ${WARNINGOPTS} )
-target_link_libraries(csv2xls csv2xlslib )
+target_link_libraries(csv2xls csv2xlslib -static)
 
 install(TARGETS csv2xls DESTINATION bin)

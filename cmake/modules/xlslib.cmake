@@ -5,7 +5,7 @@ set(EXTERN_XLSLIB_DIR ${EXTERN_DEPENDENCIES_DIR}/xlslib)
 FetchContent_Declare(
   xlslib
   GIT_REPOSITORY https://github.com/ferkulat/xlslib.git
-  GIT_TAG        227776845cca16a50213359c58c7b9e8264520d9
+  GIT_TAG        28fb458bc5ba2da614f4738d9560a6fb917d49a9
   SOURCE_DIR     ${EXTERN_XLSLIB_DIR}
 )
 FetchContent_MakeAvailable(xlslib)
