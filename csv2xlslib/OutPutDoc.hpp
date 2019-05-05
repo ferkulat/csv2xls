@@ -22,7 +22,7 @@ class OutPutDoc
 
     void clearSheet(XlsSheetName const& sheet_name);
 
-    int write_to_file(const std::filesystem::path& file_name);
+    int writeInto(OutPutFile const& out_put_file);
 
     void setCell(Row row, Column column, const std::string& strlabel);
 
@@ -33,7 +33,7 @@ class OutPutDoc
         virtual ~concept_t() = default;
 
         virtual void clearSheet(XlsSheetName const& sheet_name)                   = 0;
-        virtual int  write_to_file(const std::filesystem::path& file_name)        = 0;
+        virtual int  writeInto(OutPutFile const& out_put_file)                    = 0;
         virtual void setCell(Row row, Column column, const std::string& strlabel) = 0;
     };
     template <typename T> class doc_type : public concept_t
@@ -49,9 +49,9 @@ class OutPutDoc
             x.clearSheet(sheet_name);
         }
 
-        int write_to_file(const std::filesystem::path& file_name) override
+        int writeInto(OutPutFile const& out_put_file) override
         {
-            return x.write_to_file(file_name);
+            return x.writeInto(out_put_file);
         }
 
         void setCell(Row row, Column column, const std::string& strlabel) override

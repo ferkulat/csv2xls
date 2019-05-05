@@ -18,7 +18,7 @@ class dummy_workbook
     {
         called_clear_sheet++;
     }
-    int write_to_file(const std::filesystem::path& /*file_name*/)
+    int writeInto(OutPutFile const& /*file_name*/)
     {
         called_write_to_file++;
         return 0;
@@ -45,9 +45,9 @@ template <typename T> class wrapper_workbook
     {
         wrapped->clearSheet(sheet_name);
     }
-    int write_to_file(const std::filesystem::path& file_name)
+    int writeInto(OutPutFile const& file_name)
     {
-        return wrapped->write_to_file(file_name);
+        return wrapped->writeInto(file_name);
     }
     void setCell(Row row, Column col, const std::string& strlabel)
     {
@@ -76,7 +76,7 @@ struct Group1
     {
         test_workbook            = std::make_shared<dummy_workbook>();
         xls_file                 = std::make_unique<csv2xls::xls_file_t>(OutPutDoc(wrapper_workbook(test_workbook)));
-        xls_file->filename       = "file";
+        xls_file->out_put_file   = OutPutFile("file");
         xls_file->xls_row_limit  = csv2xls::DEFAULT_XLS_MAX_LINES;
         xls_file->current_column = Column(0);
         xls_file->current_row    = Row(0);

@@ -37,7 +37,6 @@ using Column = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t, struct TypeT
 
 
 bool operator<(OutPutRowLimit v1, OutPutRowLimit v2);
-bool operator<(OutPutFileNameDigitCount v1, OutPutFileNameDigitCount v2);
 
 #undef TYPE_SAFE
 }

@@ -42,9 +42,9 @@ void xls_workbook::setCell(Row row, Column column, const std::string& strlabel)
     this->pimpl->wsheet->label(row.Get(), column.Get(), strlabel);
 }
 
-int xls_workbook::write_to_file(const std::filesystem::path& file_name)
+int xls_workbook::writeInto(OutPutFile const& out_put_file)
 {
-    return this->pimpl->wbook->Dump(file_name.string());
+    return this->pimpl->wbook->Dump(out_put_file.Get().string());
 }
 
 xls_workbook::xls_workbook()

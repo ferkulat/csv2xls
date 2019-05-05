@@ -41,8 +41,8 @@ namespace csv2xls
  *
  * The resulting file name.
  */
-std::filesystem::path
-xls_filename(std::filesystem::path wish_name,
+OutPutFile
+xls_filename(OutPutFile wish_name,
              long count, /** the number added to file name */
              OutPutFileNameDigitCount digits);/** minimum digits of the number  */
 

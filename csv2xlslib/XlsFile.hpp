@@ -49,7 +49,7 @@ struct xls_file_t
     }
 
     OutPutFileNameDigitCount digit_count;
-    std::filesystem::path    filename;
+    OutPutFile               out_put_file;
     OutPutRowLimit           xls_row_limit;
     HeadLineType             headline;
     XlsSheetName             sheet_name;

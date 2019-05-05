@@ -10,9 +10,9 @@ void OutPutDoc::clearSheet(XlsSheetName const& sheet_name)
     self_->clearSheet(sheet_name);
 }
 
-int OutPutDoc::write_to_file(const std::filesystem::path& file_name)
+int OutPutDoc::writeInto(OutPutFile const& out_put_file)
 {
-    return self_->write_to_file(file_name);
+    return self_->writeInto(out_put_file);
 }
 
 void OutPutDoc::setCell(Row row, Column col, const std::string& strlabel)

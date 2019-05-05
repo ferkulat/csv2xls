@@ -173,7 +173,7 @@ namespace csv2xls
         if (std::get<CmdOutputFilePath>(cmdConfig).has_value())
         {
             auto const user_input = std::get<CmdOutputFilePath>(cmdConfig).value().Get();
-            config.xls_file_name  = std::regex_replace(user_input.string(), std::regex("^ +"), "");
+            config.out_put_file  = OutPutFile(std::regex_replace(user_input.string(), std::regex("^ +"), ""));
         }
 
         if (std::get<CmdCsvSeparatorIsTab>(cmdConfig).value().Get())
@@ -258,22 +258,24 @@ namespace csv2xls
     {
         if (opts.exit_clean) return opts;
 
-        if (opts.xls_file_name.empty())
+        if (opts.out_put_file.Get().empty())
         {
             if (opts.csv_file_name.Get().has_filename())
             {
-                opts.xls_file_name = opts.csv_file_name.Get().filename();
+                opts.out_put_file = OutPutFile(opts.csv_file_name.Get().filename());
             }
             else
             {
                 throw BadCommandLineOption("Error determining output file name");
             }
         }
-        else if (isDir(opts.xls_file_name))
+        else if (isDir(opts.out_put_file.Get()))
         {
-            opts.xls_file_name /= opts.csv_file_name.Get().filename();
+            auto out_path = opts.out_put_file.Get();
+            out_path /= opts.csv_file_name.Get().filename();
+            opts.out_put_file = OutPutFile(out_path);
         }
-        opts.xls_file_name = xls_filename(opts.xls_file_name, 0, OutPutFileNameDigitCount(0));
+        opts.out_put_file = xls_filename(opts.out_put_file, 0, OutPutFileNameDigitCount(0));
         return opts;
     }
 

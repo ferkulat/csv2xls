@@ -86,14 +86,15 @@ using namespace std;
         return parts.base.string() + parts.type.string();
     }
 
-    std::filesystem::path xls_filename(std::filesystem::path wish_name,
+OutPutFile xls_filename(OutPutFile wish_name,
                                         long count,
                                        OutPutFileNameDigitCount digits)
     {
-        return BuildXlsFilename(
+        return OutPutFile(
+            BuildXlsFilename(
                 AddNumberToBaseName(count, digits)(
                         SetOutputFileNameParts(
-                                SplitIntoParts(wish_name))));
+                                SplitIntoParts(wish_name.Get())))));
     }
 
 }/*---namespace csv2xls---*/
