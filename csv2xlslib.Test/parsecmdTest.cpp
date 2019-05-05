@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include "../csv2xlslib/parsecmd.hpp"
-#include "doctest.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ struct TheFixture
     virtual ~TheFixture() = default;
 };
 
-TEST_CASE_FIXTURE(TheFixture, "When_no_commandline_options_are_given then set_default_values")
+TEST_CASE_METHOD(TheFixture, "When_no_commandline_options_are_given then set_default_values")
 {
     std::vector<std::string> args{"prgname", "input1.csv"};
 
@@ -31,36 +31,36 @@ TEST_CASE_FIXTURE(TheFixture, "When_no_commandline_options_are_given then set_de
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
     CHECK(!my_opts.csv_file_has_headline.Get());
-    CHECK_EQ(DEFAULT_CSV_TAB_DELIMITER, my_opts.csv_tab_delimiter);
-    CHECK_EQ(DEFAULT_XLS_MAX_LINES,     my_opts.xls_row_limit);
-    CHECK_EQ(DEFAULT_XLS_DIGIT_COUNT,   my_opts.xls_digit_count);
-    CHECK_EQ(DEFAULT_CSV_BUFFER_SIZE,   my_opts.input_buffer_size);
-    CHECK_EQ(DEFAULT_XLS_SHEET_NAME,    my_opts.xls_sheet_name);
+    REQUIRE(DEFAULT_CSV_TAB_DELIMITER == my_opts.csv_tab_delimiter);
+    REQUIRE(DEFAULT_XLS_MAX_LINES     == my_opts.xls_row_limit);
+    REQUIRE(DEFAULT_XLS_DIGIT_COUNT   == my_opts.xls_digit_count);
+    REQUIRE(DEFAULT_CSV_BUFFER_SIZE   == my_opts.input_buffer_size);
+    REQUIRE(DEFAULT_XLS_SHEET_NAME    == my_opts.xls_sheet_name);
 }
 
-TEST_CASE_FIXTURE(TheFixture, "When_no_commandline_options_are_given then guess_output_name_from_inputname")
+TEST_CASE_METHOD(TheFixture, "When_no_commandline_options_are_given then guess_output_name_from_inputname")
 {
     std::vector<std::string> args{"prgname", "input1.csv"};
 
     auto arg_ptrs      = CmdArgsArray(args);
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    CHECK_EQ(InputFile("input1.csv"), my_opts.csv_file_name);
-    CHECK_EQ("input1.xls",            my_opts.xls_file_name);
+    REQUIRE(InputFile("input1.csv") == my_opts.csv_file_name);
+    REQUIRE("input1.xls"            == my_opts.xls_file_name);
 }
 
-TEST_CASE_FIXTURE(TheFixture, "When_output_name_is_a_directory, guess_output_name_from_inputname")
+TEST_CASE_METHOD(TheFixture, "When_output_name_is_a_directory, guess_output_name_from_inputname")
 {
     std::vector<std::string> args{"prgname", "-o tmp/", "input1.csv"};
 
     auto arg_ptrs      = CmdArgsArray(args);
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    CHECK_EQ(InputFile("input1.csv"), my_opts.csv_file_name);
-    CHECK_EQ("tmp/input1.xls",        my_opts.xls_file_name);
+    REQUIRE(InputFile("input1.csv") == my_opts.csv_file_name);
+    REQUIRE("tmp/input1.xls"        == my_opts.xls_file_name);
 }
 
-TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_headline then it_should_fail_with_line_limit_1")
+TEST_CASE_METHOD(TheFixture, "When_first_line_is_headline then it_should_fail_with_line_limit_1")
 {
     std::vector<std::string> args{"prgname", "-l 1", "-H", "input1.csv"};
 
@@ -68,7 +68,7 @@ TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_headline then it_should_fail_w
     REQUIRE_THROWS(parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data()));
 }
 
-TEST_CASE_FIXTURE(TheFixture, "When user requests -l 65536 it_should_not throw")
+TEST_CASE_METHOD(TheFixture, "When user requests -l 65536 it_should_not throw")
 {
     std::vector<std::string> args{"prgname", "-l 65536", "-H", "input1.csv"};
 
@@ -78,7 +78,7 @@ TEST_CASE_FIXTURE(TheFixture, "When user requests -l 65536 it_should_not throw")
     REQUIRE_NOTHROW(checkOptions(opts));
 }
 
-TEST_CASE_FIXTURE(TheFixture, "When user requests -l 65537 it_should_ throw")
+TEST_CASE_METHOD(TheFixture, "When user requests -l 65537 it_should_ throw")
 {
     std::vector<std::string> args{"prgname", "-l 65537", "-H", "input1.csv"};
 
@@ -87,29 +87,29 @@ TEST_CASE_FIXTURE(TheFixture, "When user requests -l 65537 it_should_ throw")
     REQUIRE_THROWS(parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data()));
 }
 
-TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_headline then it_accepts_line_limit_set_to_2")
+TEST_CASE_METHOD(TheFixture, "When_first_line_is_headline then it_accepts_line_limit_set_to_2")
 {
     std::vector<std::string> args{"prgname", "-l 2", "-H", "input1.csv"};
 
     auto arg_ptrs      = CmdArgsArray(args);
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    CHECK_EQ(my_opts.csv_file_name,         InputFile("input1.csv"));
-    CHECK_EQ(my_opts.xls_row_limit,         OutPutRowLimit(2));
-    CHECK_EQ(my_opts.csv_file_has_headline, InputHasHeadLine(true));
+    REQUIRE(my_opts.csv_file_name         == InputFile("input1.csv"));
+    REQUIRE(my_opts.xls_row_limit         == OutPutRowLimit(2));
+    REQUIRE(my_opts.csv_file_has_headline == InputHasHeadLine(true));
 }
 
-TEST_CASE_FIXTURE(TheFixture, "When_first_line_is_not_headline then it_accepts_line_limit_set_to_1")
+TEST_CASE_METHOD(TheFixture, "When_first_line_is_not_headline then it_accepts_line_limit_set_to_1")
 {
     std::vector<std::string> args{"prgname", "-l 1", "input1.csv"};
     
     auto arg_ptrs      = CmdArgsArray(args);
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    CHECK_EQ(my_opts.xls_row_limit, OutPutRowLimit(1));
+    REQUIRE(my_opts.xls_row_limit == OutPutRowLimit(1));
 }
 
-TEST_CASE_FIXTURE(TheFixture, "When_line_limit_is_0 then it_should_fail")
+TEST_CASE_METHOD(TheFixture, "When_line_limit_is_0 then it_should_fail")
 {
     std::vector<std::string> args{"prgname", "-l 0", "input1.csv"};
 
@@ -137,47 +137,47 @@ TEST_CASE("Option h should not throw")
 
 }
 
-TEST_CASE_FIXTURE(TheFixture, "Given option -d ',' Config.csv_tab_delimiter is set to ','")
+TEST_CASE_METHOD(TheFixture, "Given option -d ',' Config.csv_tab_delimiter is set to ','")
 {
     std::vector<std::string> args{"prgname", "-d ','", "input1.csv"};
 
     auto arg_ptrs      = CmdArgsArray(args);
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    CHECK_EQ(my_opts.csv_tab_delimiter, CsvSeparator (','));
+    REQUIRE(my_opts.csv_tab_delimiter == CsvSeparator (','));
 }
 
-TEST_CASE_FIXTURE(TheFixture, "Given option -t Config.csv_tab_delimiter is set to '\t'")
+TEST_CASE_METHOD(TheFixture, "Given option -t Config.csv_tab_delimiter is set to '\t'")
 {
     std::vector<std::string> args{"prgname", "-t", "input1.csv"};
 
     auto arg_ptrs      = CmdArgsArray(args);
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    CHECK_EQ(my_opts.csv_tab_delimiter, CsvSeparator ('\t'));
+    REQUIRE(my_opts.csv_tab_delimiter == CsvSeparator ('\t'));
 }
 
-TEST_CASE_FIXTURE(TheFixture, "Given option -t overrides option -d ',' and sets Config.csv_tab_delimiter to '\t'")
+TEST_CASE_METHOD(TheFixture, "Given option -t overrides option -d ',' and sets Config.csv_tab_delimiter to '\t'")
 {
     std::vector<std::string> args{"prgname", "-t","-d ','", "input1.csv"};
 
     auto arg_ptrs      = CmdArgsArray(args);
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    CHECK_EQ(my_opts.csv_tab_delimiter, CsvSeparator ('\t'));
+    REQUIRE(my_opts.csv_tab_delimiter == CsvSeparator ('\t'));
 }
 
-TEST_CASE_FIXTURE(TheFixture, R"(Given option -w Tab1 Config.xls_sheet_name to "Tab1")")
+TEST_CASE_METHOD(TheFixture, R"(Given option -w Tab1 Config.xls_sheet_name to "Tab1")")
 {
     std::vector<std::string> args{"prgname", "-t", R"(-w Tab1)", "input1.csv"};
 
     auto arg_ptrs      = CmdArgsArray(args);
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    CHECK_EQ(my_opts.xls_sheet_name, XlsSheetName ("Tab1"));
+    REQUIRE(my_opts.xls_sheet_name == XlsSheetName ("Tab1"));
 }
 
-TEST_CASE_FIXTURE(TheFixture, "Given no argument then it_should_fail")
+TEST_CASE_METHOD(TheFixture, "Given no argument then it_should_fail")
 {
     std::vector<std::string> args{"prgname"};
 
