@@ -1,3 +1,4 @@
+extern
 src/csv2xls
 *.swp
 *.o
@@ -11,3 +12,7 @@ src/.deps
 testing/.deps
 Makefile
 *Makefile.in
+.idea
+cmake-build-debug
+cmake-build-release
+VERSION

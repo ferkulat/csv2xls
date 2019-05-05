@@ -48,14 +48,13 @@ For step 1 a noninteractive way to convert CSV to Excel is needed.
     - all entries are in text format, no conversion to numbers, dates and so on
 
 1.3 Noninteractive
-    This program is indendet to be used by a noninteracive script.
-    So this program has to be a console programm.
+    This program has to be a console program.
     Parameters will be given by command line.
 
 1.4 Portability
     This program should be available for at least Windows and Linux.
 
 1.5 Dependencies
-    MS Excel or any other properitary software must not be a dependency to run this program.
+    MS Excel must not be a dependency to run this program.
     Writing and compiling the software should be possible with open source software.
 
