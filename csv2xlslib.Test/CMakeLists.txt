@@ -1,6 +1,3 @@
-set(EXTERN_DOCTEST_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/doctest)
-include(doctest)
-
 
 set(TEST_SOURCE_FILES
         csv2xlslibTest.cpp

@@ -1,6 +1,6 @@
 #include <XlsFile.hpp>
 #include <default_values.h>
-#include "doctest.h"
+#include <catch.hpp>
 
 using namespace std;
 class dummy_workbook
@@ -93,38 +93,38 @@ struct Group1
 
     virtual ~Group1() = default;
 };
-TEST_CASE_FIXTURE(Group1,"xls_append_cell_increases_column")
+TEST_CASE_METHOD(Group1,"xls_append_cell_increases_column")
 {
     xls_file->current_column = 0;
     xls_file->current_row    = 0;
 
     csv2xls::xls_append_cell(xls_file.get(), "lol");
-    CHECK_EQ(0, xls_file->current_row);
-    CHECK_EQ(1, xls_file->current_column);
+    REQUIRE(0 == xls_file->current_row);
+    REQUIRE(1 == xls_file->current_column);
 }
 
-TEST_CASE_FIXTURE(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_COLUMNS" )
+TEST_CASE_METHOD(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_COLUMNS" )
 {
     xls_file->current_column = csv2xls::XLS_MAX_COLUMNS;
     xls_file->current_row = 0;
     csv2xls::xls_append_cell(xls_file.get(), "lol");
-    CHECK_EQ(0, xls_file->current_row);
-    CHECK_EQ(csv2xls::XLS_MAX_COLUMNS, xls_file->current_column);
+    REQUIRE(0 == xls_file->current_row);
+    REQUIRE(csv2xls::XLS_MAX_COLUMNS == xls_file->current_column);
 }
 
-TEST_CASE_FIXTURE(Group1, "xls_newline_increases_row" )
+TEST_CASE_METHOD(Group1, "xls_newline_increases_row" )
 {
     xls_file->current_column = 0;
     xls_file->current_row = 0;
     csv2xls::xls_newline(xls_file.get());
-    CHECK_EQ(0, xls_file->current_column);
-    CHECK_EQ(1, xls_file->current_row);
-    CHECK_EQ(0, test_workbook->called_clear_sheet);
-    CHECK_EQ(0, test_workbook->called_write_to_file);
+    REQUIRE(0 == xls_file->current_column);
+    REQUIRE(1 == xls_file->current_row);
+    REQUIRE(0 == test_workbook->called_clear_sheet);
+    REQUIRE(0 == test_workbook->called_write_to_file);
 
 }
 
-TEST_CASE_FIXTURE(Group1, "xls_add_headline_does_nothing_if_headline_is_empty")
+TEST_CASE_METHOD(Group1, "xls_add_headline_does_nothing_if_headline_is_empty")
 {
     xls_file->headline.clear();
     csv2xls::xls_add_headline(xls_file.get());
@@ -135,7 +135,7 @@ TEST_CASE_FIXTURE(Group1, "xls_add_headline_does_nothing_if_headline_is_empty")
     CHECK(0 == xls_file->current_row);
 }
 
-TEST_CASE_FIXTURE(Group1, "xls_add_headline_includes_a_newline")
+TEST_CASE_METHOD(Group1, "xls_add_headline_includes_a_newline")
 {
     std::vector<string> tmp(4, "lol");
     xls_file->headline = tmp;
@@ -147,7 +147,7 @@ TEST_CASE_FIXTURE(Group1, "xls_add_headline_includes_a_newline")
     CHECK(1 == xls_file->current_row);
 }
 
-TEST_CASE_FIXTURE(Group1, "xls_newline_writes_sheet_into_file_and_makes_a_new_sheet_if_row_is_XLS_MAX_ROWS" )
+TEST_CASE_METHOD(Group1, "xls_newline_writes_sheet_into_file_and_makes_a_new_sheet_if_row_is_XLS_MAX_ROWS" )
 {
     xls_file->current_column = 2;
     xls_file->current_row = csv2xls::XLS_MAX_ROWS;
@@ -160,7 +160,7 @@ TEST_CASE_FIXTURE(Group1, "xls_newline_writes_sheet_into_file_and_makes_a_new_sh
 }
 
 
-TEST_CASE_FIXTURE(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
+TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
@@ -176,7 +176,7 @@ TEST_CASE_FIXTURE(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
 }
 
 
-TEST_CASE_FIXTURE(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
+TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
 {
     constexpr size_t INPUT_COLUMNS         = 3;
     constexpr size_t INPUT_ROWS            = 8;
@@ -197,7 +197,7 @@ TEST_CASE_FIXTURE(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
 }
 
 
-TEST_CASE_FIXTURE(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_headline")
+TEST_CASE_METHOD(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
@@ -212,7 +212,7 @@ TEST_CASE_FIXTURE(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_hea
 
 
 
-TEST_CASE_FIXTURE(Group1, "make_3x2_lines_sheets_out_of_4_inputlines_with_headline")
+TEST_CASE_METHOD(Group1, "make_3x2_lines_sheets_out_of_4_inputlines_with_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 4;

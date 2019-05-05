@@ -31,12 +31,10 @@ csv2xls (csv to xls) is a command line utility which converts csv files into one
     cd build
     cmake ..
     cmake --build .
-
+For other build targets, please have a look at [BUILD_SPECIAL.md](BUILD_SPECIAL.md)
 ### Documentaion
 
 - Print help:  csv2xls -h
-- manual page: man csv2xls
-- https://github.com/ferkulat/csv2xls/wiki
 
 ### How to contribute
 

@@ -26,7 +26,7 @@
  */
 
 #include "../csv2xlslib/conversion.h"
-#include "doctest.h"
+#include "catch.hpp"
 namespace conversionTest {
 
     TEST_CASE ("Converting a negative value to an unsigned type throws") {

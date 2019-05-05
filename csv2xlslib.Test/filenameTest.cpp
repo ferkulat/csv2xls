@@ -23,43 +23,43 @@
  */
 
 #include "../csv2xlslib/filename.hpp"
-#include "doctest.h"
+#include "catch.hpp"
 
 using namespace csv2xls;
 
 
-TEST_SUITE("no_xls_ending")
+TEST_CASE("no_xls_ending")
 {
-    TEST_CASE("given input.csv gives input.xls") {
+    SECTION("given input.csv gives input.xls") {
         auto const actual = xls_filename("input.csv", 0, 4);
-        CHECK_EQ("input.xls", actual);
-        CHECK_EQ("input.xls", xls_filename("input", 0, 4));
-        CHECK_EQ("inp.xls", xls_filename("inp", 0, 4));
-        CHECK_EQ("i.p0001.xls", xls_filename("i.p", 1, 4));
+        REQUIRE("input.xls"   == actual);
+        REQUIRE("input.xls"   == xls_filename("input", 0, 4));
+        REQUIRE("inp.xls"     == xls_filename("inp", 0, 4));
+        REQUIRE("i.p0001.xls" == xls_filename("i.p", 1, 4));
     }
-    TEST_CASE("given second outfile adds numbering") {
+    SECTION("given second outfile adds numbering") {
         auto const actual = xls_filename("input", 1, 4);
-        CHECK_EQ("input0001.xls", actual);
+        REQUIRE("input0001.xls" == actual);
     }
-    TEST_CASE("given first outfile adds no numbering") {
+    SECTION("given first outfile adds no numbering") {
         auto const actual = xls_filename("i.p", 0, 4);
-        CHECK_EQ("i.p.xls", actual);
+        REQUIRE("i.p.xls" == actual);
     }
 
 }
 
 TEST_CASE("with_xls_ending")
 {
-    CHECK_EQ("input.xls", xls_filename("input.xls", 0, 4));
-    CHECK_EQ("input.Xls", xls_filename("input.Xls", 0, 4));
-    CHECK_EQ("input0001.XLS", xls_filename("input.XLS", 1, 4));
-    CHECK_EQ("xls.xls", xls_filename("xls", 0, 4));
-    CHECK_EQ("xls0001.xls", xls_filename("xls", 1, 4));
+    REQUIRE("input.Xls"     == xls_filename("input.Xls", 0, 4));
+    REQUIRE("input.xls"     == xls_filename("input.xls", 0, 4));
+    REQUIRE("input0001.XLS" == xls_filename("input.XLS", 1, 4));
+    REQUIRE("xls.xls"       == xls_filename("xls", 0, 4));
+    REQUIRE("xls0001.xls"   == xls_filename("xls", 1, 4));
 }
 
 TEST_CASE("numbering")
 {
-    CHECK_EQ("input429496729.XLS",  xls_filename("input.XLS", 429496729, 4));
-    CHECK_EQ("input0429496729.XLS", xls_filename("input.XLS", 429496729, 10));
+    REQUIRE("input429496729.XLS"  ==  xls_filename("input.XLS", 429496729, 4));
+    REQUIRE("input0429496729.XLS" == xls_filename("input.XLS", 429496729, 10));
 }
 
