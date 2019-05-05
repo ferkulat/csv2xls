@@ -1,7 +1,9 @@
 ### Version: 0.4.0
+Date:   Sun May 5 11:17:07 2019 +0200
+
     * fix issue #13: switched to cmake and doctest
     * updated man page for option -t
-    * use C++17
+    * using C++17
     * libcsv and xlslib will be built as part of the build process
     * csv2xls can now be built with msvc2017 and msvc2019
     * using CheckedCmd for command line parsing
