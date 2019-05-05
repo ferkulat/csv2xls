@@ -31,15 +31,13 @@ struct xls_workbook::Impl{
     xlslib_core::worksheet* wsheet;
 };
 
-void xls_workbook::clear_sheet(const std::string& sheetname)
+void xls_workbook::clearSheet(XlsSheetName const& sheet_name)
 {
     this->pimpl->wbook  = std::make_unique<xlslib_core::workbook>();
-    this->pimpl->wsheet = this->pimpl->wbook->sheet(sheetname);
+    this->pimpl->wsheet = this->pimpl->wbook->sheet(sheet_name.Get());
 }
 
-void xls_workbook::setCell(Row row,
-                         Column column,
-                         const std::string& strlabel)
+void xls_workbook::setCell(Row row, Column column, const std::string& strlabel)
 {
     this->pimpl->wsheet->label(row.Get(), column.Get(), strlabel);
 }
@@ -49,15 +47,15 @@ int xls_workbook::write_to_file(const std::filesystem::path& file_name)
     return this->pimpl->wbook->Dump(file_name.string());
 }
 
-    xls_workbook::xls_workbook() : pimpl(new Impl, &PimplDeleter) {
-    }
+xls_workbook::xls_workbook()
+    : pimpl(new Impl, &PimplDeleter)
+{
+}
 
-    xls_workbook::~xls_workbook() {
-
-    }
-    void xls_workbook::PimplDeleter(Impl*p)
-    {
-        delete p;
-    }
+xls_workbook::~xls_workbook() {}
+void xls_workbook::PimplDeleter(Impl* p)
+{
+    delete p;
+}
 
 }

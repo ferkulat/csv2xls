@@ -30,7 +30,7 @@ namespace csv2xls
 
 void xls_new_sheet(xls_file_t *file)
 {
-    file->out_put_doc.clear_sheet(file->sheet_name.Get());
+    file->out_put_doc.clearSheet(file->sheet_name);
     file->current_column = Column(0);
     file->current_row = Row(0);
     xls_add_headline(file);

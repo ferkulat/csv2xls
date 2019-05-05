@@ -35,7 +35,7 @@ public:
     xls_workbook();
     ~xls_workbook();
     xls_workbook(xls_workbook && workbook) = default;
-    void clear_sheet(const std::string& sheetname);
+    void clearSheet(XlsSheetName const& sheet_name);
 
     int write_to_file(const std::filesystem::path &file_name);
 

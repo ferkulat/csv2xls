@@ -20,7 +20,7 @@ class OutPutDoc
     {
     }
 
-    void clear_sheet(const std::string& sheetname);
+    void clearSheet(XlsSheetName const& sheet_name);
 
     int write_to_file(const std::filesystem::path& file_name);
 
@@ -32,7 +32,7 @@ class OutPutDoc
       public:
         virtual ~concept_t() = default;
 
-        virtual void clear_sheet(const std::string& sheetname)                    = 0;
+        virtual void clearSheet(XlsSheetName const& sheet_name)                   = 0;
         virtual int  write_to_file(const std::filesystem::path& file_name)        = 0;
         virtual void setCell(Row row, Column column, const std::string& strlabel) = 0;
     };
@@ -44,9 +44,9 @@ class OutPutDoc
         {
         }
 
-        void clear_sheet(const std::string& sheetname) override
+        void clearSheet(XlsSheetName const& sheet_name) override
         {
-            x.clear_sheet(sheetname);
+            x.clearSheet(sheet_name);
         }
 
         int write_to_file(const std::filesystem::path& file_name) override

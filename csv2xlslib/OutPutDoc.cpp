@@ -5,9 +5,9 @@
 #include "OutPutDoc.hpp"
 namespace csv2xls
 {
-void OutPutDoc::clear_sheet(const std::string& sheetname)
+void OutPutDoc::clearSheet(XlsSheetName const& sheet_name)
 {
-    self_->clear_sheet(sheetname);
+    self_->clearSheet(sheet_name);
 }
 
 int OutPutDoc::write_to_file(const std::filesystem::path& file_name)

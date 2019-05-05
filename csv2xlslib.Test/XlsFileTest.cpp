@@ -14,7 +14,7 @@ class dummy_workbook
         called_label         = 0;
     }
 
-    void clear_sheet(const std::string& /*sheetname*/)
+    void clearSheet(XlsSheetName const& /*sheetname*/)
     {
         called_clear_sheet++;
     }
@@ -41,9 +41,9 @@ template <typename T> class wrapper_workbook
     {
     }
 
-    void clear_sheet(const std::string& sheetname)
+    void clearSheet(XlsSheetName const& sheet_name)
     {
-        wrapped->clear_sheet(sheetname);
+        wrapped->clearSheet(sheet_name);
     }
     int write_to_file(const std::filesystem::path& file_name)
     {
@@ -92,7 +92,7 @@ TEST_CASE_METHOD(Group1, "xls_append_cell_increases_column")
     xls_file->current_row    = Row(0);
 
     csv2xls::xls_append_cell(xls_file.get(), "lol");
-    REQUIRE(Row(0) == xls_file->current_row);
+    REQUIRE(Row(0)    == xls_file->current_row);
     REQUIRE(Column(1) == xls_file->current_column);
 }
 
@@ -100,6 +100,7 @@ TEST_CASE_METHOD(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_C
 {
     xls_file->current_column = Column(csv2xls::XLS_MAX_COLUMNS.Get());
     xls_file->current_row    = Row(0);
+    
     csv2xls::xls_append_cell(xls_file.get(), "lol");
 
     REQUIRE(Row(0) == xls_file->current_row);
@@ -110,7 +111,9 @@ TEST_CASE_METHOD(Group1, "xls_newline_increases_row")
 {
     xls_file->current_column = Column(0);
     xls_file->current_row    = Row(0);
+
     csv2xls::xls_newline(xls_file.get());
+
     REQUIRE(Column(0) == xls_file->current_column);
     REQUIRE(Row(1)    == xls_file->current_row);
     REQUIRE(0         == test_workbook->called_clear_sheet);
