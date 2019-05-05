@@ -25,7 +25,16 @@ TYPE_SAFE(InputFile, std::filesystem::path)
 
 using Row = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t, struct TypeTagRow,
                                                   type_safe_skill_set::ComparableWith<OutPutRowLimit>::templ,
-                                                  type_safe_skill_set::PreIncrementable>;
+                                                  type_safe_skill_set::PreIncrementable,
+                                                  type_safe_skill_set::Equality>;
+
+using OutPutColumnLimit = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t, struct TypeTagOutPutColumnLimit>;
+
+using Column = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t, struct TypeTagColumn,
+                                                     type_safe_skill_set::ComparableWith<OutPutColumnLimit>::templ,
+                                                     type_safe_skill_set::PreIncrementable,
+                                                     type_safe_skill_set::Equality>;
+
 
 bool operator<(OutPutRowLimit v1, OutPutRowLimit v2);
 bool operator<(OutPutFileNameDigitCount v1, OutPutFileNameDigitCount v2);

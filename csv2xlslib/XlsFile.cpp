@@ -30,9 +30,9 @@ namespace csv2xls
 
 void xls_new_sheet(xls_file_t *file)
 {
-    file->wbook.clear_sheet(file->sheet_name.Get());
-    file->current_column = 0;
-    file->current_row = 0;
+    file->out_put_doc.clear_sheet(file->sheet_name.Get());
+    file->current_column = Column(0);
+    file->current_row = Row(0);
     xls_add_headline(file);
     file->page_number++;
 }
@@ -41,20 +41,20 @@ void xls_new_sheet(xls_file_t *file)
                          std::string label)
     {
         //ignore columns > XLS_MAX_COLUMNS
-        if (XLS_MAX_COLUMNS <= file->current_column) return;
+        if ( file->current_column.isGreaterEqual( XLS_MAX_COLUMNS)) return;
 
-        file->wbook.label(file->current_row, file->current_column, label);
-        file->current_column++;
+        file->out_put_doc.setCell(file->current_row, file->current_column, label);
+        ++file->current_column;
     }
 
     bool isWithinRowLimit(xls_file_t const *file) {
-        return file->current_row < std::min(file->xls_row_limit.Get(), XLS_MAX_ROWS);
+        return file->current_row.isLess( std::min(file->xls_row_limit, XLS_MAX_ROWS));
     }
 
     void xls_newline(xls_file_t *file)
     {
-        file->current_column = 0;
-        file->current_row++;
+        file->current_column = Column(0);
+        ++file->current_row;
 
         if (isWithinRowLimit(file)) return;
 
@@ -70,7 +70,7 @@ void xls_new_sheet(xls_file_t *file)
         auto fname = xls_filename(file->filename,
                                          file->page_number,
                                          file->digit_count.Get());
-        file->wbook.write_to_file(fname);
+        file->out_put_doc.write_to_file(fname);
     }
 
     void xls_add_headline(xls_file_t *file)
@@ -85,9 +85,9 @@ void xls_new_sheet(xls_file_t *file)
 
     bool xls_sheet_is_empty(xls_file_t *file)
     {
-        return ((file->current_column == 0)
-                && ((!file->headline.empty() && file->current_row == 1)
-                        || (file->current_row == 0)));
+        return ((Column(0) == file->current_column )
+                && ((!file->headline.empty() && ( Row(1) == file->current_row ) )
+                        || (Row(0) == file->current_row  )));
     }
 
 }/* ---- end of namespace csv2xls ---- */

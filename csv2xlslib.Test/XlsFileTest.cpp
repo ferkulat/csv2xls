@@ -23,7 +23,7 @@ class dummy_workbook
         called_write_to_file++;
         return 0;
     }
-    void label(unsigned int /*row*/, unsigned int /*col*/, const std::string& /*strlabel*/)
+    void setCell(Row /*row*/, Column /*col*/, const std::string& /*strlabel*/)
     {
         called_label++;
     }
@@ -49,9 +49,9 @@ template <typename T> class wrapper_workbook
     {
         return wrapped->write_to_file(file_name);
     }
-    void label(unsigned int row, unsigned int col, const std::string& strlabel)
+    void setCell(Row row, Column col, const std::string& strlabel)
     {
-        wrapped->label(row, col, strlabel);
+        wrapped->setCell(row, col, strlabel);
     }
 };
 
@@ -78,8 +78,8 @@ struct Group1
         xls_file                 = std::make_unique<csv2xls::xls_file_t>(OutPutDoc(wrapper_workbook(test_workbook)));
         xls_file->filename       = "file";
         xls_file->xls_row_limit  = csv2xls::DEFAULT_XLS_MAX_LINES;
-        xls_file->current_column = 0;
-        xls_file->current_row    = 0;
+        xls_file->current_column = Column(0);
+        xls_file->current_row    = Row(0);
         xls_file->digit_count    = OutPutFileNameDigitCount(3);
         xls_file->page_number    = 0;
     }
@@ -88,43 +88,44 @@ struct Group1
 };
 TEST_CASE_METHOD(Group1, "xls_append_cell_increases_column")
 {
-    xls_file->current_column = 0;
-    xls_file->current_row    = 0;
+    xls_file->current_column = Column(0);
+    xls_file->current_row    = Row(0);
 
     csv2xls::xls_append_cell(xls_file.get(), "lol");
-    REQUIRE(0 == xls_file->current_row);
-    REQUIRE(1 == xls_file->current_column);
+    REQUIRE(Row(0) == xls_file->current_row);
+    REQUIRE(Column(1) == xls_file->current_column);
 }
 
 TEST_CASE_METHOD(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_COLUMNS")
 {
-    xls_file->current_column = csv2xls::XLS_MAX_COLUMNS;
-    xls_file->current_row    = 0;
+    xls_file->current_column = Column(csv2xls::XLS_MAX_COLUMNS.Get());
+    xls_file->current_row    = Row(0);
     csv2xls::xls_append_cell(xls_file.get(), "lol");
-    REQUIRE(0 == xls_file->current_row);
-    REQUIRE(csv2xls::XLS_MAX_COLUMNS == xls_file->current_column);
+
+    REQUIRE(Row(0) == xls_file->current_row);
+    REQUIRE(xls_file->current_column.isEqual(csv2xls::XLS_MAX_COLUMNS));
 }
 
 TEST_CASE_METHOD(Group1, "xls_newline_increases_row")
 {
-    xls_file->current_column = 0;
-    xls_file->current_row    = 0;
+    xls_file->current_column = Column(0);
+    xls_file->current_row    = Row(0);
     csv2xls::xls_newline(xls_file.get());
-    REQUIRE(0 == xls_file->current_column);
-    REQUIRE(1 == xls_file->current_row);
-    REQUIRE(0 == test_workbook->called_clear_sheet);
-    REQUIRE(0 == test_workbook->called_write_to_file);
+    REQUIRE(Column(0) == xls_file->current_column);
+    REQUIRE(Row(1)    == xls_file->current_row);
+    REQUIRE(0         == test_workbook->called_clear_sheet);
+    REQUIRE(0         == test_workbook->called_write_to_file);
 }
 
 TEST_CASE_METHOD(Group1, "xls_add_headline_does_nothing_if_headline_is_empty")
 {
     xls_file->headline.clear();
     csv2xls::xls_add_headline(xls_file.get());
-    CHECK(0 == test_workbook->called_clear_sheet);
-    CHECK(0 == test_workbook->called_label);
-    CHECK(0 == test_workbook->called_write_to_file);
-    CHECK(0 == xls_file->current_column);
-    CHECK(0 == xls_file->current_row);
+    CHECK(0         == test_workbook->called_clear_sheet);
+    CHECK(0         == test_workbook->called_label);
+    CHECK(0         == test_workbook->called_write_to_file);
+    CHECK(Column(0) == xls_file->current_column);
+    CHECK(Row(0)    == xls_file->current_row);
 }
 
 TEST_CASE_METHOD(Group1, "xls_add_headline_includes_a_newline")
@@ -132,22 +133,23 @@ TEST_CASE_METHOD(Group1, "xls_add_headline_includes_a_newline")
     std::vector<string> tmp(4, "lol");
     xls_file->headline = tmp;
     csv2xls::xls_add_headline(xls_file.get());
-    CHECK(0 == test_workbook->called_clear_sheet);
-    CHECK(4 == test_workbook->called_label);
-    CHECK(0 == test_workbook->called_write_to_file);
-    CHECK(0 == xls_file->current_column);
-    CHECK(1 == xls_file->current_row);
+    CHECK(0         == test_workbook->called_clear_sheet);
+    CHECK(4         == test_workbook->called_label);
+    CHECK(0         == test_workbook->called_write_to_file);
+    CHECK(Column(0) == xls_file->current_column);
+    CHECK(Row(1)    == xls_file->current_row);
 }
 
 TEST_CASE_METHOD(Group1, "xls_newline_writes_sheet_into_file_and_makes_a_new_sheet_if_row_is_XLS_MAX_ROWS")
 {
-    xls_file->current_column = 2;
-    xls_file->current_row    = csv2xls::XLS_MAX_ROWS;
+    xls_file->current_column = Column(2);
+    xls_file->current_row    = Row(csv2xls::XLS_MAX_ROWS.Get());
     csv2xls::xls_newline(xls_file.get());
-    CHECK(1 == test_workbook->called_clear_sheet);
-    CHECK(1 == test_workbook->called_write_to_file);
-    CHECK(0 == xls_file->current_column);
-    CHECK(0 == xls_file->current_row);
+    
+    CHECK(1         == test_workbook->called_clear_sheet);
+    CHECK(1         == test_workbook->called_write_to_file);
+    CHECK(Column(0) == xls_file->current_column);
+    CHECK(Row(0)    == xls_file->current_row);
 }
 
 TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
@@ -162,7 +164,7 @@ TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
     CHECK(1 == test_workbook->called_clear_sheet);
     CHECK(INPUT_ROWS * INPUT_COLUMNS == test_workbook->called_label);
     CHECK(1 == test_workbook->called_write_to_file);
-    CHECK(0 == xls_file->current_column);
+    CHECK(Column(0) == xls_file->current_column);
 }
 
 TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
@@ -181,8 +183,8 @@ TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
     CHECK((INPUT_ROWS + HEADLINE) * INPUT_COLUMNS == test_workbook->called_label);
 
     CHECK(1 == test_workbook->called_write_to_file);
-    CHECK(0 == xls_file->current_column);
-    CHECK(INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET.Get() == xls_file->current_row);
+    CHECK(Column(0) == xls_file->current_column);
+    CHECK(INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET.Get() == xls_file->current_row.Get());
 }
 
 TEST_CASE_METHOD(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_headline")

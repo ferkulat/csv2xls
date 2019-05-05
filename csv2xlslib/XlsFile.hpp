@@ -35,25 +35,29 @@
 
 namespace csv2xls
 {
-    constexpr uint32_t XLS_MAX_ROWS    = 65536;
-    constexpr int XLS_MAX_COLUMNS = 256;
+    constexpr auto XLS_MAX_ROWS    = OutPutRowLimit(65536);
+    constexpr auto XLS_MAX_COLUMNS = OutPutColumnLimit(256);
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
 using HeadLineType = std::vector<std::string>;
 struct xls_file_t
 {
-    xls_file_t(OutPutDoc wbook_):wbook(std::move(wbook_)){}
-    HeadLineType headline;
-    OutPutDoc    wbook;
-    XlsSheetName sheet_name;
-    std::filesystem::path  filename;
-    int          page_number;
+    xls_file_t(OutPutDoc out_put_doc_)
+        : out_put_doc(std::move(out_put_doc_))
+    {
+    }
+
     OutPutFileNameDigitCount digit_count;
-    uint32_t     current_column;
-    uint32_t     current_row;
-    OutPutRowLimit xls_row_limit;
-} ;
+    std::filesystem::path    filename;
+    OutPutRowLimit           xls_row_limit;
+    HeadLineType             headline;
+    XlsSheetName             sheet_name;
+    OutPutDoc                out_put_doc;
+    Column                   current_column;
+    Row                      current_row;
+    int                      page_number;
+};
 
 /**
  *

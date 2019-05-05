@@ -26,6 +26,10 @@ class TypeSafeSkillSet : public Skills<TypeSafeSkillSet<T, TypeTag, Skills...>>.
     {
         return value;
     }
+    constexpr T & Get()
+    {
+        return value;
+    }
 };
 
 template <typename Derived>
@@ -56,19 +60,18 @@ struct ComparableWith
     template<typename T>
     struct templ: crtp<T, templ>
     {
-    constexpr bool operator< (U const& other) const { return this->underlying().get() < other.get(); }
-    constexpr bool operator> (U const& other) const { return this->underlying().get() > other.get(); }
-    constexpr bool operator<=(U const& other) const { return (*this < other)||(*this == other);      }
-    constexpr bool operator>=(U const& other) const { return (*this > other)||(*this == other);      }
-    constexpr bool operator==(U const& other) const { return this->underlying().get() == other.get();}
-    constexpr bool operator!=(U const& other) const { return !(*this == other);                      }
+    constexpr  bool isLess        (U const& other) const { return this->underlying().Get() < other.Get(); }
+    constexpr  bool isEqual       (U const& other) const { return this->underlying().Get() == other.Get();}
+    constexpr  bool isGreater     (U const& other) const { return this->underlying().Get() > other.Get(); }
+    constexpr  bool isLessEqual   (U const& other) const { return (this->isLess(other))    || (this->isEqual(other));      }
+    constexpr  bool isGreaterEqual(U const& other) const { return (this->isGreater(other)) || (this->isEqual(other));      }
     };
 };
 
 template <typename T>
 struct PreIncrementable : crtp<T, PreIncrementable>
 {
-    T& operator++() { ++this->underlying().get(); return this->underlying(); }
+    T& operator++() { ++(this->underlying().Get()); return this->underlying(); }
 };
 
 }

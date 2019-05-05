@@ -22,9 +22,10 @@
  * MA  02110-1301  USA *
  */
 
+#include "csv2xls_types.h"
+#include <filesystem>
 #include <memory>
 #include <string>
-#include <filesystem>
 namespace csv2xls
 {
 
@@ -38,9 +39,8 @@ public:
 
     int write_to_file(const std::filesystem::path &file_name);
 
-    void label( unsigned int row,
-                unsigned int col,
-                const std::string& strlabel);
+    void setCell( Row row, Column column,
+                  const std::string& strlabel);
 private:
     struct Impl;
     static void PimplDeleter(Impl*p);

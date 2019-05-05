@@ -37,11 +37,11 @@ void xls_workbook::clear_sheet(const std::string& sheetname)
     this->pimpl->wsheet = this->pimpl->wbook->sheet(sheetname);
 }
 
-void xls_workbook::label(unsigned32_t row,
-                         unsigned32_t col,
+void xls_workbook::setCell(Row row,
+                         Column column,
                          const std::string& strlabel)
 {
-    this->pimpl->wsheet->label(row, col, strlabel);
+    this->pimpl->wsheet->label(row.Get(), column.Get(), strlabel);
 }
 
 int xls_workbook::write_to_file(const std::filesystem::path& file_name)

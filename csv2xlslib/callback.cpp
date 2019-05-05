@@ -50,7 +50,7 @@ void csv_cb_headline_field(void *s, size_t CSV2XLS_LEN, void *data)
     auto *csv_field = (char*) s;
     auto *xls_file = (xls_file_t*) data;
 
-    if (XLS_MAX_COLUMNS >= xls_file->headline.size())
+    if (XLS_MAX_COLUMNS.Get() >= xls_file->headline.size())
     {
 #if  CSV_MAJOR < 3
         *(csv_field + CSV2XLS_LEN) = '\0'; /*terminate string*/

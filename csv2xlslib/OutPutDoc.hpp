@@ -5,61 +5,67 @@
 #ifndef CSV2XLS_OUTPUTDOC_H
 #define CSV2XLS_OUTPUTDOC_H
 
-#include <string>
-#include <memory>
+#include "csv2xls_types.h"
 #include <filesystem>
-
-class OutPutDoc {
-public:
-    template<typename T>
-    explicit OutPutDoc(T&& x) : self_(new doc_type<T>(std::forward<T>(x))){}
+#include <memory>
+#include <string>
+namespace csv2xls
+{
+class OutPutDoc
+{
+  public:
+    template <typename T>
+    explicit OutPutDoc(T&& x)
+        : self_(new doc_type<T>(std::forward<T>(x)))
+    {
+    }
 
     void clear_sheet(const std::string& sheetname);
 
-    int write_to_file(const std::filesystem::path &file_name);
+    int write_to_file(const std::filesystem::path& file_name);
 
-    void label( unsigned int row,
-                unsigned int col,
-                const std::string& strlabel);
-private:
+    void setCell(Row row, Column column, const std::string& strlabel);
 
+  private:
     class concept_t
     {
-    public:
+      public:
         virtual ~concept_t() = default;
 
-        virtual void clear_sheet(const std::string& sheetname)= 0;
-        virtual int write_to_file(const std::filesystem::path &file_name) = 0;
-        virtual void label( unsigned int row,
-                            unsigned int col,
-                            const std::string& strlabel) = 0;
+        virtual void clear_sheet(const std::string& sheetname)                    = 0;
+        virtual int  write_to_file(const std::filesystem::path& file_name)        = 0;
+        virtual void setCell(Row row, Column column, const std::string& strlabel) = 0;
     };
-    template <typename T>
-    class doc_type : public concept_t
+    template <typename T> class doc_type : public concept_t
     {
-    public:
-        doc_type(T x_):x(std::move(x_)){}
+      public:
+        doc_type(T x_)
+            : x(std::move(x_))
+        {
+        }
 
-        void clear_sheet(const std::string &sheetname) override {
+        void clear_sheet(const std::string& sheetname) override
+        {
             x.clear_sheet(sheetname);
         }
 
-        int write_to_file(const std::filesystem::path &file_name) override {
+        int write_to_file(const std::filesystem::path& file_name) override
+        {
             return x.write_to_file(file_name);
         }
 
-        void label(unsigned int row,
-                   unsigned int col,
-                   const std::string &strlabel) override {
-            x.label(row, col, strlabel);
+        void setCell(Row row, Column column, const std::string& strlabel) override
+        {
+            x.setCell(row, column, strlabel);
         }
 
-    private:
+      private:
         T x;
     };
-private:
+
+  private:
     std::unique_ptr<concept_t> self_;
 };
-
+}
 
 #endif //CSV2XLS_OUTPUTDOC_H
