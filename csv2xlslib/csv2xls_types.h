@@ -5,7 +5,7 @@
 #ifndef CSV2XLS_CSV2XLS_TYPES_H
 #define CSV2XLS_CSV2XLS_TYPES_H
 
-#include "TypeSafeSkillSet.h"
+#include "SkilledType.h"
 #include <checked_cmd.h>
 #include <filesystem>
 namespace csv2xls
@@ -22,22 +22,21 @@ TYPE_SAFE(OutPutFileNameDigitCount, std::uint8_t)
 TYPE_SAFE(OutPutFile, std::filesystem::path)
 TYPE_SAFE(InputFile, std::filesystem::path)
 
-using OutPutRowLimit = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t, struct TypeTagOutPutRowLimit,
-                                                             type_safe_skill_set::Equality,
-                                                             type_safe_skill_set::RelativeComparable>;
+using OutPutRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutRowLimit,
+                                                 skilled_type::Equality,
+                                                 skilled_type::RelativeComparable>;
 
-using Row = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t, struct TypeTagRow,
-                                                  type_safe_skill_set::ComparableWith<OutPutRowLimit>::templ,
-                                                  type_safe_skill_set::PreIncrementable,
-                                                  type_safe_skill_set::Equality>;
+using Row = skilled_type::SkilledType<std::uint32_t, struct TypeTagRow,
+                                      skilled_type::ComparableWith<OutPutRowLimit>::templ,
+                                      skilled_type::PreIncrementable,
+                                      skilled_type::Equality>;
 
-using OutPutColumnLimit = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t, struct TypeTagOutPutColumnLimit>;
+using OutPutColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutColumnLimit>;
 
-using Column = type_safe_skill_set::TypeSafeSkillSet<std::uint32_t, struct TypeTagColumn,
-                                                     type_safe_skill_set::ComparableWith<OutPutColumnLimit>::templ,
-                                                     type_safe_skill_set::PreIncrementable,
-                                                     type_safe_skill_set::Equality>;
-
+using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
+                                         skilled_type::ComparableWith<OutPutColumnLimit>::templ,
+                                         skilled_type::PreIncrementable,
+                                         skilled_type::Equality>;
 
 #undef TYPE_SAFE
 }

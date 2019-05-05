@@ -2,30 +2,30 @@
 // Created by marcel on 5/5/19.
 //
 
-#ifndef CSV2XLS_TYPESAFESKILLSET_H
-#define CSV2XLS_TYPESAFESKILLSET_H
+#ifndef CSV2XLS_SKILLEDTYPE_H
+#define CSV2XLS_SKILLEDTYPE_H
 
 #include <istream>
 #include "crtp.h"
-namespace type_safe_skill_set
+namespace skilled_type
 {
-template <typename T, typename TypeTag, template <typename> typename... Skills> class TypeSafeSkillSet;
+template <typename T, typename TypeTag, template <typename> typename... Skills> class SkilledType;
 
 template <typename T, typename TypeTag, template <typename> typename... Skills>
-std::istream& operator>>(std::istream& is, TypeSafeSkillSet<T, TypeTag, Skills...>& target);
+std::istream& operator>>(std::istream& is, SkilledType<T, TypeTag, Skills...>& target);
 
 template <typename T, typename TypeTag, template <typename> typename... Skills>
-std::ostream& operator<<(std::ostream& os, TypeSafeSkillSet<T, TypeTag, Skills...> const& target);
+std::ostream& operator<<(std::ostream& os, SkilledType<T, TypeTag, Skills...> const& target);
 
 template <typename T, typename TypeTag, template <typename> typename... Skills>
-class TypeSafeSkillSet : public Skills<TypeSafeSkillSet<T, TypeTag, Skills...>>...
+class SkilledType : public Skills<SkilledType<T, TypeTag, Skills...>>...
 {
     T value;
 
   public:
     using type         = T;
-    TypeSafeSkillSet() = default;
-    constexpr explicit TypeSafeSkillSet(T t_)
+    SkilledType() = default;
+    constexpr explicit SkilledType(T t_)
         : value(std::move(t_))
     {
     }
@@ -40,21 +40,21 @@ class TypeSafeSkillSet : public Skills<TypeSafeSkillSet<T, TypeTag, Skills...>>.
 
   private:
     friend std::istream&
-    operator>><T, TypeTag, Skills...>(std::istream& is, TypeSafeSkillSet<T, TypeTag, Skills...>& target);
+    operator>><T, TypeTag, Skills...>(std::istream& is, SkilledType<T, TypeTag, Skills...>& target);
 
     friend std::ostream&
-    operator<<<T, TypeTag, Skills...>(std::ostream& os, TypeSafeSkillSet<T, TypeTag, Skills...> const& target);
+    operator<<<T, TypeTag, Skills...>(std::ostream& os, SkilledType<T, TypeTag, Skills...> const& target);
 };
 
 template <typename T, typename TypeTag, template <typename> typename... Skills>
-std::istream& operator>>(std::istream& is, TypeSafeSkillSet<T, TypeTag, Skills...>& target)
+std::istream& operator>>(std::istream& is, SkilledType<T, TypeTag, Skills...>& target)
 {
     is >> target.value;
     return is;
 }
 
 template <typename T, typename TypeTag, template <typename> typename... Skills>
-std::ostream& operator<<(std::ostream& os, TypeSafeSkillSet<T, TypeTag, Skills...> const& target)
+std::ostream& operator<<(std::ostream& os, SkilledType<T, TypeTag, Skills...> const& target)
 {
     os << target.value;
     return os;
@@ -128,5 +128,5 @@ template <typename T> struct PreIncrementable : crtp<T, PreIncrementable>
     }
 };
 
-} // namespace type_safe_skill_set
-#endif //CSV2XLS_TYPESAFESKILLSET_H
+} // namespace skilled_type
+#endif // CSV2XLS_SKILLEDTYPE_H
