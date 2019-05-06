@@ -275,7 +275,7 @@ namespace csv2xls
             out_path /= opts.csv_file_name.Get().filename();
             opts.out_put_file = OutPutFile(out_path);
         }
-        opts.out_put_file = xls_filename(opts.out_put_file, 0, DigitCount(0));
+        opts.out_put_file = xls_filename(opts.out_put_file, FileNumber(0), DigitCount(0));
         return opts;
     }
 

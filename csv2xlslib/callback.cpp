@@ -42,7 +42,7 @@ void csv_cb_end_of_field(void *s, size_t CSV2XLS_LEN, void *data)
     auto *xls_file = (xls_file_t*) data;
 
 
-    xls_append_cell(xls_file, CellContent(csv_field));
+    xlsAppendCell(xls_file, CellContent(csv_field));
 }/* ----- end of function csv_cb_end_of_field ----- */
 
 void csv_cb_headline_field(void *s, size_t CSV2XLS_LEN, void *data)
@@ -55,7 +55,7 @@ void csv_cb_headline_field(void *s, size_t CSV2XLS_LEN, void *data)
 #if  CSV_MAJOR < 3
         *(csv_field + CSV2XLS_LEN) = '\0'; /*terminate string*/
 #endif
-        xls_append_cell(xls_file, CellContent(csv_field));
+        xlsAppendCell(xls_file, CellContent(csv_field));
         xls_file->headline.emplace_back(csv_field);
     }
 }/* ----- end of function csv_cb_headline_field ----- */

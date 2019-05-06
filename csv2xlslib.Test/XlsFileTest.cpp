@@ -61,7 +61,7 @@ void read_CSV_into(csv2xls::xls_file_t* xlsfile, int row_count, int column_count
     {
         for (int col = 0; col < column_count; col++)
         {
-            csv2xls::xls_append_cell(xlsfile, CellContent("lol"));
+            csv2xls::xlsAppendCell(xlsfile, CellContent("lol"));
         }
         csv2xls::xls_newline(xlsfile);
     }
@@ -81,7 +81,7 @@ struct Group1
         xls_file->current_column = Column(0);
         xls_file->current_row    = Row(0);
         xls_file->digit_count    = DigitCount(3);
-        xls_file->page_number    = 0;
+        xls_file->file_number    = FileNumber(0);
     }
 
     virtual ~Group1() = default;
@@ -91,7 +91,7 @@ TEST_CASE_METHOD(Group1, "xls_append_cell_increases_column")
     xls_file->current_column = Column(0);
     xls_file->current_row    = Row(0);
 
-    csv2xls::xls_append_cell(xls_file.get(), CellContent("lol"));
+    csv2xls::xlsAppendCell(xls_file.get(), CellContent("lol"));
     REQUIRE(Row(0)    == xls_file->current_row);
     REQUIRE(Column(1) == xls_file->current_column);
 }
@@ -101,7 +101,7 @@ TEST_CASE_METHOD(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_C
     xls_file->current_column = Column(csv2xls::XLS_MAX_COLUMNS.Get());
     xls_file->current_row    = Row(0);
     
-    csv2xls::xls_append_cell(xls_file.get(), CellContent("lol"));
+    csv2xls::xlsAppendCell(xls_file.get(), CellContent("lol"));
 
     REQUIRE(Row(0) == xls_file->current_row);
     REQUIRE(xls_file->current_column.isEqual(csv2xls::XLS_MAX_COLUMNS));

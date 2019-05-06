@@ -33,7 +33,7 @@ namespace csv2xls
  * The name you wish to be the output file name. If it ends with `.xls` (case insensitive),
  * you will get the name like you suggested. If it ends with `.csv`, `csv`
  * gets replaced by `xls`. In all other cases the suggested name will extended with `.xls`.
- * @param count
+ * @param file_number
  *
  * If `count` is > 0, the resulting file name will extended by the number `count` before `.xls`.
  * The number has 4 digits with leadung zeros.
@@ -41,9 +41,7 @@ namespace csv2xls
  *
  * The resulting file name.
  */
-OutPutFile
-xls_filename(OutPutFile wish_name,
-             long count, /** the number added to file name */
-             DigitCount digit_count);/** minimum digits of the number  */
+OutPutFile xls_filename(OutPutFile wish_name, FileNumber file_number, /** the number added to file name */
+                        DigitCount digit_count);                /** minimum digits of the number  */
 
 } /* ----- end of namespace csv2xls ----- */

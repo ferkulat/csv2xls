@@ -56,7 +56,7 @@ struct xls_file_t
     OutPutDoc      out_put_doc;
     Column         current_column;
     Row            current_row;
-    int            page_number;
+    FileNumber     file_number;
 };
 
 /**
@@ -79,8 +79,7 @@ xls_new_sheet(xls_file_t *file);
  * The string to be written into the current xls data cell.
  */
 void
-xls_append_cell(xls_file_t *xlsfile,
-                CellContent const& cell_content);
+xlsAppendCell(xls_file_t* xlsfile, CellContent const& cell_content);
 
 /**
  * \brief Point to the next line at column 0 in xls data

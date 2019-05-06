@@ -34,11 +34,10 @@ void xls_new_sheet(xls_file_t *file)
     file->current_column = Column(0);
     file->current_row = Row(0);
     xls_add_headline(file);
-    file->page_number++;
+    file->file_number++;
 }
 
-    void xls_append_cell(xls_file_t *file,
-                         CellContent const& cell_content)
+    void xlsAppendCell(xls_file_t* file, CellContent const& cell_content)
     {
         //ignore columns > XLS_MAX_COLUMNS
         if ( file->current_column.isGreaterEqual( XLS_MAX_COLUMNS)) return;
@@ -68,7 +67,7 @@ void xls_new_sheet(xls_file_t *file)
         if (xls_sheet_is_empty(file)) return;
 
         auto fname = xls_filename(file->out_put_file,
-                                         file->page_number,
+                                         file->file_number,
                                          file->digit_count);
         file->out_put_doc.writeInto(fname);
     }
@@ -78,7 +77,7 @@ void xls_new_sheet(xls_file_t *file)
         if (file->headline.empty()) return;
 
         for (auto const& column_name : file->headline)
-            xls_append_cell(file, column_name);
+            xlsAppendCell(file, column_name);
 
         xls_newline(file);
     }

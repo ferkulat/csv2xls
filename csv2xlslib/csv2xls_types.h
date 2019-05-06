@@ -28,18 +28,19 @@ using OutPutRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOu
 
 using Row = skilled_type::SkilledType<std::uint32_t, struct TypeTagRow,
                                       skilled_type::ComparableWith<OutPutRowLimit>::templ,
-                                      skilled_type::PreIncrementable,
+                                      skilled_type::Incrementable,
                                       skilled_type::Equality>;
 
 using OutPutColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutColumnLimit>;
 
 using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
                                          skilled_type::ComparableWith<OutPutColumnLimit>::templ,
-                                         skilled_type::PreIncrementable,
+                                         skilled_type::Incrementable,
                                          skilled_type::Equality>;
 
 using CellContent = skilled_type::SkilledType<std::string, struct TypeTagCellContent>;
-
+using FileNumber = skilled_type::SkilledType<int, struct TypeTagFileNumber,
+                                             skilled_type::Incrementable>;
 #undef TYPE_SAFE
 }
 #endif //CSV2XLS_CSV2XLS_TYPES_H

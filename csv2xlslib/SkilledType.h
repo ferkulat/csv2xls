@@ -119,12 +119,18 @@ template <typename U> struct ComparableWith
     };
 };
 
-template <typename T> struct PreIncrementable : crtp<T, PreIncrementable>
+template <typename T> struct Incrementable : crtp<T, Incrementable>
 {
     T& operator++()
     {
         ++(this->underlying().Get());
         return this->underlying();
+    }
+    T operator++(int)
+    {
+        T tmp(this->underlying().Get());
+        operator++();
+        return tmp;
     }
 };
 
