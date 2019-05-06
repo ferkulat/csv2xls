@@ -36,7 +36,7 @@ namespace csv2xls
     using CmdPrintVersionInfo         = CheckedCmd::Flag<PrintVersionInfo>;
     using CmdInputHasHeadLine         = CheckedCmd::Flag<InputHasHeadLine>;
     using CmdCsvSeparatorIsTab        = CheckedCmd::Flag<CsvSeparatorIsTab>;
-    using CmdOutputFilePath           = CheckedCmd::Param<std::optional<OutPutFile>>;
+    using CmdOutputFilePath           = CheckedCmd::Param<std::optional<OutPutFileName>>;
     using CmdXlsSheetName             = CheckedCmd::Param<std::optional<XlsSheetName>>;
     using CmdCsvSeparator             = CheckedCmd::Param<std::optional<CsvSeparator>>;
     using CmdOutPutRowLimit           = CheckedCmd::Param<std::optional<OutPutRowLimit>>;
@@ -173,7 +173,7 @@ namespace csv2xls
         if (std::get<CmdOutputFilePath>(cmdConfig).has_value())
         {
             auto const user_input = std::get<CmdOutputFilePath>(cmdConfig).value().Get();
-            config.out_put_file  = OutPutFile(std::regex_replace(user_input.string(), std::regex("^ +"), ""));
+            config.out_put_file  = OutPutFileName(std::regex_replace(user_input.string(), std::regex("^ +"), ""));
         }
 
         if (std::get<CmdCsvSeparatorIsTab>(cmdConfig).value().Get())
@@ -262,7 +262,7 @@ namespace csv2xls
         {
             if (opts.csv_file_name.Get().has_filename())
             {
-                opts.out_put_file = OutPutFile(opts.csv_file_name.Get().filename());
+                opts.out_put_file = OutPutFileName(opts.csv_file_name.Get().filename());
             }
             else
             {
@@ -273,9 +273,9 @@ namespace csv2xls
         {
             auto out_path = opts.out_put_file.Get();
             out_path /= opts.csv_file_name.Get().filename();
-            opts.out_put_file = OutPutFile(out_path);
+            opts.out_put_file = OutPutFileName(out_path);
         }
-        opts.out_put_file = xls_filename(opts.out_put_file, FileNumber(0), DigitCount(0));
+        opts.out_put_file = outputFilename(opts.out_put_file, FileNumber(0), DigitCount(0));
         return opts;
     }
 

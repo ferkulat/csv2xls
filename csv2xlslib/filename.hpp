@@ -41,7 +41,7 @@ namespace csv2xls
  *
  * The resulting file name.
  */
-OutPutFile xls_filename(OutPutFile wish_name, FileNumber file_number, /** the number added to file name */
-                        DigitCount digit_count);                /** minimum digits of the number  */
+OutPutFileName outputFilename(OutPutFileName wish_name, FileNumber file_number, /** the number added to file name */
+                          DigitCount digit_count);                /** minimum digits of the number  */
 
 } /* ----- end of namespace csv2xls ----- */

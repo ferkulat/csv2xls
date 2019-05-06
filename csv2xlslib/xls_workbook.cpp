@@ -42,7 +42,7 @@ void xls_workbook::setCell(Row row, Column column, CellContent const& cell_conte
     this->pimpl->wsheet->label(row.Get(), column.Get(), cell_content.Get());
 }
 
-int xls_workbook::writeInto(OutPutFile const& out_put_file)
+int xls_workbook::writeInto(OutPutFileName const& out_put_file)
 {
     return this->pimpl->wbook->Dump(out_put_file.Get().string());
 }

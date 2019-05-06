@@ -66,9 +66,7 @@ void xls_new_sheet(xls_file_t *file)
     {
         if (xls_sheet_is_empty(file)) return;
 
-        auto fname = xls_filename(file->out_put_file,
-                                         file->file_number,
-                                         file->digit_count);
+        auto fname = outputFilename(file->out_put_file, file->file_number, file->digit_count);
         file->out_put_doc.writeInto(fname);
     }
 

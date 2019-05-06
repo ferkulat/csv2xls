@@ -49,7 +49,7 @@ struct xls_file_t
     }
 
     DigitCount     digit_count;
-    OutPutFile     out_put_file;
+    OutPutFileName out_put_file;
     OutPutRowLimit xls_row_limit;
     HeadLineType   headline;
     XlsSheetName   sheet_name;

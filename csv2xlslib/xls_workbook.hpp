@@ -37,7 +37,7 @@ public:
     xls_workbook(xls_workbook && workbook) = default;
     void clearSheet(XlsSheetName const& sheet_name);
 
-    int writeInto(OutPutFile const& out_put_file);
+    int writeInto(OutPutFileName const& out_put_file);
 
     void setCell( Row row, Column column,
                   CellContent const& cell_content);

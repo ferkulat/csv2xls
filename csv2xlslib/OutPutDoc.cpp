@@ -10,7 +10,7 @@ void OutPutDoc::clearSheet(XlsSheetName const& sheet_name)
     self_->clearSheet(sheet_name);
 }
 
-int OutPutDoc::writeInto(OutPutFile const& out_put_file)
+int OutPutDoc::writeInto(OutPutFileName const& out_put_file)
 {
     return self_->writeInto(out_put_file);
 }

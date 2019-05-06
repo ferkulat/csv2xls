@@ -46,7 +46,7 @@ TEST_CASE_METHOD(TheFixture, "When_no_commandline_options_are_given then guess_o
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
     REQUIRE(InputFile("input1.csv")  == my_opts.csv_file_name);
-    REQUIRE(OutPutFile("input1.xls") == my_opts.out_put_file);
+    REQUIRE(OutPutFileName("input1.xls") == my_opts.out_put_file);
 }
 
 TEST_CASE_METHOD(TheFixture, "When_output_name_is_a_directory, guess_output_name_from_inputname")
@@ -57,7 +57,7 @@ TEST_CASE_METHOD(TheFixture, "When_output_name_is_a_directory, guess_output_name
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
     REQUIRE(InputFile("input1.csv")      == my_opts.csv_file_name);
-    REQUIRE(OutPutFile("tmp/input1.xls") == my_opts.out_put_file);
+    REQUIRE(OutPutFileName("tmp/input1.xls") == my_opts.out_put_file);
 }
 
 TEST_CASE_METHOD(TheFixture, "When_first_line_is_headline then it_should_fail_with_line_limit_1")
