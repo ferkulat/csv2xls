@@ -43,8 +43,8 @@ void csv_cb_headline_field(void *s, size_t len, void *data)
 
     if (XLS_MAX_COLUMNS.Get() >= xls_file.headline.size())
     {
-        appendCell(xls_file, CellContent(csv_field));
-        xls_file.headline.emplace_back(std::string(csv_field, len));
+        auto const& cell_content = xls_file.headline.emplace_back(std::string(csv_field, len));
+        appendCell(xls_file, cell_content);
     }
 }
 
