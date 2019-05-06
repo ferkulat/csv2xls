@@ -40,7 +40,7 @@ namespace csv2xls
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
-using HeadLineType = std::vector<std::string>;
+using HeadLineType = std::vector<CellContent>;
 struct xls_file_t
 {
     xls_file_t(OutPutDoc out_put_doc_)
@@ -75,12 +75,12 @@ xls_new_sheet(xls_file_t *file);
  *
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
- * @param val
+ * @param cell_content
  * The string to be written into the current xls data cell.
  */
 void
 xls_append_cell(xls_file_t *xlsfile,
-                std::string val);
+                CellContent const& cell_content);
 
 /**
  * \brief Point to the next line at column 0 in xls data

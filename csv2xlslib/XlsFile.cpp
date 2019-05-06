@@ -38,12 +38,12 @@ void xls_new_sheet(xls_file_t *file)
 }
 
     void xls_append_cell(xls_file_t *file,
-                         std::string label)
+                         CellContent const& cell_content)
     {
         //ignore columns > XLS_MAX_COLUMNS
         if ( file->current_column.isGreaterEqual( XLS_MAX_COLUMNS)) return;
 
-        file->out_put_doc.setCell(file->current_row, file->current_column, label);
+        file->out_put_doc.setCell(file->current_row, file->current_column, cell_content);
         ++file->current_column;
     }
 

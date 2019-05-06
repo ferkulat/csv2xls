@@ -38,6 +38,8 @@ using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
                                          skilled_type::PreIncrementable,
                                          skilled_type::Equality>;
 
+using CellContent = skilled_type::SkilledType<std::string, struct TypeTagCellContent>;
+
 #undef TYPE_SAFE
 }
 #endif //CSV2XLS_CSV2XLS_TYPES_H

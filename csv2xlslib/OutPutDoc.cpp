@@ -15,8 +15,8 @@ int OutPutDoc::writeInto(OutPutFile const& out_put_file)
     return self_->writeInto(out_put_file);
 }
 
-void OutPutDoc::setCell(Row row, Column col, const std::string& strlabel)
+void OutPutDoc::setCell(Row row, Column col, CellContent const& cell_content)
 {
-    self_->setCell(row, col, strlabel);
+    self_->setCell(row, col, cell_content);
 }
 }

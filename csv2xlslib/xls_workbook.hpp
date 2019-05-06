@@ -40,7 +40,7 @@ public:
     int writeInto(OutPutFile const& out_put_file);
 
     void setCell( Row row, Column column,
-                  const std::string& strlabel);
+                  CellContent const& cell_content);
 private:
     struct Impl;
     static void PimplDeleter(Impl*p);
