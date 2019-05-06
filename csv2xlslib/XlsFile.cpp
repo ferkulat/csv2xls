@@ -43,7 +43,7 @@ void xls_new_sheet(xls_file_t *file)
         if ( file->current_column.isGreaterEqual( XLS_MAX_COLUMNS)) return;
 
         file->out_put_doc.setCell(file->current_row, file->current_column, cell_content);
-        ++file->current_column;
+        file->current_column++;
     }
 
     bool isWithinRowLimit(xls_file_t const *file) {
@@ -53,7 +53,7 @@ void xls_new_sheet(xls_file_t *file)
     void xls_newline(xls_file_t *file)
     {
         file->current_column = Column(0);
-        ++file->current_row;
+        file->current_row++;
 
         if (isWithinRowLimit(file)) return;
 
@@ -80,11 +80,20 @@ void xls_new_sheet(xls_file_t *file)
         xls_newline(file);
     }
 
-    bool xls_sheet_is_empty(xls_file_t *file)
+    bool isAtFirstRow(const xls_file_t* file)
     {
-        return ((Column(0) == file->current_column )
-                && ((!file->headline.empty() && ( Row(1) == file->current_row ) )
-                        || (Row(0) == file->current_row  )));
+        auto const first_row = (file->headline.empty())? Row(0): Row(1);
+        return (first_row == file->current_row);
     }
 
-}/* ---- end of namespace csv2xls ---- */
+    bool isAtFirstColumn(const xls_file_t* file)
+    {
+        return (Column(0) == file->current_column);
+    }
+
+    bool xls_sheet_is_empty(xls_file_t *file)
+    {
+        return (isAtFirstColumn(file) && isAtFirstRow(file));
+    }
+
+    }/* ---- end of namespace csv2xls ---- */

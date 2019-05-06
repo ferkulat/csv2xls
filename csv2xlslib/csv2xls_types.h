@@ -29,7 +29,8 @@ using OutPutRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOu
 using Row = skilled_type::SkilledType<std::uint32_t, struct TypeTagRow,
                                       skilled_type::ComparableWith<OutPutRowLimit>::templ,
                                       skilled_type::Incrementable,
-                                      skilled_type::Equality>;
+                                      skilled_type::Equality,
+                                      skilled_type::RelativeComparable>;
 
 using OutPutColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutColumnLimit>;
 
