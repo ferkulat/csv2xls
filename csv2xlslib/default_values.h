@@ -14,8 +14,8 @@ namespace csv2xls
     constexpr auto DEFAULT_CSV_BUFFER_SIZE   = InputBufferSize(1024*1024);
     constexpr auto MAX_CSV_BUFFER_SIZE       = InputBufferSize(std::numeric_limits<InputBufferSize::type>::max());
     constexpr auto MIN_CSV_BUFFER_SIZE       = InputBufferSize(1);
-    constexpr auto DEFAULT_XLS_DIGIT_COUNT   = OutPutFileNameDigitCount(4);
-    constexpr auto MAX_XLS_DIGIT_COUNT       = OutPutFileNameDigitCount(10);
+    constexpr auto DEFAULT_XLS_DIGIT_COUNT   = DigitCount(4);
+    constexpr auto MAX_XLS_DIGIT_COUNT       = DigitCount(10);
 }
 
 #endif

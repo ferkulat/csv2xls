@@ -41,15 +41,15 @@ namespace csv2xls
 
     struct Config
     {
-        InputFile                csv_file_name;
-        OutPutFile               out_put_file;
-        XlsSheetName             xls_sheet_name        = XlsSheetName("Table1");
-        OutPutRowLimit           xls_row_limit         = DEFAULT_XLS_MAX_LINES;
-        InputBufferSize          input_buffer_size     = DEFAULT_CSV_BUFFER_SIZE;
-        OutPutFileNameDigitCount xls_digit_count       = DEFAULT_XLS_DIGIT_COUNT;
-        CsvSeparator             csv_tab_delimiter     = DEFAULT_CSV_TAB_DELIMITER;
-        InputHasHeadLine         csv_file_has_headline = InputHasHeadLine(false);
-        bool exit_clean                                = false;
+        InputFile        csv_file_name;
+        OutPutFile       out_put_file;
+        XlsSheetName     xls_sheet_name        = XlsSheetName("Table1");
+        OutPutRowLimit   xls_row_limit         = DEFAULT_XLS_MAX_LINES;
+        InputBufferSize  input_buffer_size     = DEFAULT_CSV_BUFFER_SIZE;
+        DigitCount       digit_count           = DEFAULT_XLS_DIGIT_COUNT;
+        CsvSeparator     csv_tab_delimiter     = DEFAULT_CSV_TAB_DELIMITER;
+        InputHasHeadLine csv_file_has_headline = InputHasHeadLine(false);
+        bool exit_clean                        = false;
     };
 
     Config

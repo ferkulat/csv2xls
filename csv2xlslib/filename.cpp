@@ -32,11 +32,11 @@ namespace csv2xls
 
 using namespace std;
 
-    string ConvertCountToStringWithLeadingZero(OutPutFileNameDigitCount numberOfDigits,
+    string ConvertCountToStringWithLeadingZero(DigitCount digit_count,
                                                long count)
     {
         stringstream numstream;
-        numstream.width(numberOfDigits.Get());
+        numstream.width(digit_count.Get());
         numstream.fill('0');
         numstream << count;
         return numstream.str();
@@ -72,11 +72,11 @@ using namespace std;
         return parts;
     }
 
-    auto AddNumberToBaseName(long count, OutPutFileNameDigitCount digits)
+    auto AddNumberToBaseName(long count, DigitCount digit_count)
     {
-        return [count, digits](FileNameParts parts){
-            if (count && digits.Get())
-                parts.base += ConvertCountToStringWithLeadingZero(digits, count);
+        return [count, digit_count](FileNameParts parts){
+            if (count && digit_count.Get())
+                parts.base += ConvertCountToStringWithLeadingZero(digit_count, count);
             return parts;
         };
     }
@@ -87,12 +87,12 @@ using namespace std;
     }
 
 OutPutFile xls_filename(OutPutFile wish_name,
-                                        long count,
-                                       OutPutFileNameDigitCount digits)
+                        long count,
+                        DigitCount digit_count)
     {
         return OutPutFile(
             BuildXlsFilename(
-                AddNumberToBaseName(count, digits)(
+                AddNumberToBaseName(count, digit_count)(
                         SetOutputFileNameParts(
                                 SplitIntoParts(wish_name.Get())))));
     }

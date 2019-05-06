@@ -18,7 +18,7 @@ TYPE_SAFE(PrintVersionInfo, bool)
 TYPE_SAFE(CsvSeparator, char)
 TYPE_SAFE(InputBufferSize, std::streamsize)
 TYPE_SAFE(XlsSheetName, std::string)
-TYPE_SAFE(OutPutFileNameDigitCount, std::uint8_t)
+TYPE_SAFE(DigitCount, std::uint8_t)
 TYPE_SAFE(OutPutFile, std::filesystem::path)
 TYPE_SAFE(InputFile, std::filesystem::path)
 

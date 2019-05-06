@@ -80,7 +80,7 @@ struct Group1
         xls_file->xls_row_limit  = csv2xls::DEFAULT_XLS_MAX_LINES;
         xls_file->current_column = Column(0);
         xls_file->current_row    = Row(0);
-        xls_file->digit_count    = OutPutFileNameDigitCount(3);
+        xls_file->digit_count    = DigitCount(3);
         xls_file->page_number    = 0;
     }
 

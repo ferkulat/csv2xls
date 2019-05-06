@@ -29,7 +29,7 @@ namespace csv2xls
         xls_out.out_put_file  = options.out_put_file;
         xls_out.xls_row_limit = options.xls_row_limit;
         xls_out.sheet_name    = options.xls_sheet_name;
-        xls_out.digit_count   = options.xls_digit_count;
+        xls_out.digit_count   = options.digit_count;
         xls_out.page_number   = -1;
 
         xls_new_sheet(&xls_out);

@@ -41,7 +41,7 @@ namespace csv2xls
     using CmdCsvSeparator             = CheckedCmd::Param<std::optional<CsvSeparator>>;
     using CmdOutPutRowLimit           = CheckedCmd::Param<std::optional<OutPutRowLimit>>;
     using CmdInputBufferSize          = CheckedCmd::Param<std::optional<InputBufferSize>>;
-    using CmdOutPutFileNameDigitCount = CheckedCmd::Param<std::optional<OutPutFileNameDigitCount>>;
+    using CmdOutPutFileNameDigitCount = CheckedCmd::Param<std::optional<DigitCount>>;
 
     auto MakeCmdConfig(){
         using CheckedCmd::Help;
@@ -66,8 +66,8 @@ namespace csv2xls
                                                                          false;
         };
 
-        auto const isValidOutPutFileNameDigitCount = [](OutPutFileNameDigitCount const& out_put_file_name_digit_count){
-            return (out_put_file_name_digit_count.Get() < 11);
+        auto const isValidDigitCount = [](DigitCount const& digit_count){
+            return (digit_count.Get() < 11);
         };
 
         auto const NoChecks = [](auto const& ){ return true;};
@@ -142,7 +142,7 @@ namespace csv2xls
                         , ShortName("-D")
                         , LongName("--DigitCount")
                         , Description("If the excel file gets split, each file gets a number with min. N digits in its filename ")
-                        , isValidOutPutFileNameDigitCount
+                        , isValidDigitCount
                 )
                 ,Help()
         );
@@ -202,7 +202,7 @@ namespace csv2xls
 
         if (std::get<CmdOutPutFileNameDigitCount>(cmdConfig).has_value())
         {
-            config.xls_digit_count = std::get<CmdOutPutFileNameDigitCount>(cmdConfig).value();
+            config.digit_count = std::get<CmdOutPutFileNameDigitCount>(cmdConfig).value();
         }
 
         return config;
@@ -275,7 +275,7 @@ namespace csv2xls
             out_path /= opts.csv_file_name.Get().filename();
             opts.out_put_file = OutPutFile(out_path);
         }
-        opts.out_put_file = xls_filename(opts.out_put_file, 0, OutPutFileNameDigitCount(0));
+        opts.out_put_file = xls_filename(opts.out_put_file, 0, DigitCount(0));
         return opts;
     }
 

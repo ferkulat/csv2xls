@@ -44,6 +44,6 @@ namespace csv2xls
 OutPutFile
 xls_filename(OutPutFile wish_name,
              long count, /** the number added to file name */
-             OutPutFileNameDigitCount digits);/** minimum digits of the number  */
+             DigitCount digit_count);/** minimum digits of the number  */
 
 } /* ----- end of namespace csv2xls ----- */

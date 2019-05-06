@@ -33,7 +33,7 @@ TEST_CASE_METHOD(TheFixture, "When_no_commandline_options_are_given then set_def
     CHECK(!my_opts.csv_file_has_headline.Get());
     REQUIRE(DEFAULT_CSV_TAB_DELIMITER == my_opts.csv_tab_delimiter);
     REQUIRE(DEFAULT_XLS_MAX_LINES     == my_opts.xls_row_limit);
-    REQUIRE(DEFAULT_XLS_DIGIT_COUNT   == my_opts.xls_digit_count);
+    REQUIRE(DEFAULT_XLS_DIGIT_COUNT   == my_opts.digit_count);
     REQUIRE(DEFAULT_CSV_BUFFER_SIZE   == my_opts.input_buffer_size);
     REQUIRE(DEFAULT_XLS_SHEET_NAME    == my_opts.xls_sheet_name);
 }

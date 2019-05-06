@@ -48,15 +48,15 @@ struct xls_file_t
     {
     }
 
-    OutPutFileNameDigitCount digit_count;
-    OutPutFile               out_put_file;
-    OutPutRowLimit           xls_row_limit;
-    HeadLineType             headline;
-    XlsSheetName             sheet_name;
-    OutPutDoc                out_put_doc;
-    Column                   current_column;
-    Row                      current_row;
-    int                      page_number;
+    DigitCount     digit_count;
+    OutPutFile     out_put_file;
+    OutPutRowLimit xls_row_limit;
+    HeadLineType   headline;
+    XlsSheetName   sheet_name;
+    OutPutDoc      out_put_doc;
+    Column         current_column;
+    Row            current_row;
+    int            page_number;
 };
 
 /**
