@@ -25,7 +25,6 @@
 #ifndef XLSFILE_HPP
 #define XLSFILE_HPP
 
-#include <string>
 #include <vector>
 #include <cstdint>
 #include <memory>
@@ -64,7 +63,7 @@ struct xls_file_t
  * @param file
  */
 void
-xls_new_sheet(xls_file_t *file);
+newSheet(xls_file_t* file);
 
 
 /**
@@ -79,7 +78,7 @@ xls_new_sheet(xls_file_t *file);
  * The string to be written into the current xls data cell.
  */
 void
-xlsAppendCell(xls_file_t* xlsfile, CellContent const& cell_content);
+appendCell(xls_file_t* xlsfile, CellContent const& cell_content);
 
 /**
  * \brief Point to the next line at column 0 in xls data
@@ -88,7 +87,7 @@ xlsAppendCell(xls_file_t* xlsfile, CellContent const& cell_content);
  * Pointer to the struct which holds the information of the xls data.
  */
 void
-xls_newline(xls_file_t *xlsfile);
+newLine(xls_file_t* xlsfile);
 
 /**
  * \fn void xls_dump_worksheet(xls_file_t * xlsfile)
@@ -102,7 +101,7 @@ xls_newline(xls_file_t *xlsfile);
  * Pointer to the struct which holds the information of the xls data.
  */
 void
-xls_dump_worksheet(xls_file_t *xlsfile);
+writeIntoFile(xls_file_t* xlsfile);
 
 /**
  * \fn void xls_add_headline(xls_file_t*xlsfile)
@@ -120,9 +119,9 @@ xls_dump_worksheet(xls_file_t *xlsfile);
  * nix
  */
 void
-xls_add_headline(xls_file_t *xlsfile);
+addHeadline(xls_file_t* xlsfile);
 
 bool
-xls_sheet_is_empty(xls_file_t *file);
+isEmptySheet(xls_file_t* file);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*end XLSFILE_HPP*/
