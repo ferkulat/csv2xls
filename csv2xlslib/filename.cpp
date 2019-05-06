@@ -86,9 +86,9 @@ using namespace std;
         return parts.base.string() + parts.type.string();
     }
 
-OutPutFileName outputFilename(OutPutFileName wish_name, FileNumber file_number, DigitCount digit_count)
+OutputFileName outputFilename(OutputFileName wish_name, FileNumber file_number, DigitCount digit_count)
     {
-        return OutPutFileName(
+        return OutputFileName(
             BuildXlsFilename(
                 AddNumberToBaseName(file_number, digit_count)(
                         SetOutputFileNameParts(

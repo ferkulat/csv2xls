@@ -30,7 +30,7 @@ namespace csv2xls
 
 void newSheet(xls_file_t& file)
 {
-    file.out_put_doc.clearSheet(file.sheet_name);
+    file.output_doc.clearSheet(file.sheet_name);
     file.current_column = Column(0);
     file.current_row    = Row(0);
     addHeadline(file);
@@ -43,7 +43,7 @@ void appendCell(xls_file_t& file, CellContent const& cell_content)
     if (file.current_column.isGreaterEqual(XLS_MAX_COLUMNS))
         return;
 
-    file.out_put_doc.setCell(file.current_row, file.current_column, cell_content);
+    file.output_doc.setCell(file.current_row, file.current_column, cell_content);
     file.current_column++;
 }
 
@@ -69,8 +69,8 @@ void writeIntoFile(xls_file_t& file)
     if (isEmptySheet(file))
         return;
 
-    auto fname = outputFilename(file.out_put_file, file.file_number, file.digit_count);
-    file.out_put_doc.writeInto(fname);
+    auto fname = outputFilename(file.output_file_name, file.file_number, file.digit_count);
+    file.output_doc.writeInto(fname);
 }
 
 void addHeadline(xls_file_t& file)

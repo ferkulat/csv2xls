@@ -11,18 +11,18 @@
 #include <string>
 namespace csv2xls
 {
-class OutPutDoc
+class OutputDoc
 {
   public:
     template <typename T>
-    explicit OutPutDoc(T&& x)
+    explicit OutputDoc(T&& x)
         : self_(new doc_type<T>(std::forward<T>(x)))
     {
     }
 
     void clearSheet(XlsSheetName const& sheet_name);
 
-    int writeInto(OutPutFileName const& out_put_file);
+    int writeInto(OutputFileName const& out_put_file);
 
     void setCell(Row row, Column column, CellContent const& cell_content);
 
@@ -33,7 +33,7 @@ class OutPutDoc
         virtual ~concept_t() = default;
 
         virtual void clearSheet(XlsSheetName const& sheet_name)                       = 0;
-        virtual int  writeInto(OutPutFileName const& out_put_file)                        = 0;
+        virtual int  writeInto(OutputFileName const& out_put_file)                        = 0;
         virtual void setCell(Row row, Column column, CellContent const& cell_content) = 0;
     };
     template <typename T> class doc_type : public concept_t
@@ -49,7 +49,7 @@ class OutPutDoc
             x.clearSheet(sheet_name);
         }
 
-        int writeInto(OutPutFileName const& out_put_file) override
+        int writeInto(OutputFileName const& out_put_file) override
         {
             return x.writeInto(out_put_file);
         }

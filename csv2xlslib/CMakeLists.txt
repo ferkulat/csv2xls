@@ -19,8 +19,8 @@ add_library(csv2xlslib
         callback.hpp
         conversion.h
         version.h
-        OutPutDoc.hpp
-        OutPutDoc.cpp
+        OutputDoc.hpp
+        OutputDoc.cpp
         csv2xls_types.cpp SkilledType.h)
 target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )
 target_include_directories(csv2xlslib SYSTEM PRIVATE ${CMAKE_PREFIX_PATH}/include/xlslib)

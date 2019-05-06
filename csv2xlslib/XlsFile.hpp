@@ -29,12 +29,12 @@
 #include <cstdint>
 #include <memory>
 
-#include "OutPutDoc.hpp"
+#include "OutputDoc.hpp"
 #include "csv2xls_types.h"
 
 namespace csv2xls
 {
-    constexpr auto XLS_MAX_ROWS    = OutPutRowLimit(65536);
+    constexpr auto XLS_MAX_ROWS    = OutputRowLimit(65536);
     constexpr auto XLS_MAX_COLUMNS = OutPutColumnLimit(256);
 /**
  * \brief information about xls file to be passed to csv call back functions
@@ -42,17 +42,17 @@ namespace csv2xls
 using HeadLineType = std::vector<CellContent>;
 struct xls_file_t
 {
-    xls_file_t(OutPutDoc out_put_doc_)
-        : out_put_doc(std::move(out_put_doc_))
+    xls_file_t(OutputDoc output_doc_)
+        : output_doc(std::move(output_doc_))
     {
     }
 
     DigitCount     digit_count;
-    OutPutFileName out_put_file;
-    OutPutRowLimit xls_row_limit;
+    OutputFileName output_file_name;
+    OutputRowLimit xls_row_limit;
     HeadLineType   headline;
     XlsSheetName   sheet_name;
-    OutPutDoc      out_put_doc;
+    OutputDoc      output_doc;
     Column         current_column;
     Row            current_row;
     FileNumber     file_number;

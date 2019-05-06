@@ -42,12 +42,12 @@ namespace csv2xls
     struct Config
     {
         InputFile        csv_file_name;
-        OutPutFileName   out_put_file;
+        OutputFileName   output_file_name;
         XlsSheetName     xls_sheet_name        = XlsSheetName("Table1");
-        OutPutRowLimit   xls_row_limit         = DEFAULT_XLS_MAX_LINES;
+        OutputRowLimit   output_row_limit      = DEFAULT_XLS_MAX_LINES;
         InputBufferSize  input_buffer_size     = DEFAULT_CSV_BUFFER_SIZE;
         DigitCount       digit_count           = DEFAULT_XLS_DIGIT_COUNT;
-        CsvSeparator     csv_tab_delimiter     = DEFAULT_CSV_TAB_DELIMITER;
+        CsvSeparator     csv_separator         = DEFAULT_CSV_TAB_DELIMITER;
         InputHasHeadLine csv_file_has_headline = InputHasHeadLine(false);
         bool exit_clean                        = false;
     };

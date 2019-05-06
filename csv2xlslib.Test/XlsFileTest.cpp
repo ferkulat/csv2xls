@@ -18,7 +18,7 @@ class dummy_workbook
     {
         called_clear_sheet++;
     }
-    int writeInto(OutPutFileName const& /*file_name*/)
+    int writeInto(OutputFileName const& /*file_name*/)
     {
         called_write_to_file++;
         return 0;
@@ -45,7 +45,7 @@ template <typename T> class wrapper_workbook
     {
         wrapped->clearSheet(sheet_name);
     }
-    int writeInto(OutPutFileName const& file_name)
+    int writeInto(OutputFileName const& file_name)
     {
         return wrapped->writeInto(file_name);
     }
@@ -70,18 +70,18 @@ void read_CSV_into(csv2xls::xls_file_t& xlsfile, int row_count, int column_count
 struct Group1
 {
     std::shared_ptr<dummy_workbook>      test_workbook;
-    csv2xls::xls_file_t xls_file{OutPutDoc(wrapper_workbook(test_workbook))};
+    csv2xls::xls_file_t xls_file{OutputDoc(wrapper_workbook(test_workbook))};
 
     Group1()
     {
-        test_workbook           = std::make_shared<dummy_workbook>();
-        xls_file                = csv2xls::xls_file_t(OutPutDoc(wrapper_workbook(test_workbook)));
-        xls_file.out_put_file   = OutPutFileName("file");
-        xls_file.xls_row_limit  = csv2xls::DEFAULT_XLS_MAX_LINES;
-        xls_file.current_column = Column(0);
-        xls_file.current_row    = Row(0);
-        xls_file.digit_count    = DigitCount(3);
-        xls_file.file_number    = FileNumber(0);
+        test_workbook             = std::make_shared<dummy_workbook>();
+        xls_file                  = csv2xls::xls_file_t(OutputDoc(wrapper_workbook(test_workbook)));
+        xls_file.output_file_name = OutputFileName("file");
+        xls_file.xls_row_limit    = csv2xls::DEFAULT_XLS_MAX_LINES;
+        xls_file.current_column   = Column(0);
+        xls_file.current_row      = Row(0);
+        xls_file.digit_count      = DigitCount(3);
+        xls_file.file_number      = FileNumber(0);
     }
 
     virtual ~Group1() = default;
@@ -162,7 +162,7 @@ TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
-    constexpr auto   LINE_LIMIT_PER_SHEET = OutPutRowLimit(5);
+    constexpr auto   LINE_LIMIT_PER_SHEET = OutputRowLimit(5);
 
     xls_file.xls_row_limit = LINE_LIMIT_PER_SHEET;
     read_CSV_into(xls_file, INPUT_ROWS, INPUT_COLUMNS);
@@ -178,7 +178,7 @@ TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
     constexpr size_t HEADLINE             = 1;
-    constexpr auto   LINE_LIMIT_PER_SHEET = OutPutRowLimit(5);
+    constexpr auto   LINE_LIMIT_PER_SHEET = OutputRowLimit(5);
 
     xls_file.headline      = std::vector<CellContent>(INPUT_COLUMNS, CellContent("head"));
     xls_file.xls_row_limit = LINE_LIMIT_PER_SHEET;
@@ -196,7 +196,7 @@ TEST_CASE_METHOD(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_head
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
-    constexpr auto   LINE_LIMIT_PER_SHEET = OutPutRowLimit(4);
+    constexpr auto   LINE_LIMIT_PER_SHEET = OutputRowLimit(4);
 
     xls_file.xls_row_limit = LINE_LIMIT_PER_SHEET;
     read_CSV_into(xls_file, INPUT_ROWS, INPUT_COLUMNS);
@@ -209,7 +209,7 @@ TEST_CASE_METHOD(Group1, "make_3x2_lines_sheets_out_of_4_inputlines_with_headlin
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 4;
-    constexpr auto   LINE_LIMIT_PER_SHEET = OutPutRowLimit(2);
+    constexpr auto   LINE_LIMIT_PER_SHEET = OutputRowLimit(2);
 
     xls_file.headline      = std::vector<CellContent>(INPUT_COLUMNS, CellContent("head"));
     xls_file.xls_row_limit = LINE_LIMIT_PER_SHEET;

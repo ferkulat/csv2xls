@@ -31,35 +31,35 @@ using namespace csv2xls;
 TEST_CASE("no_xls_ending")
 {
     SECTION("given input.csv gives input.xls") {
-        auto const actual = outputFilename(OutPutFileName("input.csv"), FileNumber(0), DigitCount(4));
-        REQUIRE(OutPutFileName("input.xls"  ) == actual);
-        REQUIRE(OutPutFileName("input.xls"  ) == outputFilename(OutPutFileName("input"), FileNumber(0), DigitCount(4)));
-        REQUIRE(OutPutFileName("inp.xls"    ) == outputFilename(OutPutFileName("inp"),   FileNumber(0), DigitCount(4)));
-        REQUIRE(OutPutFileName("i.p0001.xls") == outputFilename(OutPutFileName("i.p"),   FileNumber(1), DigitCount(4)));
+        auto const actual = outputFilename(OutputFileName("input.csv"), FileNumber(0), DigitCount(4));
+        REQUIRE(OutputFileName("input.xls"  ) == actual);
+        REQUIRE(OutputFileName("input.xls"  ) == outputFilename(OutputFileName("input"), FileNumber(0), DigitCount(4)));
+        REQUIRE(OutputFileName("inp.xls"    ) == outputFilename(OutputFileName("inp"),   FileNumber(0), DigitCount(4)));
+        REQUIRE(OutputFileName("i.p0001.xls") == outputFilename(OutputFileName("i.p"),   FileNumber(1), DigitCount(4)));
     }
     SECTION("given second outfile adds numbering") {
-        auto const actual = outputFilename(OutPutFileName("input"), FileNumber(1), DigitCount(4));
-        REQUIRE(OutPutFileName("input0001.xls") == actual);
+        auto const actual = outputFilename(OutputFileName("input"), FileNumber(1), DigitCount(4));
+        REQUIRE(OutputFileName("input0001.xls") == actual);
     }
     SECTION("given first outfile adds no numbering") {
-        auto const actual = outputFilename(OutPutFileName("i.p"), FileNumber(0), DigitCount(4));
-        REQUIRE(OutPutFileName("i.p.xls") == actual);
+        auto const actual = outputFilename(OutputFileName("i.p"), FileNumber(0), DigitCount(4));
+        REQUIRE(OutputFileName("i.p.xls") == actual);
     }
 
 }
 
 TEST_CASE("with_xls_ending")
 {
-    REQUIRE(OutPutFileName("input.Xls"    ) == outputFilename(OutPutFileName("input.Xls"), FileNumber(0), DigitCount(4)));
-    REQUIRE(OutPutFileName("input.xls"    ) == outputFilename(OutPutFileName("input.xls"), FileNumber(0), DigitCount(4)));
-    REQUIRE(OutPutFileName("input0001.XLS") == outputFilename(OutPutFileName("input.XLS"), FileNumber(1), DigitCount(4)));
-    REQUIRE(OutPutFileName("xls.xls"      ) == outputFilename(OutPutFileName("xls"),       FileNumber(0), DigitCount(4)));
-    REQUIRE(OutPutFileName("xls0001.xls"  ) == outputFilename(OutPutFileName("xls"),       FileNumber(1), DigitCount(4)));
+    REQUIRE(OutputFileName("input.Xls"    ) == outputFilename(OutputFileName("input.Xls"), FileNumber(0), DigitCount(4)));
+    REQUIRE(OutputFileName("input.xls"    ) == outputFilename(OutputFileName("input.xls"), FileNumber(0), DigitCount(4)));
+    REQUIRE(OutputFileName("input0001.XLS") == outputFilename(OutputFileName("input.XLS"), FileNumber(1), DigitCount(4)));
+    REQUIRE(OutputFileName("xls.xls"      ) == outputFilename(OutputFileName("xls"),       FileNumber(0), DigitCount(4)));
+    REQUIRE(OutputFileName("xls0001.xls"  ) == outputFilename(OutputFileName("xls"),       FileNumber(1), DigitCount(4)));
 }
 
 TEST_CASE("numbering")
 {
-    REQUIRE(OutPutFileName("input429496729.XLS" ) ==  outputFilename(OutPutFileName("input.XLS"), FileNumber(429496729), DigitCount(4)));
-    REQUIRE(OutPutFileName("input0429496729.XLS") ==  outputFilename(OutPutFileName("input.XLS"), FileNumber(429496729),  DigitCount(10)));
+    REQUIRE(OutputFileName("input429496729.XLS" ) ==  outputFilename(OutputFileName("input.XLS"), FileNumber(429496729), DigitCount(4)));
+    REQUIRE(OutputFileName("input0429496729.XLS") ==  outputFilename(OutputFileName("input.XLS"), FileNumber(429496729),  DigitCount(10)));
 }
 

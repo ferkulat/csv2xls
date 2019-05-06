@@ -36,10 +36,10 @@ namespace csv2xls
     using CmdPrintVersionInfo         = CheckedCmd::Flag<PrintVersionInfo>;
     using CmdInputHasHeadLine         = CheckedCmd::Flag<InputHasHeadLine>;
     using CmdCsvSeparatorIsTab        = CheckedCmd::Flag<CsvSeparatorIsTab>;
-    using CmdOutputFilePath           = CheckedCmd::Param<std::optional<OutPutFileName>>;
+    using CmdOutputFilePath           = CheckedCmd::Param<std::optional<OutputFileName>>;
     using CmdXlsSheetName             = CheckedCmd::Param<std::optional<XlsSheetName>>;
     using CmdCsvSeparator             = CheckedCmd::Param<std::optional<CsvSeparator>>;
-    using CmdOutPutRowLimit           = CheckedCmd::Param<std::optional<OutPutRowLimit>>;
+    using CmdOutPutRowLimit           = CheckedCmd::Param<std::optional<OutputRowLimit>>;
     using CmdInputBufferSize          = CheckedCmd::Param<std::optional<InputBufferSize>>;
     using CmdOutPutFileNameDigitCount = CheckedCmd::Param<std::optional<DigitCount>>;
 
@@ -54,7 +54,7 @@ namespace csv2xls
             return xlsSheetName.Get().size() < 32;
         };
 
-        auto const isValidOutPutRowLimit = [](OutPutRowLimit const& outPutRowLimit){
+        auto const isValidOutPutRowLimit = [](OutputRowLimit const& outPutRowLimit){
             return (outPutRowLimit.Get() < DEFAULT_XLS_MIN_LINES.Get())? false:
                    (outPutRowLimit.Get() > DEFAULT_XLS_MAX_LINES.Get())? false:
                                                                          true;
@@ -173,16 +173,16 @@ namespace csv2xls
         if (std::get<CmdOutputFilePath>(cmdConfig).has_value())
         {
             auto const user_input = std::get<CmdOutputFilePath>(cmdConfig).value().Get();
-            config.out_put_file  = OutPutFileName(std::regex_replace(user_input.string(), std::regex("^ +"), ""));
+            config.output_file_name  = OutputFileName(std::regex_replace(user_input.string(), std::regex("^ +"), ""));
         }
 
         if (std::get<CmdCsvSeparatorIsTab>(cmdConfig).value().Get())
         {
-            config.csv_tab_delimiter = CsvSeparator(CHAR_TABULATOR);
+            config.csv_separator = CsvSeparator(CHAR_TABULATOR);
         }
         else if (std::get<CmdCsvSeparator>(cmdConfig).has_value())
         {
-            config.csv_tab_delimiter = std::get<CmdCsvSeparator>(cmdConfig).value();
+            config.csv_separator = std::get<CmdCsvSeparator>(cmdConfig).value();
         }
 
         if (std::get<CmdXlsSheetName>(cmdConfig).has_value())
@@ -192,7 +192,7 @@ namespace csv2xls
 
         if (std::get<CmdOutPutRowLimit>(cmdConfig).has_value())
         {
-            config.xls_row_limit = std::get<CmdOutPutRowLimit>(cmdConfig).value();
+            config.output_row_limit = std::get<CmdOutPutRowLimit>(cmdConfig).value();
         }
 
         if (std::get<CmdInputBufferSize>(cmdConfig).has_value())
@@ -218,7 +218,7 @@ namespace csv2xls
             return opts;
         }
 
-        if ((opts.csv_file_has_headline.Get()) && (opts.xls_row_limit.Get() < 2))
+        if ((opts.csv_file_has_headline.Get()) && (opts.output_row_limit.Get() < 2))
         {
             throw BadCommandLineOption("if first line is head line, then minimum line limit is 2");
         }
@@ -258,24 +258,24 @@ namespace csv2xls
     {
         if (opts.exit_clean) return opts;
 
-        if (opts.out_put_file.Get().empty())
+        if (opts.output_file_name.Get().empty())
         {
             if (opts.csv_file_name.Get().has_filename())
             {
-                opts.out_put_file = OutPutFileName(opts.csv_file_name.Get().filename());
+                opts.output_file_name = OutputFileName(opts.csv_file_name.Get().filename());
             }
             else
             {
                 throw BadCommandLineOption("Error determining output file name");
             }
         }
-        else if (isDir(opts.out_put_file.Get()))
+        else if (isDir(opts.output_file_name.Get()))
         {
-            auto out_path = opts.out_put_file.Get();
+            auto out_path = opts.output_file_name.Get();
             out_path /= opts.csv_file_name.Get().filename();
-            opts.out_put_file = OutPutFileName(out_path);
+            opts.output_file_name = OutputFileName(out_path);
         }
-        opts.out_put_file = outputFilename(opts.out_put_file, FileNumber(0), DigitCount(0));
+        opts.output_file_name = outputFilename(opts.output_file_name, FileNumber(0), DigitCount(0));
         return opts;
     }
 

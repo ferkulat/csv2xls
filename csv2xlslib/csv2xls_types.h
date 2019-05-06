@@ -19,15 +19,15 @@ TYPE_SAFE(CsvSeparator, char)
 TYPE_SAFE(InputBufferSize, std::streamsize)
 TYPE_SAFE(XlsSheetName, std::string)
 TYPE_SAFE(DigitCount, std::uint8_t)
-TYPE_SAFE(OutPutFileName, std::filesystem::path)
+TYPE_SAFE(OutputFileName, std::filesystem::path)
 TYPE_SAFE(InputFile, std::filesystem::path)
 
-using OutPutRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutRowLimit,
+using OutputRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutRowLimit,
                                                  skilled_type::Equality,
                                                  skilled_type::RelativeComparable>;
 
 using Row = skilled_type::SkilledType<std::uint32_t, struct TypeTagRow,
-                                      skilled_type::ComparableWith<OutPutRowLimit>::templ,
+                                      skilled_type::ComparableWith<OutputRowLimit>::templ,
                                       skilled_type::Incrementable,
                                       skilled_type::Equality,
                                       skilled_type::RelativeComparable>;
