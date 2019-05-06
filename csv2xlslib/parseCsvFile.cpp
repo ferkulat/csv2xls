@@ -32,7 +32,7 @@ namespace csv2xls
         xls_out.digit_count   = options.digit_count;
         xls_out.file_number   = FileNumber(-1);
 
-        newSheet(&xls_out);
+        newSheet(xls_out);
         return xls_out;
     }
 
@@ -87,7 +87,7 @@ namespace csv2xls
         {
             warn_on_fail(parse_buffer(ReadBuffer(csv_input, input_buffer)));
         }
-        writeIntoFile(&xls_out);
+        writeIntoFile(xls_out);
         return 0;
     }
 

@@ -28,34 +28,34 @@
 namespace csv2xls
 {
 
-void newSheet(xls_file_t* file)
+void newSheet(xls_file_t& file)
 {
-    file->out_put_doc.clearSheet(file->sheet_name);
-    file->current_column = Column(0);
-    file->current_row    = Row(0);
+    file.out_put_doc.clearSheet(file.sheet_name);
+    file.current_column = Column(0);
+    file.current_row    = Row(0);
     addHeadline(file);
-    file->file_number++;
+    file.file_number++;
 }
 
-void appendCell(xls_file_t* file, CellContent const& cell_content)
+void appendCell(xls_file_t& file, CellContent const& cell_content)
 {
     // ignore columns > XLS_MAX_COLUMNS
-    if (file->current_column.isGreaterEqual(XLS_MAX_COLUMNS))
+    if (file.current_column.isGreaterEqual(XLS_MAX_COLUMNS))
         return;
 
-    file->out_put_doc.setCell(file->current_row, file->current_column, cell_content);
-    file->current_column++;
+    file.out_put_doc.setCell(file.current_row, file.current_column, cell_content);
+    file.current_column++;
 }
 
-bool isWithinRowLimit(xls_file_t const* file)
+bool isWithinRowLimit(xls_file_t const& file)
 {
-    return file->current_row.isLess(std::min(file->xls_row_limit, XLS_MAX_ROWS));
+    return file.current_row.isLess(std::min(file.xls_row_limit, XLS_MAX_ROWS));
 }
 
-void newLine(xls_file_t* file)
+void newLine(xls_file_t& file)
 {
-    file->current_column = Column(0);
-    file->current_row++;
+    file.current_column = Column(0);
+    file.current_row++;
 
     if (isWithinRowLimit(file))
         return;
@@ -64,38 +64,38 @@ void newLine(xls_file_t* file)
     newSheet(file);
 }
 
-void writeIntoFile(xls_file_t* file)
+void writeIntoFile(xls_file_t& file)
 {
     if (isEmptySheet(file))
         return;
 
-    auto fname = outputFilename(file->out_put_file, file->file_number, file->digit_count);
-    file->out_put_doc.writeInto(fname);
+    auto fname = outputFilename(file.out_put_file, file.file_number, file.digit_count);
+    file.out_put_doc.writeInto(fname);
 }
 
-void addHeadline(xls_file_t* file)
+void addHeadline(xls_file_t& file)
 {
-    if (file->headline.empty())
+    if (file.headline.empty())
         return;
 
-    for (auto const& column_name : file->headline)
+    for (auto const& column_name : file.headline)
         appendCell(file, column_name);
 
     newLine(file);
 }
 
-bool isAtFirstRow(const xls_file_t* file)
+bool isAtFirstRow(xls_file_t const& file)
 {
-    auto const first_row = (file->headline.empty()) ? Row(0) : Row(1);
-    return (first_row == file->current_row);
+    auto const first_row = (file.headline.empty()) ? Row(0) : Row(1);
+    return (first_row == file.current_row);
 }
 
-bool isAtFirstColumn(const xls_file_t* file)
+bool isAtFirstColumn(xls_file_t const& file)
 {
-    return (Column(0) == file->current_column);
+    return (Column(0) == file.current_column);
 }
 
-bool isEmptySheet(xls_file_t* file)
+bool isEmptySheet(xls_file_t const& file)
 {
     return (isAtFirstColumn(file) && isAtFirstRow(file));
 }
