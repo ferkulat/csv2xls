@@ -55,15 +55,13 @@ namespace csv2xls
         };
 
         auto const isValidOutPutRowLimit = [](OutputRowLimit const& outPutRowLimit){
-            return (outPutRowLimit.Get() < DEFAULT_XLS_MIN_LINES.Get())? false:
-                   (outPutRowLimit.Get() > DEFAULT_XLS_MAX_LINES.Get())? false:
-                                                                         true;
+            return (outPutRowLimit.Get() <  DEFAULT_XLS_MIN_LINES.Get())? false:
+                   (outPutRowLimit.Get() <= DEFAULT_XLS_MAX_LINES.Get());
         };
 
         auto const isValidInPutBufferSize = [](InputBufferSize const& inputBufferSize){
             return (inputBufferSize.Get() <  MIN_CSV_BUFFER_SIZE.Get())? false:
-                   (inputBufferSize.Get() <= MAX_CSV_BUFFER_SIZE.Get())? true:
-                                                                         false;
+                   (inputBufferSize.Get() <= MAX_CSV_BUFFER_SIZE.Get());
         };
 
         auto const isValidDigitCount = [](DigitCount const& digit_count){
