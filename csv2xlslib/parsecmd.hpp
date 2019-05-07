@@ -61,10 +61,6 @@ namespace csv2xls
                       char **argv);
 
     Config
-    parsecmd_getopts(int argc,
-                     char**argv);
-
-    Config
     set_xls_filename(Config opts);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*PARSECMD_HPP*/
