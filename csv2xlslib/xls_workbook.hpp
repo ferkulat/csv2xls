@@ -22,8 +22,8 @@
  * MA  02110-1301  USA *
  */
 
+#include "csv2xls_compound_types.h"
 #include "csv2xls_types.h"
-#include <filesystem>
 #include <memory>
 #include <string>
 namespace csv2xls

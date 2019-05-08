@@ -47,7 +47,6 @@ struct xls_file_t
     {
     }
 
-    DigitCount     digit_count;
     OutputFileName output_file_name;
     OutputRowLimit xls_row_limit;
     HeadLineType   headline;

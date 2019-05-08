@@ -74,14 +74,13 @@ struct Group1
 
     Group1()
     {
-        test_workbook             = std::make_shared<dummy_workbook>();
-        xls_file                  = csv2xls::xls_file_t(OutputDoc(wrapper_workbook(test_workbook)));
-        xls_file.output_file_name = OutputFileName("file");
-        xls_file.xls_row_limit    = csv2xls::DEFAULT_XLS_MAX_LINES;
-        xls_file.current_column   = Column(0);
-        xls_file.current_row      = Row(0);
-        xls_file.digit_count      = DigitCount(3);
-        xls_file.file_number      = FileNumber(0);
+        test_workbook                         = std::make_shared<dummy_workbook>();
+        xls_file                              = csv2xls::xls_file_t(OutputDoc(wrapper_workbook(test_workbook)));
+        xls_file.xls_row_limit                = csv2xls::DEFAULT_XLS_MAX_LINES;
+        xls_file.current_column               = Column(0);
+        xls_file.current_row                  = Row(0);
+        xls_file.output_file_name.digit_count = DigitCount(3);
+        xls_file.file_number                  = FileNumber(0);
     }
 
     virtual ~Group1() = default;

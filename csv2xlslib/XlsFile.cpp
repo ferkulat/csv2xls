@@ -22,7 +22,6 @@
  * MA  02110-1301  USA
  */
 #include "XlsFile.hpp"
-#include "filename.hpp"
 #include <iostream>
 #include <algorithm>
 namespace csv2xls
@@ -69,8 +68,8 @@ void writeIntoFile(xls_file_t& file)
     if (isEmptySheet(file))
         return;
 
-    auto fname = outputFilename(file.output_file_name, file.file_number, file.digit_count);
-    file.output_doc.writeInto(fname);
+
+    file.output_doc.writeInto(file.output_file_name);
 }
 
 void addHeadline(xls_file_t& file)

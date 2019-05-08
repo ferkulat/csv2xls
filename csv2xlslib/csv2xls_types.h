@@ -10,6 +10,8 @@
 #include <filesystem>
 namespace csv2xls
 {
+using Path = std::filesystem::path;
+
 #define TYPE_SAFE(Name, Type) using Name = CheckedCmd::CheckedCmdTypesafe::Typesafe<Type, struct TypeTag##Name>;
 
 TYPE_SAFE(CsvSeparatorIsTab, bool)
@@ -19,8 +21,7 @@ TYPE_SAFE(CsvSeparator, char)
 TYPE_SAFE(InputBufferSize, std::streamsize)
 TYPE_SAFE(XlsSheetName, std::string)
 TYPE_SAFE(DigitCount, std::uint8_t)
-TYPE_SAFE(OutputFileName, std::filesystem::path)
-TYPE_SAFE(InputFile, std::filesystem::path)
+TYPE_SAFE(InputFile, Path)
 
 using OutputRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutRowLimit,
                                                  skilled_type::Equality,
@@ -41,7 +42,9 @@ using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
 
 using CellContent = skilled_type::SkilledType<std::string, struct TypeTagCellContent>;
 using FileNumber = skilled_type::SkilledType<int, struct TypeTagFileNumber,
-                                             skilled_type::Incrementable>;
+                                             skilled_type::Incrementable,
+                                             skilled_type::Equality>;
+
 #undef TYPE_SAFE
 }
 #endif //CSV2XLS_CSV2XLS_TYPES_H

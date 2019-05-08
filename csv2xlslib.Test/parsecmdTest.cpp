@@ -33,7 +33,7 @@ TEST_CASE_METHOD(TheFixture, "When_no_commandline_options_are_given then set_def
     CHECK(!my_opts.csv_file_has_headline.Get());
     REQUIRE(DEFAULT_CSV_TAB_DELIMITER == my_opts.csv_separator);
     REQUIRE(DEFAULT_XLS_MAX_LINES     == my_opts.output_row_limit);
-    REQUIRE(DEFAULT_XLS_DIGIT_COUNT   == my_opts.digit_count);
+    REQUIRE(DEFAULT_XLS_DIGIT_COUNT   == my_opts.output_file_name.digit_count);
     REQUIRE(DEFAULT_CSV_BUFFER_SIZE   == my_opts.input_buffer_size);
     REQUIRE(DEFAULT_XLS_SHEET_NAME    == my_opts.xls_sheet_name);
 }
@@ -46,7 +46,38 @@ TEST_CASE_METHOD(TheFixture, "When_no_commandline_options_are_given then guess_o
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
     REQUIRE(InputFile("input1.csv")  == my_opts.csv_file_name);
-    REQUIRE(OutputFileName("input1.xls") == my_opts.output_file_name);
+    REQUIRE("input1.xls" == my_opts.output_file_name.Get());
+}
+
+TEST_CASE_METHOD(TheFixture, "Given -o output input, adds xls to output")
+{
+std::vector<std::string> args{"prgname", "-o output", "input1.csv"};
+
+auto arg_ptrs      = CmdArgsArray(args);
+auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
+
+REQUIRE("output.xls" == my_opts.output_file_name.Get());
+}
+
+TEST_CASE_METHOD(TheFixture, "Given -o output input.lol, adds xls to output")
+{
+std::vector<std::string> args{"prgname", "-o output.lo", "input1.csv"};
+
+auto arg_ptrs      = CmdArgsArray(args);
+auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
+
+REQUIRE("output.lo.xls" == my_opts.output_file_name.Get());
+}
+
+
+TEST_CASE_METHOD(TheFixture, "Given -o output.Xls input.csv, the extension will be taken as it is")
+{
+std::vector<std::string> args{"prgname", "-o output.Xls", "input1.csv"};
+
+auto arg_ptrs      = CmdArgsArray(args);
+auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
+
+REQUIRE("output.Xls" == my_opts.output_file_name.Get());
 }
 
 TEST_CASE_METHOD(TheFixture, "When_output_name_is_a_directory, guess_output_name_from_inputname")
@@ -57,7 +88,7 @@ TEST_CASE_METHOD(TheFixture, "When_output_name_is_a_directory, guess_output_name
     auto const my_opts = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
     REQUIRE(InputFile("input1.csv")      == my_opts.csv_file_name);
-    REQUIRE(OutputFileName("tmp/input1.xls") == my_opts.output_file_name);
+    REQUIRE("tmp/input1.xls" == my_opts.output_file_name.Get());
 }
 
 TEST_CASE_METHOD(TheFixture, "When_first_line_is_headline then it_should_fail_with_line_limit_1")
@@ -75,7 +106,8 @@ TEST_CASE_METHOD(TheFixture, "When user requests -l 65536 it_should_not throw")
     auto arg_ptrs = CmdArgsArray(args);
     auto my_opts  = parse_commandline(static_cast<int>(arg_ptrs.size()), arg_ptrs.data());
 
-    REQUIRE_NOTHROW(checkOptions(opts));
+    REQUIRE_NOTHROW(checkOptions(my_opts));
+
 }
 
 TEST_CASE_METHOD(TheFixture, "When user requests -l 65537 it_should_ throw")

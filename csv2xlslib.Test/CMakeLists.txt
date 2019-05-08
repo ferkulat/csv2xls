@@ -1,7 +1,7 @@
 
 set(TEST_SOURCE_FILES
         csv2xlslibTest.cpp
-        filenameTest.cpp
+        OutputFileNameTest.cpp
         parsecmdTest.cpp
         XlsFileTest.cpp
         conversionTest.cpp TypeSafeSkillSetTest.cpp ../csv2xlslib/crtp.h)

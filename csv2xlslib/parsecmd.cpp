@@ -24,9 +24,7 @@
 
 #include "parsecmd.hpp"
 #include <iostream>
-#include <filesystem>
 #include "version.h"
-#include "filename.hpp"
 #include <sstream>
 #include <regex>
 
@@ -36,7 +34,7 @@ namespace csv2xls
     using CmdPrintVersionInfo         = CheckedCmd::Flag<PrintVersionInfo>;
     using CmdInputHasHeadLine         = CheckedCmd::Flag<InputHasHeadLine>;
     using CmdCsvSeparatorIsTab        = CheckedCmd::Flag<CsvSeparatorIsTab>;
-    using CmdOutputFilePath           = CheckedCmd::Param<std::optional<OutputFileName>>;
+    using CmdOutputFilePath           = CheckedCmd::Param<std::optional<std::string>>;
     using CmdXlsSheetName             = CheckedCmd::Param<std::optional<XlsSheetName>>;
     using CmdCsvSeparator             = CheckedCmd::Param<std::optional<CsvSeparator>>;
     using CmdOutPutRowLimit           = CheckedCmd::Param<std::optional<OutputRowLimit>>;
@@ -146,8 +144,55 @@ namespace csv2xls
         );
 
     }
+    bool isDir(Path const& path)
+    {
+        return !path.has_filename();
+    }
     using CmdConfig = decltype(MakeCmdConfig());
 
+    void setOutputFileName(CmdConfig const cmd_config, Config& config){
+        if (std::get<CmdOutputFilePath>(cmd_config).has_value())
+        {
+            auto const user_input = std::get<CmdOutputFilePath>(cmd_config).value();
+
+            auto const filename  = Path (std::regex_replace(user_input, std::regex("^ +"), ""));
+            if (isDir(filename))
+            {
+                auto const out_path = filename/ config.csv_file_name.Get().stem();
+                config.output_file_name.name_no_extension = out_path.parent_path()/out_path.stem();
+                config.output_file_name.extension = ".xls";
+            }
+            else if(!filename.has_extension())
+            {
+                auto const out_path = filename;
+                config.output_file_name.name_no_extension = out_path.parent_path()/out_path.stem();
+                config.output_file_name.extension = ".xls";
+            }
+            else
+            {
+                auto const out_path = filename;
+                if(std::regex_match(filename.extension().string(), std::regex(".xls", std::regex::icase) ))
+                {
+                    config.output_file_name.name_no_extension = out_path.parent_path() / out_path.stem();
+                    config.output_file_name.extension         = out_path.extension();
+                }
+                else
+                {
+                    config.output_file_name.name_no_extension = out_path;
+                    config.output_file_name.extension         = ".xls";
+                }
+            }
+        }
+        else if (config.csv_file_name.Get().has_filename())
+        {
+            config.output_file_name.name_no_extension = config.csv_file_name.Get().filename().stem();
+            config.output_file_name.extension = ".xls";
+        }
+        else
+        {
+            throw BadCommandLineOption("Error determining output file name");
+        }
+    }
     auto IntoConfig( CmdConfig cmdConfig)
     {
 
@@ -168,11 +213,7 @@ namespace csv2xls
         config.csv_file_name         = std::get<CmdInputFilePath>(cmdConfig).value();
         config.csv_file_has_headline = std::get<CmdInputHasHeadLine>(cmdConfig).value();
 
-        if (std::get<CmdOutputFilePath>(cmdConfig).has_value())
-        {
-            auto const user_input = std::get<CmdOutputFilePath>(cmdConfig).value().Get();
-            config.output_file_name  = OutputFileName(std::regex_replace(user_input.string(), std::regex("^ +"), ""));
-        }
+        setOutputFileName(cmdConfig, config);
 
         if (std::get<CmdCsvSeparatorIsTab>(cmdConfig).value().Get())
         {
@@ -200,14 +241,13 @@ namespace csv2xls
 
         if (std::get<CmdOutPutFileNameDigitCount>(cmdConfig).has_value())
         {
-            config.digit_count = std::get<CmdOutPutFileNameDigitCount>(cmdConfig).value();
+            config.output_file_name.digit_count = std::get<CmdOutPutFileNameDigitCount>(cmdConfig).value();
         }
 
         return config;
     }
 
     using namespace std;
-    bool isDir(string const& path);
 
     Config checkOptions(Config opts)
     {
@@ -243,39 +283,11 @@ namespace csv2xls
             std::cout << gGIT_VERSION << "\n";
         }
 
-        return set_xls_filename(checkOptions(IntoConfig(parser_result.value())));
+        return checkOptions(IntoConfig(parser_result.value()));
 
     }
 
-    bool isDir(std::filesystem::path const& path)
-    {
-        return !path.has_filename();
-    }
 
-    Config set_xls_filename(Config opts)
-    {
-        if (opts.exit_clean) return opts;
-
-        if (opts.output_file_name.Get().empty())
-        {
-            if (opts.csv_file_name.Get().has_filename())
-            {
-                opts.output_file_name = OutputFileName(opts.csv_file_name.Get().filename());
-            }
-            else
-            {
-                throw BadCommandLineOption("Error determining output file name");
-            }
-        }
-        else if (isDir(opts.output_file_name.Get()))
-        {
-            auto out_path = opts.output_file_name.Get();
-            out_path /= opts.csv_file_name.Get().filename();
-            opts.output_file_name = OutputFileName(out_path);
-        }
-        opts.output_file_name = outputFilename(opts.output_file_name, FileNumber(0), DigitCount(0));
-        return opts;
-    }
 
     BadCommandLineOption::BadCommandLineOption(std::string const& what)
             : logic_error(what) {}
