@@ -27,42 +27,31 @@
 #include <csv.h>
 namespace csv2xls
 {
-#if CSV_MAJOR < 3
-    #define CSV2XLS_LEN len
-#else
-    #define CSV2XLS_LEN
-#endif
 
-void csv_cb_end_of_field(void *s, size_t CSV2XLS_LEN, void *data)
+void csv_cb_end_of_field(void *s, size_t len, void *data)
 {
-      auto *csv_field = (char*) s;
-#if CSV_MAJOR < 3
-      *(csv_field + CSV2XLS_LEN ) = '\0'; /*terminate string*/
-#endif
-    auto *xls_file = (xls_file_t*) data;
+    auto const* csv_field = static_cast<char const*>(s);
+    auto        &xls_file = *(static_cast<xls_file_t*>(data));
 
+    appendCell(xls_file, CellContent(std::string(csv_field, len)));
+}
 
-    xls_append_cell(xls_file, csv_field);
-}/* ----- end of function csv_cb_end_of_field ----- */
-
-void csv_cb_headline_field(void *s, size_t CSV2XLS_LEN, void *data)
+void csv_cb_headline_field(void *s, size_t len, void *data)
 {
-    auto *csv_field = (char*) s;
-    auto *xls_file = (xls_file_t*) data;
+    auto const* csv_field = static_cast<char const*>(s);
+    auto        &xls_file = *(static_cast<xls_file_t*>(data));
 
-    if (XLS_MAX_COLUMNS >= xls_file->headline.size())
-    {
-#if  CSV_MAJOR < 3
-        *(csv_field + CSV2XLS_LEN) = '\0'; /*terminate string*/
-#endif
-        xls_append_cell(xls_file, csv_field);
-        xls_file->headline.emplace_back(csv_field);
-    }
-}/* ----- end of function csv_cb_headline_field ----- */
+    if (xls_file.headline.size() > XLS_MAX_COLUMNS.Get())
+        return;
+
+    auto const& cell_content = xls_file.headline.emplace_back(std::string(csv_field, len));
+    appendCell(xls_file, cell_content);
+}
 
 void csv_cb_end_of_row(int , void *data)
 {
-    auto *xls_file = (xls_file_t*) data;
-    xls_newline(xls_file);
-}/* ----- end of function csv_cb_end_of_row ----- */
+    auto &xls_file = *(static_cast<xls_file_t*>(data));
+    newLine(xls_file);
+}
+
 }/* ---- end of namespace csv2xls ---- */

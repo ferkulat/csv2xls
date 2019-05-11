@@ -4,8 +4,6 @@ add_library(csv2xlslib
         csv.cpp
         csv.hpp
         default_values.h
-        filename.cpp
-        filename.hpp
         parsecmd.cpp
         parsecmd.hpp
         parseCsvFile.cpp
@@ -19,9 +17,11 @@ add_library(csv2xlslib
         callback.hpp
         conversion.h
         version.h
-        OutPutDoc.hpp
-        OutPutDoc.cpp
-        csv2xls_types.cpp)
+        OutputDoc.hpp
+        OutputDoc.cpp
+        csv2xls_compound_types.h
+        csv2xls_compound_types.cpp
+        csv2xls_skills.h)
 target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )
 target_include_directories(csv2xlslib SYSTEM PRIVATE ${CMAKE_PREFIX_PATH}/include/xlslib)
 message("CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID}" )

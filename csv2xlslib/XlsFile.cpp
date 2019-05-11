@@ -22,72 +22,81 @@
  * MA  02110-1301  USA
  */
 #include "XlsFile.hpp"
-#include "filename.hpp"
 #include <iostream>
 #include <algorithm>
 namespace csv2xls
 {
 
-void xls_new_sheet(xls_file_t *file)
+void newSheet(xls_file_t& file)
 {
-    file->wbook.clear_sheet(file->sheet_name.Get());
-    file->current_column = 0;
-    file->current_row = 0;
-    xls_add_headline(file);
-    file->page_number++;
+    file.output_doc.clearSheet(file.sheet_name);
+    file.current_column = Column(0);
+    file.current_row    = Row(0);
+    addHeadline(file);
+    file.file_number++;
 }
 
-    void xls_append_cell(xls_file_t *file,
-                         std::string label)
-    {
-        //ignore columns > XLS_MAX_COLUMNS
-        if (XLS_MAX_COLUMNS <= file->current_column) return;
+void appendCell(xls_file_t& file, CellContent const& cell_content)
+{
+    // ignore columns > XLS_MAX_COLUMNS
+    if (file.current_column.isGreaterEqual(XLS_MAX_COLUMNS))
+        return;
 
-        file->wbook.label(file->current_row, file->current_column, label);
-        file->current_column++;
-    }
+    file.output_doc.setCell(file.current_row, file.current_column, cell_content);
+    file.current_column++;
+}
 
-    bool isWithinRowLimit(xls_file_t const *file) {
-        return file->current_row < std::min(file->xls_row_limit.Get(), XLS_MAX_ROWS);
-    }
+bool isWithinRowLimit(xls_file_t const& file)
+{
+    return file.current_row.isLess(std::min(file.xls_row_limit, XLS_MAX_ROWS));
+}
 
-    void xls_newline(xls_file_t *file)
-    {
-        file->current_column = 0;
-        file->current_row++;
+void newLine(xls_file_t& file)
+{
+    file.current_column = Column(0);
+    file.current_row++;
 
-        if (isWithinRowLimit(file)) return;
+    if (isWithinRowLimit(file))
+        return;
 
-        xls_dump_worksheet(file);
-        xls_new_sheet(file);
-    }
+    writeIntoFile(file);
+    newSheet(file);
+}
+
+void writeIntoFile(xls_file_t& file)
+{
+    if (isEmptySheet(file))
+        return;
 
 
-    void xls_dump_worksheet(xls_file_t *file)
-    {
-        if (xls_sheet_is_empty(file)) return;
+    file.output_doc.writeInto(file.output_file_name);
+}
 
-        auto fname = xls_filename(file->filename,
-                                         file->page_number,
-                                         file->digit_count.Get());
-        file->wbook.write_to_file(fname);
-    }
+void addHeadline(xls_file_t& file)
+{
+    if (file.headline.empty())
+        return;
 
-    void xls_add_headline(xls_file_t *file)
-    {
-        if (file->headline.empty()) return;
+    for (auto const& column_name : file.headline)
+        appendCell(file, column_name);
 
-        for (auto const& column_name : file->headline)
-            xls_append_cell(file, column_name);
+    newLine(file);
+}
 
-        xls_newline(file);
-    }
+bool isAtFirstRow(xls_file_t const& file)
+{
+    auto const first_row = (file.headline.empty()) ? Row(0) : Row(1);
+    return (first_row == file.current_row);
+}
 
-    bool xls_sheet_is_empty(xls_file_t *file)
-    {
-        return ((file->current_column == 0)
-                && ((!file->headline.empty() && file->current_row == 1)
-                        || (file->current_row == 0)));
-    }
+bool isAtFirstColumn(xls_file_t const& file)
+{
+    return (Column(0) == file.current_column);
+}
 
-}/* ---- end of namespace csv2xls ---- */
+bool isEmptySheet(xls_file_t const& file)
+{
+    return (isAtFirstColumn(file) && isAtFirstRow(file));
+}
+
+} // namespace csv2xls

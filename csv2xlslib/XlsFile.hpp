@@ -25,42 +25,44 @@
 #ifndef XLSFILE_HPP
 #define XLSFILE_HPP
 
-#include <string>
 #include <vector>
 #include <cstdint>
 #include <memory>
 
-#include "OutPutDoc.hpp"
+#include "OutputDoc.hpp"
 #include "csv2xls_types.h"
 
 namespace csv2xls
 {
-    constexpr uint32_t XLS_MAX_ROWS    = 65536;
-    constexpr int XLS_MAX_COLUMNS = 256;
+    constexpr auto XLS_MAX_ROWS    = OutputRowLimit(65536);
+    constexpr auto XLS_MAX_COLUMNS = OutPutColumnLimit(256);
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
-using HeadLineType = std::vector<std::string>;
+using HeadLineType = std::vector<CellContent>;
 struct xls_file_t
 {
-    xls_file_t(OutPutDoc wbook_):wbook(std::move(wbook_)){}
-    HeadLineType headline;
-    OutPutDoc    wbook;
-    XlsSheetName sheet_name;
-    std::filesystem::path  filename;
-    int          page_number;
-    OutPutFileNameDigitCount digit_count;
-    uint32_t     current_column;
-    uint32_t     current_row;
-    OutPutRowLimit xls_row_limit;
-} ;
+    xls_file_t(OutputDoc output_doc_)
+        : output_doc(std::move(output_doc_))
+    {
+    }
+
+    OutputFileName output_file_name;
+    OutputRowLimit xls_row_limit;
+    HeadLineType   headline;
+    XlsSheetName   sheet_name;
+    OutputDoc      output_doc;
+    Column         current_column;
+    Row            current_row;
+    FileNumber     file_number;
+};
 
 /**
  *
  * @param file
  */
 void
-xls_new_sheet(xls_file_t *file);
+newSheet(xls_file_t& file);
 
 
 /**
@@ -71,12 +73,11 @@ xls_new_sheet(xls_file_t *file);
  *
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
- * @param val
+ * @param cell_content
  * The string to be written into the current xls data cell.
  */
 void
-xls_append_cell(xls_file_t *xlsfile,
-                std::string val);
+appendCell(xls_file_t& xlsfile, CellContent const& cell_content);
 
 /**
  * \brief Point to the next line at column 0 in xls data
@@ -85,7 +86,7 @@ xls_append_cell(xls_file_t *xlsfile,
  * Pointer to the struct which holds the information of the xls data.
  */
 void
-xls_newline(xls_file_t *xlsfile);
+newLine(xls_file_t& xlsfile);
 
 /**
  * \fn void xls_dump_worksheet(xls_file_t * xlsfile)
@@ -99,7 +100,7 @@ xls_newline(xls_file_t *xlsfile);
  * Pointer to the struct which holds the information of the xls data.
  */
 void
-xls_dump_worksheet(xls_file_t *xlsfile);
+writeIntoFile(xls_file_t& xlsfile);
 
 /**
  * \fn void xls_add_headline(xls_file_t*xlsfile)
@@ -117,9 +118,9 @@ xls_dump_worksheet(xls_file_t *xlsfile);
  * nix
  */
 void
-xls_add_headline(xls_file_t *xlsfile);
+addHeadline(xls_file_t& xlsfile);
 
 bool
-xls_sheet_is_empty(xls_file_t *file);
+isEmptySheet(const xls_file_t& file);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*end XLSFILE_HPP*/

@@ -31,33 +31,31 @@ struct xls_workbook::Impl{
     xlslib_core::worksheet* wsheet;
 };
 
-void xls_workbook::clear_sheet(const std::string& sheetname)
+void xls_workbook::clearSheet(XlsSheetName const& sheet_name)
 {
     this->pimpl->wbook  = std::make_unique<xlslib_core::workbook>();
-    this->pimpl->wsheet = this->pimpl->wbook->sheet(sheetname);
+    this->pimpl->wsheet = this->pimpl->wbook->sheet(sheet_name.Get());
 }
 
-void xls_workbook::label(unsigned32_t row,
-                         unsigned32_t col,
-                         const std::string& strlabel)
+void xls_workbook::setCell(Row row, Column column, CellContent const& cell_content)
 {
-    this->pimpl->wsheet->label(row, col, strlabel);
+    this->pimpl->wsheet->label(row.Get(), column.Get(), cell_content.Get());
 }
 
-int xls_workbook::write_to_file(const std::filesystem::path& file_name)
+int xls_workbook::writeInto(OutputFileName const& out_put_file)
 {
-    return this->pimpl->wbook->Dump(file_name.string());
+    return this->pimpl->wbook->Dump(out_put_file.Get().string());
 }
 
-    xls_workbook::xls_workbook() : pimpl(new Impl, &PimplDeleter) {
-    }
+xls_workbook::xls_workbook()
+    : pimpl(new Impl, &PimplDeleter)
+{
+}
 
-    xls_workbook::~xls_workbook() {
-
-    }
-    void xls_workbook::PimplDeleter(Impl*p)
-    {
-        delete p;
-    }
+xls_workbook::~xls_workbook() {}
+void xls_workbook::PimplDeleter(Impl* p)
+{
+    delete p;
+}
 
 }

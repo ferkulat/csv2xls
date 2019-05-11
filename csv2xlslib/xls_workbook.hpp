@@ -22,9 +22,10 @@
  * MA  02110-1301  USA *
  */
 
+#include "csv2xls_compound_types.h"
+#include "csv2xls_types.h"
 #include <memory>
 #include <string>
-#include <filesystem>
 namespace csv2xls
 {
 
@@ -34,13 +35,12 @@ public:
     xls_workbook();
     ~xls_workbook();
     xls_workbook(xls_workbook && workbook) = default;
-    void clear_sheet(const std::string& sheetname);
+    void clearSheet(XlsSheetName const& sheet_name);
 
-    int write_to_file(const std::filesystem::path &file_name);
+    int writeInto(OutputFileName const& out_put_file);
 
-    void label( unsigned int row,
-                unsigned int col,
-                const std::string& strlabel);
+    void setCell( Row row, Column column,
+                  CellContent const& cell_content);
 private:
     struct Impl;
     static void PimplDeleter(Impl*p);

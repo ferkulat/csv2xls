@@ -24,15 +24,14 @@ namespace csv2xls
     template<typename T>
     xls_file_t createCallBackData(T&& doctype, Config const &options)
     {
-        xls_file_t xls_out(OutPutDoc(std::forward<T>(doctype)));
+        xls_file_t xls_out(OutputDoc(std::forward<T>(doctype)));
 
-        xls_out.filename      = options.xls_file_name;
-        xls_out.xls_row_limit = options.xls_row_limit;
-        xls_out.sheet_name    = options.xls_sheet_name;
-        xls_out.digit_count   = options.xls_digit_count;
-        xls_out.page_number   = -1;
+        xls_out.output_file_name = options.output_file_name;
+        xls_out.xls_row_limit    = options.output_row_limit;
+        xls_out.sheet_name       = options.xls_sheet_name;
+        xls_out.file_number      = FileNumber(-1);
 
-        xls_new_sheet(&xls_out);
+        newSheet(xls_out);
         return xls_out;
     }
 
@@ -87,7 +86,7 @@ namespace csv2xls
         {
             warn_on_fail(parse_buffer(ReadBuffer(csv_input, input_buffer)));
         }
-        xls_dump_worksheet(&xls_out);
+        writeIntoFile(xls_out);
         return 0;
     }
 
@@ -95,14 +94,14 @@ namespace csv2xls
     {
         if (options.exit_clean) return 0;
 
-        auto csv_input           = openCsvFile(options.csv_file_name);
-        auto const parser        = createParser(options.csv_tab_delimiter);
-        auto const set_head_line = SetUpHeadLine(csv_input, parser, options.csv_file_has_headline);
+        auto csv_input         = openCsvFile(options.csv_file_name);
+        auto const parser      = createParser(options.csv_separator);
+        auto const setHeadLine = SetUpHeadLine(csv_input, parser, options.csv_file_has_headline);
 
         return DoTheHardWork(csv_input,
                              parser,
                              char_buf_t (options.input_buffer_size),
-                             set_head_line(createCallBackData(xls_workbook(),options)));
+                             setHeadLine(createCallBackData(xls_workbook(),options)));
     }
 
     FileNotOpen::FileNotOpen(char const *what)

@@ -14,6 +14,7 @@ include(warnings)
 include(checkedcmd)
 include(libcsv)
 include(xlslib)
+include(CppSkilledType)
 
 enable_testing()
 
