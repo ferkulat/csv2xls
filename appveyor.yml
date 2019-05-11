@@ -73,12 +73,11 @@ before_build:
   - cmd: cmake -H. -BBuild -A%PLATFORM% -DUSE_WMAIN=%wmain% || exit /b !ERRORLEVEL!
 
 
-# build with MSBuild
-build:
-  project: Build\csv2xls.sln         # path to Visual Studio solution or project
-  parallel: true                        # enable MSBuild parallel builds
-  verbosity: normal                     # MSBuild verbosity level {quiet|minimal|normal|detailed}
+build_script:
+  - cd Build
+  - cmake  ..
+  - cmake --build . --config %CONFIGURATION%
 
 test_script:
   - set CTEST_OUTPUT_ON_FAILURE=1
-  - cmd: .\misc\appveyorTestRunScript.bat
+  - cmd: ..\misc\appveyorTestRunScript.bat

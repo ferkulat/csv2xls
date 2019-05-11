@@ -91,9 +91,9 @@ before_script:
 
 script:
   - cd Build-Debug
-  - make -j 2
+  - cmake --build .
   - CTEST_OUTPUT_ON_FAILURE=1 ctest -j 2
     # Go to release build
   - cd ../Build-Release
-  - make -j 2
+  - cmake --build .
   - CTEST_OUTPUT_ON_FAILURE=1 ctest -j 2

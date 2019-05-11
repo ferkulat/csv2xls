@@ -1,4 +1,3 @@
-cd Build
 if "%CONFIGURATION%"=="Debug" (
   ctest -j 2 -C %CONFIGURATION%
 )
