@@ -5,9 +5,10 @@
 #ifndef CSV2XLS_CSV2XLS_TYPES_H
 #define CSV2XLS_CSV2XLS_TYPES_H
 
-#include "SkilledType.h"
+#include <Skills.h>
 #include <checked_cmd.h>
 #include <filesystem>
+#include <csv2xls_skills.h>
 namespace csv2xls
 {
 using Path = std::filesystem::path;
@@ -25,24 +26,24 @@ TYPE_SAFE(InputFile, Path)
 
 using OutputRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutRowLimit,
                                                  skilled_type::Equality,
-                                                 skilled_type::RelativeComparable>;
+                                                 skilled_type::Relativity>;
 
 using Row = skilled_type::SkilledType<std::uint32_t, struct TypeTagRow,
-                                      skilled_type::ComparableWith<OutputRowLimit>::templ,
-                                      skilled_type::Incrementable,
+                                      ComparableWith<OutputRowLimit>::templ,
+                                      skilled_type::Incrementability,
                                       skilled_type::Equality,
-                                      skilled_type::RelativeComparable>;
+                                      skilled_type::Relativity>;
 
 using OutPutColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutColumnLimit>;
 
 using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
-                                         skilled_type::ComparableWith<OutPutColumnLimit>::templ,
-                                         skilled_type::Incrementable,
+                                         ComparableWith<OutPutColumnLimit>::templ,
+                                         skilled_type::Incrementability,
                                          skilled_type::Equality>;
 
 using CellContent = skilled_type::SkilledType<std::string, struct TypeTagCellContent>;
 using FileNumber = skilled_type::SkilledType<int, struct TypeTagFileNumber,
-                                             skilled_type::Incrementable,
+                                             skilled_type::Incrementability,
                                              skilled_type::Equality>;
 
 #undef TYPE_SAFE
