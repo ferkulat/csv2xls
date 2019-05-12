@@ -5,7 +5,7 @@ set(EXTERN_CHECKED_CMD_DIR ${EXTERN_DEPENDENCIES_DIR}/checked_cmd)
 FetchContent_Declare(
   checked_cmd
   GIT_REPOSITORY https://github.com/ferkulat/CheckedCmd.git
-  GIT_TAG        139af9879403ec1ea589e09bb19839ea309ade98
+  GIT_TAG        e99221b08adce2f3d206c4b08da19fac3689c6f9
   SOURCE_DIR     ${EXTERN_CHECKED_CMD_DIR}
 )
 if(NOT checked_cmd_POPULATED)

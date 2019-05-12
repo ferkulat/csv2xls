@@ -92,8 +92,8 @@ before_script:
 script:
   - cd Build-Debug
   - cmake --build .
-  - CTEST_OUTPUT_ON_FAILURE=1 ctest -j 2
+  - CTEST_OUTPUT_ON_FAILURE=1 ctest --exclude-regex "CheckedCmdTests|check_csv" -j 2
     # Go to release build
   - cd ../Build-Release
   - cmake --build .
-  - CTEST_OUTPUT_ON_FAILURE=1 ctest -j 2
+  - CTEST_OUTPUT_ON_FAILURE=1 ctest --exclude-regex "CheckedCmdTests|check_csv" -j 2
