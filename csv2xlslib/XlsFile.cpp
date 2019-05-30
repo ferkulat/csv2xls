@@ -33,7 +33,7 @@ void newSheet(xls_file_t& file)
     file.current_column = Column(0);
     file.current_row    = Row(0);
     addHeadline(file);
-    file.file_number++;
+    file.output_file_name.file_number++;
 }
 
 void appendCell(xls_file_t& file, CellContent const& cell_content)

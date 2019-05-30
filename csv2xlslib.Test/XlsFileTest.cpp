@@ -80,7 +80,7 @@ struct Group1
         xls_file.current_column               = Column(0);
         xls_file.current_row                  = Row(0);
         xls_file.output_file_name.digit_count = DigitCount(3);
-        xls_file.file_number                  = FileNumber(0);
+        xls_file.output_file_name.file_number = FileNumber(0);
     }
 
     virtual ~Group1() = default;
@@ -155,6 +155,7 @@ TEST_CASE_METHOD(Group1, "xls_newline_writes_sheet_into_file_and_makes_a_new_she
     CHECK(1         == test_workbook->called_write_to_file);
     CHECK(Column(0) == xls_file.current_column);
     CHECK(Row(0)    == xls_file.current_row);
+    CHECK(FileNumber(1) == xls_file.output_file_name.file_number);
 }
 
 TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")

@@ -29,7 +29,9 @@ namespace csv2xls
         xls_out.output_file_name = options.output_file_name;
         xls_out.xls_row_limit    = options.output_row_limit;
         xls_out.sheet_name       = options.xls_sheet_name;
-        xls_out.file_number      = FileNumber(-1);
+        xls_out
+            .output_file_name
+            .file_number         = FileNumber(-1);
 
         newSheet(xls_out);
         return xls_out;

@@ -54,7 +54,6 @@ struct xls_file_t
     OutputDoc      output_doc;
     Column         current_column;
     Row            current_row;
-    FileNumber     file_number;
 };
 
 /**
