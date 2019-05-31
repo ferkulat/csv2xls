@@ -6,7 +6,8 @@ set(TEST_SOURCE_FILES
         XlsFileTest.cpp
         conversionTest.cpp
         parseCsvStreamTest.cpp
-        TestHelper.h)
+        TestHelper.h
+        ReadCellTest.cpp)
 add_executable(csv2xlslibTest ${TEST_SOURCE_FILES} ${version_file})
 target_link_libraries(csv2xlslibTest csv2xlslib)
 add_test(
