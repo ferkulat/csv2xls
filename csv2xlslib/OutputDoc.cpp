@@ -15,8 +15,8 @@ int OutputDoc::writeInto(OutputFileName const& out_put_file)
     return self_->writeInto(out_put_file);
 }
 
-void OutputDoc::setCell(Row row, Column col, CellContent const& cell_content)
+void OutputDoc::setCell(Row row, Column column, CellContent cell_content)
 {
-    self_->setCell(row, col, cell_content);
+    self_->setCell(row, column, cell_content);
 }
 }

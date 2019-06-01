@@ -39,7 +39,7 @@ namespace csv2xls
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
-using HeadLineType = std::vector<CellContent>;
+using HeadLineType = std::vector<std::string>;
 struct xls_file_t
 {
     xls_file_t(OutputDoc output_doc_)
@@ -76,7 +76,7 @@ newSheet(xls_file_t& file);
  * The string to be written into the current xls data cell.
  */
 void
-appendCell(xls_file_t& xlsfile, CellContent const& cell_content);
+appendCell(xls_file_t& xlsfile, CellContent cell_content);
 
 /**
  * \brief Point to the next line at column 0 in xls data

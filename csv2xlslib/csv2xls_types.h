@@ -41,7 +41,14 @@ using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
                                          skilled_type::Incrementability,
                                          skilled_type::Equality>;
 
-using CellContent = skilled_type::SkilledType<std::string, struct TypeTagCellContent>;
+struct CellContent{
+    CellContent(char const* start_, size_t length_)
+    :start(start_)
+    , length(length_)
+    {}
+    char const* start;
+    size_t length;
+};
 using FileNumber = skilled_type::SkilledType<int, struct TypeTagFileNumber,
                                              skilled_type::Incrementability,
                                              skilled_type::Equality>;

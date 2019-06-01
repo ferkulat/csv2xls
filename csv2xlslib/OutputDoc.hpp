@@ -24,7 +24,7 @@ class OutputDoc
 
     int writeInto(OutputFileName const& out_put_file);
 
-    void setCell(Row row, Column column, CellContent const& cell_content);
+    void setCell(Row row, Column column, CellContent cell_content);
 
   private:
     class concept_t
@@ -34,7 +34,7 @@ class OutputDoc
 
         virtual void clearSheet(XlsSheetName const& sheet_name)                       = 0;
         virtual int  writeInto(OutputFileName const& out_put_file)                        = 0;
-        virtual void setCell(Row row, Column column, CellContent const& cell_content) = 0;
+        virtual void setCell(Row row, Column column, CellContent cell_content) = 0;
     };
     template <typename T> class doc_type : public concept_t
     {
@@ -54,7 +54,7 @@ class OutputDoc
             return x.writeInto(out_put_file);
         }
 
-        void setCell(Row row, Column column, CellContent const& cell_content) override
+        void setCell(Row row, Column column, CellContent cell_content) override
         {
             x.setCell(row, column, cell_content);
         }

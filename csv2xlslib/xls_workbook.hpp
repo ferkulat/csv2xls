@@ -40,7 +40,7 @@ public:
     int writeInto(OutputFileName const& out_put_file);
 
     void setCell( Row row, Column column,
-                  CellContent const& cell_content);
+                  CellContent cell_content);
 private:
     struct Impl;
     static void PimplDeleter(Impl*p);

@@ -36,7 +36,7 @@ void newSheet(xls_file_t& file)
     file.output_file_name.file_number++;
 }
 
-void appendCell(xls_file_t& file, CellContent const& cell_content)
+void appendCell(xls_file_t& file, CellContent cell_content)
 {
     // ignore columns > XLS_MAX_COLUMNS
     if (file.current_column.isGreaterEqual(XLS_MAX_COLUMNS))
@@ -78,7 +78,7 @@ void addHeadline(xls_file_t& file)
         return;
 
     for (auto const& column_name : file.headline)
-        appendCell(file, column_name);
+        appendCell(file, CellContent(column_name.c_str(), column_name.length()));
 
     newLine(file);
 }

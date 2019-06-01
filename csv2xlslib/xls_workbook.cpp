@@ -37,9 +37,9 @@ void xls_workbook::clearSheet(XlsSheetName const& sheet_name)
     this->pimpl->wsheet = this->pimpl->wbook->sheet(sheet_name.Get());
 }
 
-void xls_workbook::setCell(Row row, Column column, CellContent const& cell_content)
+void xls_workbook::setCell(Row row, Column column, CellContent cell_content)
 {
-    this->pimpl->wsheet->label(row.Get(), column.Get(), cell_content.Get());
+    this->pimpl->wsheet->label(row.Get(), column.Get(), std::string(cell_content.start, cell_content.length));
 }
 
 int xls_workbook::writeInto(OutputFileName const& out_put_file)
