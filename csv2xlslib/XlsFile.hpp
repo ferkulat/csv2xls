@@ -51,47 +51,16 @@ struct xls_file_t
     OutputDoc      output_doc;
 };
 
-/**
- *
- * @param file
- */
 Row
 RowAfterNewSheet(xls_file_t& file);
 
 
-/**
- * \brief Write into the current xls data cell
- *
- *  adressed by `xlsfile->current_column`  and `xlsfile->current_row`.
- *  After writing increase `xlsfile->current_column` by 1.
- *
- * @param xlsfile
- * Pointer to the struct which holds the information of the xls data.
- * @param cell_content
- * The string to be written into the current xls data cell.
- */
 Column
 appendCell(xls_file_t& xlsfile, CellContent cell_content);
 
-/**
- * \brief Point to the next line at column 0 in xls data
- *
- * @param xlsfile
- * Pointer to the struct which holds the information of the xls data.
- */
-Row newLine(xls_file_t& xlsfile);
+Row
+newLine(xls_file_t& xlsfile);
 
-/**
- * \fn void xls_dump_worksheet(xls_file_t * xlsfile)
- *
- * \brief Write xls data to disk an create a new workbook.
- *
- * This is where we make page breaks in xls data written to disk.
- * After that the `xlsfile->page_number` will be increased.
- * When option -H is set, every new workbook gets the head line in first row.
- * @param xlsfile
- * Pointer to the struct which holds the information of the xls data.
- */
 void
 writeIntoFile(xls_file_t& xlsfile);
 

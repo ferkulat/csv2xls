@@ -46,9 +46,9 @@ void XlsWorkBook::setCell(Row row, Column column, CellContent cell_content)
     this->pimpl->wsheet->label(row.Get(), column.Get(), std::string(cell_content.start, cell_content.length));
 }
 
-int XlsWorkBook::writeInto(OutputFileName const& out_put_file)
+int XlsWorkBook::writeInto(OutputFileName const& output_file_name)
 {
-    return this->pimpl->wbook->Dump(out_put_file.Get().string());
+    return this->pimpl->wbook->Dump(output_file_name.Get().string());
 }
 auto XlsWorkBook::columnLimit()-> std::optional<OutputColumnLimit>
 {

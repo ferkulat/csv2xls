@@ -39,7 +39,8 @@ using OutputColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTa
 using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
                                          ComparableWith<OutputColumnLimit>::templ,
                                          skilled_type::Incrementability,
-                                         skilled_type::Equality>;
+                                         skilled_type::Equality,
+                                         skilled_type::Relativity>;
 
 struct CellContent{
     CellContent(char const* start_, size_t length_)
