@@ -48,7 +48,6 @@ struct xls_file_t
 
     OutputFileName output_file_name;
     OutputRowLimit xls_row_limit;
-    XlsSheetName   sheet_name;
     OutputDoc      output_doc;
 };
 

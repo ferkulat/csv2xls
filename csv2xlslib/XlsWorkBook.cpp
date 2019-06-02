@@ -22,41 +22,45 @@
  * MA  02110-1301  USA *
  */
 
-#include "xls_workbook.hpp"
+#include "XlsWorkBook.hpp"
 #include <xlslib.h>
 namespace csv2xls
 {
-struct xls_workbook::Impl{
+struct XlsWorkBook::Impl{
+    Impl(XlsSheetName const& xls_sheet_name_)
+        : xls_sheet_name(xls_sheet_name_)
+    {}
     std::unique_ptr<xlslib_core::workbook> wbook;
     xlslib_core::worksheet* wsheet;
+    XlsSheetName xls_sheet_name;
 };
 
-void xls_workbook::clearSheet(XlsSheetName const& sheet_name)
+void XlsWorkBook::clearSheet()
 {
     this->pimpl->wbook  = std::make_unique<xlslib_core::workbook>();
-    this->pimpl->wsheet = this->pimpl->wbook->sheet(sheet_name.Get());
+    this->pimpl->wsheet = this->pimpl->wbook->sheet(pimpl->xls_sheet_name.Get());
 }
 
-void xls_workbook::setCell(Row row, Column column, CellContent cell_content)
+void XlsWorkBook::setCell(Row row, Column column, CellContent cell_content)
 {
     this->pimpl->wsheet->label(row.Get(), column.Get(), std::string(cell_content.start, cell_content.length));
 }
 
-int xls_workbook::writeInto(OutputFileName const& out_put_file)
+int XlsWorkBook::writeInto(OutputFileName const& out_put_file)
 {
     return this->pimpl->wbook->Dump(out_put_file.Get().string());
 }
-auto xls_workbook::columnLimit()-> std::optional<OutputColumnLimit>
+auto XlsWorkBook::columnLimit()-> std::optional<OutputColumnLimit>
 {
     return OutputColumnLimit(256);
 }
-xls_workbook::xls_workbook()
-    : pimpl(new Impl, &PimplDeleter)
+XlsWorkBook::XlsWorkBook(XlsSheetName const& xls_sheet_name)
+    : pimpl(new Impl(xls_sheet_name), &PimplDeleter)
 {
 }
 
-xls_workbook::~xls_workbook() {}
-void xls_workbook::PimplDeleter(Impl* p)
+XlsWorkBook::~XlsWorkBook() {}
+void XlsWorkBook::PimplDeleter(Impl* p)
 {
     delete p;
 }

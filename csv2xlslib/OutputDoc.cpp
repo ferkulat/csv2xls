@@ -5,9 +5,9 @@
 #include "OutputDoc.hpp"
 namespace csv2xls
 {
-Row OutputDoc::RowAfterClearSheet(XlsSheetName const& sheet_name)
+Row OutputDoc::RowAfterClearSheet()
 {
-    self_->clearSheet(sheet_name);
+    self_->clearSheet();
     m_column = Column(0);
     m_row    = Row(0);
     if (m_headline.size())

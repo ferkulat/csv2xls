@@ -30,7 +30,7 @@ namespace csv2xls
 Row RowAfterNewSheet(xls_file_t& file)
 {
     file.output_file_name.file_number++;
-    return file.output_doc.RowAfterClearSheet(file.sheet_name);
+    return file.output_doc.RowAfterClearSheet();
 }
 
 Column appendCell(xls_file_t& file, CellContent cell_content)

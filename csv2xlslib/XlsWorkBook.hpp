@@ -29,13 +29,13 @@
 namespace csv2xls
 {
 
-class xls_workbook
+class XlsWorkBook
 {
 public:
-    xls_workbook();
-    ~xls_workbook();
-    xls_workbook(xls_workbook && workbook) = default;
-    void clearSheet(XlsSheetName const& sheet_name);
+    XlsWorkBook(XlsSheetName const& xls_sheet_name);
+    ~XlsWorkBook();
+    XlsWorkBook(XlsWorkBook && workbook) = default;
+    void clearSheet();
 
     int writeInto(OutputFileName const& out_put_file);
 

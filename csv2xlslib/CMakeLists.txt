@@ -12,8 +12,8 @@ add_library(csv2xlslib
         readHeadLine.hpp
         XlsFile.cpp
         XlsFile.hpp
-        xls_workbook.cpp
-        xls_workbook.hpp
+        XlsWorkBook.cpp
+        XlsWorkBook.hpp
         callback.hpp
         conversion.h
         version.h

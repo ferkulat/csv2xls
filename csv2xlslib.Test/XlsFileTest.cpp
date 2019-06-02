@@ -3,12 +3,11 @@
 #include <catch.hpp>
 namespace csv2xls
 {
-using namespace std;
-class dummy_workbook
+class DummyWorkBook
 {
   public:
 
-    void clearSheet(XlsSheetName const& /*sheetname*/)
+    void clearSheet()
     {
         called_clear_sheet++;
     }
@@ -31,19 +30,19 @@ class dummy_workbook
     int called_label = 0;
     OutputColumnLimit out_put_column_limit = csv2xls::XLS_MAX_COLUMNS;
 };
-template <typename T> class wrapper_workbook
+template <typename T> class WrapperWorkBook
 {
     std::shared_ptr<T> wrapped;
 
   public:
-    wrapper_workbook(std::shared_ptr<T> wrapped_)
+    WrapperWorkBook(std::shared_ptr<T> wrapped_)
         : wrapped(wrapped_)
     {
     }
 
-    void clearSheet(XlsSheetName const& sheet_name)
+    void clearSheet()
     {
-        wrapped->clearSheet(sheet_name);
+        wrapped->clearSheet();
     }
     int writeInto(OutputFileName const& file_name)
     {
@@ -79,25 +78,25 @@ void repeat(int count, F f)
         f();
 }
 
-struct Group1
+struct Given_an_input_file_without_headline
 {
-    std::shared_ptr<dummy_workbook>      test_workbook = std::make_shared<dummy_workbook>();
-    csv2xls::xls_file_t xls_file{OutputDoc(wrapper_workbook(test_workbook),{})};
+    std::shared_ptr<DummyWorkBook>      test_workbook = std::make_shared<DummyWorkBook>();
+    csv2xls::xls_file_t xls_file{OutputDoc(WrapperWorkBook(test_workbook),{})};
 
-    Group1()
+    Given_an_input_file_without_headline()
     {
         xls_file.xls_row_limit                = csv2xls::DEFAULT_XLS_MAX_LINES;
         xls_file.output_file_name.digit_count = DigitCount(3);
         xls_file.output_file_name.file_number = FileNumber(0);
     }
 
-    virtual ~Group1() = default;
+    virtual ~Given_an_input_file_without_headline() = default;
 };
 
 struct Given_an_input_file_with_headline
 {
-    std::shared_ptr<dummy_workbook>      test_workbook = std::make_shared<dummy_workbook>();
-    csv2xls::xls_file_t xls_file{OutputDoc(wrapper_workbook(test_workbook),{3,"lol"})};
+    std::shared_ptr<DummyWorkBook>      test_workbook = std::make_shared<DummyWorkBook>();
+    csv2xls::xls_file_t xls_file{OutputDoc(WrapperWorkBook(test_workbook),{3,"lol"})};
 
     Given_an_input_file_with_headline()
     {
@@ -110,7 +109,7 @@ struct Given_an_input_file_with_headline
 };
 
 
-TEST_CASE_METHOD(Group1, "xls_append_cell_increases_column")
+TEST_CASE_METHOD(Given_an_input_file_without_headline, "xls_append_cell_increases_column")
 {
     auto const * lol = "lol";
 
@@ -118,7 +117,7 @@ TEST_CASE_METHOD(Group1, "xls_append_cell_increases_column")
     REQUIRE(Column(1) == column);
 }
 
-TEST_CASE_METHOD(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_COLUMNS")
+TEST_CASE_METHOD(Given_an_input_file_without_headline, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_COLUMNS")
 {
     auto const * lol = "lol";
     Column column(0);
@@ -127,38 +126,38 @@ TEST_CASE_METHOD(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_C
     REQUIRE(column == Column(XLS_MAX_COLUMNS.Get()));
 }
 
-TEST_CASE_METHOD(Group1, "xls_newline_increases_row")
+TEST_CASE_METHOD(Given_an_input_file_without_headline, "xls_newline_increases_row")
 {
 
     auto const row = csv2xls::newLine(xls_file);
 
-    REQUIRE(Row(1)    == row);
-    REQUIRE(0         == test_workbook->called_clear_sheet);
-    REQUIRE(0         == test_workbook->called_write_to_file);
+    REQUIRE(Row(1) == row);
+    REQUIRE(0      == test_workbook->called_clear_sheet);
+    REQUIRE(0      == test_workbook->called_write_to_file);
 }
 
-TEST_CASE_METHOD(Group1, "xls_add_headline_does_nothing_if_headline_is_empty")
+TEST_CASE_METHOD(Given_an_input_file_without_headline, "xls_add_headline_does_nothing_if_headline_is_empty")
 {
 
-    CHECK(0         == test_workbook->called_clear_sheet);
-    CHECK(0         == test_workbook->called_label);
-    CHECK(0         == test_workbook->called_write_to_file);
+    CHECK(0 == test_workbook->called_clear_sheet);
+    CHECK(0 == test_workbook->called_label);
+    CHECK(0 == test_workbook->called_write_to_file);
 }
 
-TEST_CASE_METHOD(Group1, "xls_newline_writes_sheet_into_file_and_makes_a_new_sheet_if_row_is_XLS_MAX_ROWS")
+TEST_CASE_METHOD(Given_an_input_file_without_headline, "xls_newline_writes_sheet_into_file_and_makes_a_new_sheet_if_row_is_XLS_MAX_ROWS")
 {
     Row row;
     repeat(csv2xls::XLS_MAX_ROWS.Get(),
         [&]{row = csv2xls::newLine(xls_file);})
     ;
-    
-    CHECK(1         == test_workbook->called_clear_sheet);
-    CHECK(1         == test_workbook->called_write_to_file);
-    CHECK(Row(0)    == row);
+
+    CHECK(1             == test_workbook->called_clear_sheet);
+    CHECK(1             == test_workbook->called_write_to_file);
+    CHECK(Row(0)        == row);
     CHECK(FileNumber(1) == xls_file.output_file_name.file_number);
 }
 
-TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
+TEST_CASE_METHOD(Given_an_input_file_without_headline, "make_2_sheets_out_of_8_inputlines_without_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
@@ -190,7 +189,7 @@ TEST_CASE_METHOD(Given_an_input_file_with_headline, "make_2_sheets_out_of_8_inpu
     //CHECK(INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET.Get() == xls_file.current_row.Get());
 }
 
-TEST_CASE_METHOD(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_headline")
+TEST_CASE_METHOD(Given_an_input_file_without_headline, "make_2x4_lines_sheets_out_of_8_inputlines_without_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;

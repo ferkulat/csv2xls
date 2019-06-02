@@ -24,7 +24,7 @@ class OutputDoc
     {
     }
 
-    Row RowAfterClearSheet(XlsSheetName const& sheet_name);
+    Row RowAfterClearSheet();
 
     int writeInto(OutputFileName const& out_put_file);
 
@@ -37,7 +37,7 @@ class OutputDoc
       public:
         virtual ~concept_t() = default;
 
-        virtual void clearSheet(XlsSheetName const& sheet_name)                = 0;
+        virtual void clearSheet()                = 0;
         virtual int  writeInto(OutputFileName const& out_put_file)             = 0;
         virtual void setCell(Row row, Column column, CellContent cell_content) = 0;
         virtual auto columnLimit()-> std::optional<OutputColumnLimit>          = 0;
@@ -50,9 +50,9 @@ class OutputDoc
         {
         }
 
-        void clearSheet(XlsSheetName const& sheet_name) override
+        void clearSheet() override
         {
-            x.clearSheet(sheet_name);
+            x.clearSheet();
         }
 
         int writeInto(OutputFileName const& output_file_name) override

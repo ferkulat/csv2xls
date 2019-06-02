@@ -1,10 +1,10 @@
-#include <sstream>
 #include "parseCsvFile.hpp"
+#include "XlsWorkBook.hpp"
 #include "callback.hpp"
-#include "readHeadLine.hpp"
-#include "xls_workbook.hpp"
 #include "conversion.h"
+#include "readHeadLine.hpp"
 #include <csv.h>
+#include <sstream>
 namespace csv2xls
 {
 
@@ -28,7 +28,6 @@ namespace csv2xls
 
         xls_out.output_file_name = options.output_file_name;
         xls_out.xls_row_limit    = options.output_row_limit;
-        xls_out.sheet_name       = options.xls_sheet_name;
         xls_out
             .output_file_name
             .file_number         = FileNumber(-1);
@@ -96,16 +95,15 @@ namespace csv2xls
     {
         if (options.exit_clean) return 0;
 
-        auto csv_input         = openCsvFile(options.csv_file_name);
-        auto const parser      = createParser(options.csv_separator);
-        //auto const setHeadLine = SetUpHeadLine(csv_input, parser, options.csv_file_has_headline);
+        auto csv_input       = openCsvFile(options.csv_file_name);
+        auto const parser    = createParser(options.csv_separator);
         auto const head_line = (options.csv_file_has_headline.Get())
-                                ? readHeadLine(csv_input, parser)
-                                : HeadLineType{};
+                                    ? readHeadLine(csv_input, parser)
+                                    : HeadLineType{};
         return DoTheHardWork(csv_input,
                              parser,
                              char_buf_t (options.input_buffer_size),
-                             createCallBackData(xls_workbook(),options, head_line));
+                             createCallBackData(XlsWorkBook(options.xls_sheet_name), options, head_line));
     }
 
     FileNotOpen::FileNotOpen(char const *what)
