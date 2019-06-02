@@ -39,13 +39,12 @@ void csv_cb_end_of_field(void *s, size_t len, void *data)
 void csv_cb_headline_field(void *s, size_t len, void *data)
 {
     auto const* csv_field = static_cast<char const*>(s);
-    auto        &xls_file = *(static_cast<xls_file_t*>(data));
+    auto        *headline = static_cast<HeadLineType*>(data);
 
-    if (xls_file.headline.size() > XLS_MAX_COLUMNS.Get())
+    if (headline->size() > XLS_MAX_COLUMNS.Get())
         return;
 
-    auto const& cell_content = xls_file.headline.emplace_back(csv_field, len);
-    appendCell(xls_file, CellContent(cell_content.c_str(), cell_content.length()));
+    headline->emplace_back(csv_field, len);
 }
 
 void csv_cb_end_of_row(int , void *data)

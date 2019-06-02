@@ -46,7 +46,10 @@ int xls_workbook::writeInto(OutputFileName const& out_put_file)
 {
     return this->pimpl->wbook->Dump(out_put_file.Get().string());
 }
-
+auto xls_workbook::columnLimit()-> std::optional<OutputColumnLimit>
+{
+    return OutputColumnLimit(256);
+}
 xls_workbook::xls_workbook()
     : pimpl(new Impl, &PimplDeleter)
 {

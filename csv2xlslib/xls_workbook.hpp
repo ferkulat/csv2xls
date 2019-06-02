@@ -41,6 +41,7 @@ public:
 
     void setCell( Row row, Column column,
                   CellContent cell_content);
+    auto columnLimit()-> std::optional<OutputColumnLimit>;
 private:
     struct Impl;
     static void PimplDeleter(Impl*p);

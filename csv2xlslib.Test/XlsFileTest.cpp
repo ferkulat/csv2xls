@@ -7,12 +7,6 @@ using namespace std;
 class dummy_workbook
 {
   public:
-    dummy_workbook()
-    {
-        called_clear_sheet   = 0;
-        called_write_to_file = 0;
-        called_label         = 0;
-    }
 
     void clearSheet(XlsSheetName const& /*sheetname*/)
     {
@@ -27,9 +21,15 @@ class dummy_workbook
     {
         called_label++;
     }
-    int called_clear_sheet;
-    int called_write_to_file;
-    int called_label;
+    auto columnLimit()-> std::optional<OutputColumnLimit>
+    {
+        return out_put_column_limit;
+    }
+
+    int called_clear_sheet = 0;
+    int called_write_to_file = 0;
+    int called_label = 0;
+    OutputColumnLimit out_put_column_limit = csv2xls::XLS_MAX_COLUMNS;
 };
 template <typename T> class wrapper_workbook
 {
@@ -53,6 +53,10 @@ template <typename T> class wrapper_workbook
     {
         wrapped->setCell(row, column, cell_content);
     }
+    auto columnLimit()-> std::optional<OutputColumnLimit>
+    {
+        return wrapped->columnLimit();
+    }
 };
 
 void read_CSV_into(csv2xls::xls_file_t& xlsfile, int row_count, int column_count)
@@ -68,96 +72,89 @@ void read_CSV_into(csv2xls::xls_file_t& xlsfile, int row_count, int column_count
     }
 }
 
+template<typename F>
+void repeat(int count, F f)
+{
+    for (int i=0;i<count;++i)
+        f();
+}
+
 struct Group1
 {
-    std::shared_ptr<dummy_workbook>      test_workbook;
-    csv2xls::xls_file_t xls_file{OutputDoc(wrapper_workbook(test_workbook))};
+    std::shared_ptr<dummy_workbook>      test_workbook = std::make_shared<dummy_workbook>();
+    csv2xls::xls_file_t xls_file{OutputDoc(wrapper_workbook(test_workbook),{})};
 
     Group1()
     {
-        test_workbook                         = std::make_shared<dummy_workbook>();
-        xls_file                              = csv2xls::xls_file_t(OutputDoc(wrapper_workbook(test_workbook)));
         xls_file.xls_row_limit                = csv2xls::DEFAULT_XLS_MAX_LINES;
-        xls_file.current_column               = Column(0);
-        xls_file.current_row                  = Row(0);
         xls_file.output_file_name.digit_count = DigitCount(3);
         xls_file.output_file_name.file_number = FileNumber(0);
     }
 
     virtual ~Group1() = default;
 };
+
+struct Given_an_input_file_with_headline
+{
+    std::shared_ptr<dummy_workbook>      test_workbook = std::make_shared<dummy_workbook>();
+    csv2xls::xls_file_t xls_file{OutputDoc(wrapper_workbook(test_workbook),{3,"lol"})};
+
+    Given_an_input_file_with_headline()
+    {
+        xls_file.xls_row_limit                = csv2xls::DEFAULT_XLS_MAX_LINES;
+        xls_file.output_file_name.digit_count = DigitCount(3);
+        xls_file.output_file_name.file_number = FileNumber(0);
+    }
+
+    virtual ~Given_an_input_file_with_headline() = default;
+};
+
+
 TEST_CASE_METHOD(Group1, "xls_append_cell_increases_column")
 {
     auto const * lol = "lol";
-    xls_file.current_column = Column(0);
-    xls_file.current_row    = Row(0);
 
-    csv2xls::appendCell(xls_file, CellContent(lol,3));
-    REQUIRE(Row(0)    == xls_file.current_row);
-    REQUIRE(Column(1) == xls_file.current_column);
+    auto const column = csv2xls::appendCell(xls_file, CellContent(lol,3));
+    REQUIRE(Column(1) == column);
 }
 
 TEST_CASE_METHOD(Group1, "xls_append_cell_ignores_columns_greater_than_XLS_MAX_COLUMNS")
 {
-    xls_file.current_column = Column(csv2xls::XLS_MAX_COLUMNS.Get());
-    xls_file.current_row    = Row(0);
     auto const * lol = "lol";
+    Column column(0);
+    repeat(260, [&]{column = csv2xls::appendCell(xls_file, CellContent(lol, 3));});
 
-    csv2xls::appendCell(xls_file, CellContent(lol,3));
-
-    REQUIRE(Row(0) == xls_file.current_row);
-    REQUIRE(xls_file.current_column.isEqual(csv2xls::XLS_MAX_COLUMNS));
+    REQUIRE(column == Column(XLS_MAX_COLUMNS.Get()));
 }
 
 TEST_CASE_METHOD(Group1, "xls_newline_increases_row")
 {
-    xls_file.current_column = Column(0);
-    xls_file.current_row    = Row(0);
 
-    csv2xls::newLine(xls_file);
+    auto const row = csv2xls::newLine(xls_file);
 
-    REQUIRE(Column(0) == xls_file.current_column);
-    REQUIRE(Row(1)    == xls_file.current_row);
+    REQUIRE(Row(1)    == row);
     REQUIRE(0         == test_workbook->called_clear_sheet);
     REQUIRE(0         == test_workbook->called_write_to_file);
 }
 
 TEST_CASE_METHOD(Group1, "xls_add_headline_does_nothing_if_headline_is_empty")
 {
-    xls_file.headline.clear();
-    csv2xls::addHeadline(xls_file);
 
     CHECK(0         == test_workbook->called_clear_sheet);
     CHECK(0         == test_workbook->called_label);
     CHECK(0         == test_workbook->called_write_to_file);
-    CHECK(Column(0) == xls_file.current_column);
-    CHECK(Row(0)    == xls_file.current_row);
-}
-
-TEST_CASE_METHOD(Group1, "xls_add_headline_includes_a_newline")
-{
-
-    xls_file.headline = std::vector<std::string>(4, "lol");
-
-    csv2xls::addHeadline(xls_file);
-
-    CHECK(0         == test_workbook->called_clear_sheet);
-    CHECK(4         == test_workbook->called_label);
-    CHECK(0         == test_workbook->called_write_to_file);
-    CHECK(Column(0) == xls_file.current_column);
-    CHECK(Row(1)    == xls_file.current_row);
 }
 
 TEST_CASE_METHOD(Group1, "xls_newline_writes_sheet_into_file_and_makes_a_new_sheet_if_row_is_XLS_MAX_ROWS")
 {
-    xls_file.current_column = Column(2);
-    xls_file.current_row    = Row(csv2xls::XLS_MAX_ROWS.Get());
-    csv2xls::newLine(xls_file);
+    Row row;
+    repeat(csv2xls::XLS_MAX_ROWS.Get(),
+        [&]{row = csv2xls::newLine(xls_file);})
+    ;
     
     CHECK(1         == test_workbook->called_clear_sheet);
     CHECK(1         == test_workbook->called_write_to_file);
-    CHECK(Column(0) == xls_file.current_column);
-    CHECK(Row(0)    == xls_file.current_row);
+    CHECK(Row(0)    == row);
     CHECK(FileNumber(1) == xls_file.output_file_name.file_number);
 }
 
@@ -173,17 +170,16 @@ TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_without_headline")
     CHECK(1 == test_workbook->called_clear_sheet);
     CHECK(INPUT_ROWS * INPUT_COLUMNS == test_workbook->called_label);
     CHECK(1 == test_workbook->called_write_to_file);
-    CHECK(Column(0) == xls_file.current_column);
 }
 
-TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
+TEST_CASE_METHOD(Given_an_input_file_with_headline, "make_2_sheets_out_of_8_inputlines_with_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 8;
     constexpr size_t HEADLINE             = 1;
     constexpr auto   LINE_LIMIT_PER_SHEET = OutputRowLimit(5);
 
-    xls_file.headline      = std::vector<std::string>(INPUT_COLUMNS, "head");
+    //xls_file.headline      = std::vector<std::string>(INPUT_COLUMNS, "head");
     xls_file.xls_row_limit = LINE_LIMIT_PER_SHEET;
 
     read_CSV_into(xls_file, INPUT_ROWS, INPUT_COLUMNS);
@@ -191,8 +187,7 @@ TEST_CASE_METHOD(Group1, "make_2_sheets_out_of_8_inputlines_with_headline")
     CHECK((INPUT_ROWS + HEADLINE) * INPUT_COLUMNS == test_workbook->called_label);
 
     CHECK(1 == test_workbook->called_write_to_file);
-    CHECK(Column(0) == xls_file.current_column);
-    CHECK(INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET.Get() == xls_file.current_row.Get());
+    //CHECK(INPUT_ROWS + HEADLINE - LINE_LIMIT_PER_SHEET.Get() == xls_file.current_row.Get());
 }
 
 TEST_CASE_METHOD(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_headline")
@@ -208,13 +203,13 @@ TEST_CASE_METHOD(Group1, "make_2x4_lines_sheets_out_of_8_inputlines_without_head
     CHECK(2 == test_workbook->called_write_to_file);
 }
 
-TEST_CASE_METHOD(Group1, "make_3x2_lines_sheets_out_of_4_inputlines_with_headline")
+TEST_CASE_METHOD(Given_an_input_file_with_headline, "make_3x2_lines_sheets_out_of_4_inputlines_with_headline")
 {
     constexpr size_t INPUT_COLUMNS        = 3;
     constexpr size_t INPUT_ROWS           = 4;
     constexpr auto   LINE_LIMIT_PER_SHEET = OutputRowLimit(2);
 
-    xls_file.headline      = std::vector<std::string>(INPUT_COLUMNS, "head");
+    //xls_file.headline      = std::vector<std::string>(INPUT_COLUMNS, "head");
     xls_file.xls_row_limit = LINE_LIMIT_PER_SHEET;
 
     read_CSV_into(xls_file, INPUT_ROWS, INPUT_COLUMNS);

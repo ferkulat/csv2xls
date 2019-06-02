@@ -22,9 +22,9 @@ namespace csv2xls
         return csv_input;
     }
     template<typename T>
-    xls_file_t createCallBackData(T&& doctype, Config const &options)
+    xls_file_t createCallBackData(T&& doctype, Config const &options, HeadLineType const& head_line)
     {
-        xls_file_t xls_out(OutputDoc(std::forward<T>(doctype)));
+        xls_file_t xls_out(OutputDoc(std::forward<T>(doctype), head_line));
 
         xls_out.output_file_name = options.output_file_name;
         xls_out.xls_row_limit    = options.output_row_limit;
@@ -33,7 +33,7 @@ namespace csv2xls
             .output_file_name
             .file_number         = FileNumber(-1);
 
-        newSheet(xls_out);
+        RowAfterNewSheet(xls_out);
         return xls_out;
     }
 
@@ -41,7 +41,7 @@ namespace csv2xls
     {
         return [has_had_line, &parser, &csv_input](xls_file_t xls_out){
             if (has_had_line.Get()) {
-                readHeadLine(csv_input, parser, xls_out);
+                readHeadLine(csv_input, parser);
             }
             return xls_out;
         };
@@ -98,12 +98,14 @@ namespace csv2xls
 
         auto csv_input         = openCsvFile(options.csv_file_name);
         auto const parser      = createParser(options.csv_separator);
-        auto const setHeadLine = SetUpHeadLine(csv_input, parser, options.csv_file_has_headline);
-
+        //auto const setHeadLine = SetUpHeadLine(csv_input, parser, options.csv_file_has_headline);
+        auto const head_line = (options.csv_file_has_headline.Get())
+                                ? readHeadLine(csv_input, parser)
+                                : HeadLineType{};
         return DoTheHardWork(csv_input,
                              parser,
                              char_buf_t (options.input_buffer_size),
-                             setHeadLine(createCallBackData(xls_workbook(),options)));
+                             createCallBackData(xls_workbook(),options, head_line));
     }
 
     FileNotOpen::FileNotOpen(char const *what)

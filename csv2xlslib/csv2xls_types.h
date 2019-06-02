@@ -24,7 +24,7 @@ TYPE_SAFE(XlsSheetName, std::string)
 TYPE_SAFE(DigitCount, std::uint8_t)
 TYPE_SAFE(InputFile, Path)
 
-using OutputRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutRowLimit,
+using OutputRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutputRowLimit,
                                                  skilled_type::Equality,
                                                  skilled_type::Relativity>;
 
@@ -34,10 +34,10 @@ using Row = skilled_type::SkilledType<std::uint32_t, struct TypeTagRow,
                                       skilled_type::Equality,
                                       skilled_type::Relativity>;
 
-using OutPutColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutColumnLimit>;
+using OutputColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutputColumnLimit>;
 
 using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
-                                         ComparableWith<OutPutColumnLimit>::templ,
+                                         ComparableWith<OutputColumnLimit>::templ,
                                          skilled_type::Incrementability,
                                          skilled_type::Equality>;
 

@@ -5,10 +5,10 @@
 
 namespace csv2xls
 {
-void readHeadLine( std::istream &csv_input,
-                    Parser const& csv_in,
-                    xls_file_t &xls_out)
+HeadLineType readHeadLine( std::istream &csv_input,
+                    Parser const& csv_in)
 {
+    HeadLineType head_line;
     std::string head_line_buffer;
     if (!getline(csv_input, head_line_buffer).fail())
     {
@@ -23,13 +23,14 @@ void readHeadLine( std::istream &csv_input,
                 /* register call back function for end of csv row*/
                 csv_cb_end_of_row,
                 /* to be passed to the call back functions*/
-                &xls_out) != head_line_buffer.size())
+                &head_line) != head_line_buffer.size())
         {
             std::cerr << "Error while parsing file: %s" << "\n"
                     << csv_strerror(csv_error(csv_in.csv_file_parser.get())) << "\n";
             exit(EXIT_FAILURE);
         }
     }
+    return head_line;
 
 }
 }

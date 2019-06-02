@@ -27,76 +27,39 @@
 namespace csv2xls
 {
 
-void newSheet(xls_file_t& file)
+Row RowAfterNewSheet(xls_file_t& file)
 {
-    file.output_doc.clearSheet(file.sheet_name);
-    file.current_column = Column(0);
-    file.current_row    = Row(0);
-    addHeadline(file);
     file.output_file_name.file_number++;
+    return file.output_doc.RowAfterClearSheet(file.sheet_name);
 }
 
-void appendCell(xls_file_t& file, CellContent cell_content)
+Column appendCell(xls_file_t& file, CellContent cell_content)
 {
-    // ignore columns > XLS_MAX_COLUMNS
-    if (file.current_column.isGreaterEqual(XLS_MAX_COLUMNS))
-        return;
-
-    file.output_doc.setCell(file.current_row, file.current_column, cell_content);
-    file.current_column++;
+    return file.output_doc.appendCell(cell_content);
 }
 
-bool isWithinRowLimit(xls_file_t const& file)
+bool isWithinRowLimit(xls_file_t const& file, Row row)
 {
-    return file.current_row.isLess(std::min(file.xls_row_limit, XLS_MAX_ROWS));
+    return row.isLess(std::min(file.xls_row_limit, XLS_MAX_ROWS));
 }
 
-void newLine(xls_file_t& file)
+Row newLine(xls_file_t& file)
 {
-    file.current_column = Column(0);
-    file.current_row++;
+    auto const row = file.output_doc.newLine();
 
-    if (isWithinRowLimit(file))
-        return;
+    if (isWithinRowLimit(file, row))
+        return row;
 
     writeIntoFile(file);
-    newSheet(file);
+    return RowAfterNewSheet(file);
 }
 
 void writeIntoFile(xls_file_t& file)
 {
-    if (isEmptySheet(file))
-        return;
-
-
     file.output_doc.writeInto(file.output_file_name);
 }
 
-void addHeadline(xls_file_t& file)
-{
-    if (file.headline.empty())
-        return;
 
-    for (auto const& column_name : file.headline)
-        appendCell(file, CellContent(column_name.c_str(), column_name.length()));
 
-    newLine(file);
-}
-
-bool isAtFirstRow(xls_file_t const& file)
-{
-    auto const first_row = (file.headline.empty()) ? Row(0) : Row(1);
-    return (first_row == file.current_row);
-}
-
-bool isAtFirstColumn(xls_file_t const& file)
-{
-    return (Column(0) == file.current_column);
-}
-
-bool isEmptySheet(xls_file_t const& file)
-{
-    return (isAtFirstColumn(file) && isAtFirstRow(file));
-}
 
 } // namespace csv2xls

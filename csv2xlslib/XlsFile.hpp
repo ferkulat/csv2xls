@@ -35,11 +35,10 @@
 namespace csv2xls
 {
     constexpr auto XLS_MAX_ROWS    = OutputRowLimit(65536);
-    constexpr auto XLS_MAX_COLUMNS = OutPutColumnLimit(256);
+    constexpr auto XLS_MAX_COLUMNS = OutputColumnLimit(256);
 /**
  * \brief information about xls file to be passed to csv call back functions
  */
-using HeadLineType = std::vector<std::string>;
 struct xls_file_t
 {
     xls_file_t(OutputDoc output_doc_)
@@ -49,19 +48,16 @@ struct xls_file_t
 
     OutputFileName output_file_name;
     OutputRowLimit xls_row_limit;
-    HeadLineType   headline;
     XlsSheetName   sheet_name;
     OutputDoc      output_doc;
-    Column         current_column;
-    Row            current_row;
 };
 
 /**
  *
  * @param file
  */
-void
-newSheet(xls_file_t& file);
+Row
+RowAfterNewSheet(xls_file_t& file);
 
 
 /**
@@ -75,7 +71,7 @@ newSheet(xls_file_t& file);
  * @param cell_content
  * The string to be written into the current xls data cell.
  */
-void
+Column
 appendCell(xls_file_t& xlsfile, CellContent cell_content);
 
 /**
@@ -84,8 +80,7 @@ appendCell(xls_file_t& xlsfile, CellContent cell_content);
  * @param xlsfile
  * Pointer to the struct which holds the information of the xls data.
  */
-void
-newLine(xls_file_t& xlsfile);
+Row newLine(xls_file_t& xlsfile);
 
 /**
  * \fn void xls_dump_worksheet(xls_file_t * xlsfile)
@@ -101,25 +96,6 @@ newLine(xls_file_t& xlsfile);
 void
 writeIntoFile(xls_file_t& xlsfile);
 
-/**
- * \fn void xls_add_headline(xls_file_t*xlsfile)
- * \brief Add the head line to the xls data
- *
- * and make a new line after that. Ideally you should set
- * * `xlsfile->current_column = 0`  and
- * * `xlsfile->current_row = 0`
- *
- * before calling this function.
- * @param
- * xlsfile
- * Pointer to the struct which holds the information of the xls data.
- * @return
- * nix
- */
-void
-addHeadline(xls_file_t& xlsfile);
 
-bool
-isEmptySheet(const xls_file_t& file);
 } /* ----- end of namespace csv2xls ----- */
 #endif /*end XLSFILE_HPP*/
