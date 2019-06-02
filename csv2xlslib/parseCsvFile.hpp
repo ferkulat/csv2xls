@@ -20,7 +20,10 @@ namespace csv2xls
     };
 
     int
-    parseCsvFile(Config options);
+    parseCsvFile(Config const& options);
+
+    int
+    parseCsvStream(Config const& config, std::istream& csv_stream, OutputDoc output_doc);
 
     int
     DoTheHardWork(std::istream &csv_input, Parser const& parser, char_buf_t input_buffer, xls_file_t xls_out);

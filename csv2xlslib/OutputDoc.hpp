@@ -17,17 +17,16 @@ class OutputDoc
 {
   public:
     template <typename T>
-    explicit OutputDoc(T&& x, HeadLineType const& head_line)
+    explicit OutputDoc(T && x)
         : self_(new doc_type<T>(std::forward<T>(x)))
         ,output_column_limit(self_->columnLimit())
-        ,m_headline(head_line)
     {
     }
-
+    OutputDoc(OutputDoc && x)=default;
     Row RowAfterClearSheet();
 
     int writeInto(OutputFileName const& out_put_file);
-
+    void setHeadLine(HeadLineType const& head_line);
     Column appendCell(CellContent cell_content);
     Row newLine();
   private:

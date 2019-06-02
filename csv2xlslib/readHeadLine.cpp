@@ -21,7 +21,7 @@ HeadLineType readHeadLine( std::istream &csv_input,
                 /* register call back function for end of csv field*/
                 csv_cb_headline_field,
                 /* register call back function for end of csv row*/
-                csv_cb_end_of_row,
+                      nullptr,
                 /* to be passed to the call back functions*/
                 &head_line) != head_line_buffer.size())
         {

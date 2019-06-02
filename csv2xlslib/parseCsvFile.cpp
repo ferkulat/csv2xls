@@ -21,10 +21,10 @@ namespace csv2xls
         }
         return csv_input;
     }
-    template<typename T>
-    xls_file_t createCallBackData(T&& doctype, Config const &options, HeadLineType const& head_line)
+
+    xls_file_t createCallBackData(OutputDoc doctype, Config const &options)
     {
-        xls_file_t xls_out(OutputDoc(std::forward<T>(doctype), head_line));
+        xls_file_t xls_out(std::move(doctype));
 
         xls_out.output_file_name = options.output_file_name;
         xls_out.xls_row_limit    = options.output_row_limit;
@@ -34,16 +34,6 @@ namespace csv2xls
 
         RowAfterNewSheet(xls_out);
         return xls_out;
-    }
-
-    auto SetUpHeadLine(std::istream &csv_input, Parser const& parser, InputHasHeadLine has_had_line)
-    {
-        return [has_had_line, &parser, &csv_input](xls_file_t xls_out){
-            if (has_had_line.Get()) {
-                readHeadLine(csv_input, parser);
-            }
-            return xls_out;
-        };
     }
 
     size_t ReadBuffer(std::istream &csv_input, char_buf_t &input_buffer)
@@ -91,19 +81,26 @@ namespace csv2xls
         return 0;
     }
 
-    int parseCsvFile(Config options)
+    int parseCsvStream(Config const& config, std::istream& csv_stream, OutputDoc output_doc)
     {
-        if (options.exit_clean) return 0;
+        auto const parser    = createParser(config.csv_separator);
+        if (config.csv_file_has_headline.Get())
+        {
+            output_doc.setHeadLine(readHeadLine(csv_stream, parser));
+        }
 
-        auto csv_input       = openCsvFile(options.csv_file_name);
-        auto const parser    = createParser(options.csv_separator);
-        auto const head_line = (options.csv_file_has_headline.Get())
-                                    ? readHeadLine(csv_input, parser)
-                                    : HeadLineType{};
-        return DoTheHardWork(csv_input,
+        return DoTheHardWork(csv_stream,
                              parser,
-                             char_buf_t (options.input_buffer_size),
-                             createCallBackData(XlsWorkBook(options.xls_sheet_name), options, head_line));
+                             char_buf_t (config.input_buffer_size),
+                             createCallBackData(std::move(output_doc), config));
+    }
+    int parseCsvFile(Config const& config)
+    {
+        if (config.exit_clean) return 0;
+
+        auto csv_input = openCsvFile(config.csv_file_name);
+
+        return parseCsvStream(config, csv_input, OutputDoc(XlsWorkBook(config.xls_sheet_name)));
     }
 
     FileNotOpen::FileNotOpen(char const *what)

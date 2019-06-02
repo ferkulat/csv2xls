@@ -26,6 +26,10 @@ int OutputDoc::writeInto(OutputFileName const& out_put_file)
 
     return self_->writeInto(out_put_file);
 }
+void OutputDoc::setHeadLine(HeadLineType const& head_line)
+{
+    m_headline = head_line;
+}
 
 bool OutputDoc::isEmpty()
 {
