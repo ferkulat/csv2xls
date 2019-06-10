@@ -15,6 +15,7 @@ include(checkedcmd)
 include(libcsv)
 include(xlslib)
 include(CppSkilledType)
+include(CppResultType)
 
 enable_testing()
 

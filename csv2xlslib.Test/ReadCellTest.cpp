@@ -16,7 +16,6 @@ bool operator==(EndOfBuffer const& c1, EndOfBuffer const& c2)
 {
     return (c1.unfinished_cell == c2.unfinished_cell);
 }
-
 namespace ReadCellTest
 {
 
