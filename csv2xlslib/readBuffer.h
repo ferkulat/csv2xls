@@ -20,9 +20,12 @@ struct Buffer
         {}
     size_t m_size;
     std::unique_ptr<char[]> mem;
-    char const * end;
+    char * end;
     char* current_position;
     char quoted = '\0';
+    bool empty()const{
+        return end == mem.get();
+    }
 };
 
 struct EndOfLine{};
