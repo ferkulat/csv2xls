@@ -46,12 +46,11 @@ namespace ConvertCsvTest{
         std::vector<std::vector<std::string>>& data;
     };
 
-    struct Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file
+    struct Given_a_Csv_file_with_4_lines_and_no_newline_at_end_of_file
     {
         std::stringstream file;
         std::vector<std::vector<std::string>> data;
-
-        Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file()
+        Given_a_Csv_file_with_4_lines_and_no_newline_at_end_of_file()
         {
             file << ";2222;3333\n";
             file << "dog;cat;\n";
@@ -59,21 +58,37 @@ namespace ConvertCsvTest{
             file << "milk;tea;coffee";
         }
     };
-    TEST_CASE_METHOD(Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file, "and a row limit of 2")
+    TEST_CASE_METHOD(Given_a_Csv_file_with_4_lines_and_no_newline_at_end_of_file, "and a row limit of 2")
     {
+        Parameter parameter = {OutputRowLimit(2), CsvSeparator(';')};
         Buffer buffer(1024);
         auto outfile = OutFile(OutputRowLimit(2), OutputColumnLimit(4),data);
-        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, OutputRowLimit(2), file);
+        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, parameter, file);
         REQUIRE(data.size() == 2 );
         REQUIRE(data[0].size() == 3);
         REQUIRE(data[1].size() == 3);
     }
 
-    TEST_CASE_METHOD(Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file, "and a row limit of 3")
+    TEST_CASE_METHOD(Given_a_Csv_file_with_4_lines_and_no_newline_at_end_of_file, "and a row limit of 4")
     {
+        Parameter parameter = {OutputRowLimit(4), CsvSeparator(';')};
         Buffer buffer(10);
         auto outfile = OutFile(OutputRowLimit(3), OutputColumnLimit(4),data);
-        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, OutputRowLimit(4), file);
+        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, parameter, file);
+        REQUIRE(data.size() == 4 );
+        using ROW = std::vector<std::string>;
+        REQUIRE(data[0] == ROW{"","2222","3333"});
+        REQUIRE(data[1] == ROW{"dog","cat",""});
+        REQUIRE(data[2] == ROW{"","shark","bird"});
+        REQUIRE(data[3] == ROW{"milk","tea","coffee"});
+
+    }
+    TEST_CASE_METHOD(Given_a_Csv_file_with_4_lines_and_no_newline_at_end_of_file, "and no row limit")
+    {
+        Parameter parameter = {std::nullopt, CsvSeparator(';')};
+        Buffer buffer(10);
+        auto outfile = OutFile(OutputRowLimit(3), OutputColumnLimit(4),data);
+        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, parameter, file);
         REQUIRE(data.size() == 4 );
         using ROW = std::vector<std::string>;
         REQUIRE(data[0] == ROW{"","2222","3333"});

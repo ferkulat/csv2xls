@@ -8,57 +8,7 @@
 #include "readBuffer.h"
 #include <Skills.h>
 #include "convertCsv.h"
-namespace chaining{
-
-struct HigherOrderFunction{};
-template<typename Predicate>
-auto repeatWhile(Predicate predicate)
-{
-    return [predicate](auto callee){
-        bool success = true;
-        while(success)
-        {
-            success = predicate(callee());
-        }
-    };
-}
-
-template <typename Pred> struct repeatUntil : public HigherOrderFunction
-{
-    Pred m_pred;
-    repeatUntil(Pred pred)
-        : m_pred(pred)
-    {
-    }
-    template <typename Callee> auto operator()(Callee callee) const
-    {
-        while (true)
-        {
-            auto const result = callee();
-            if (m_pred(result))
-                return result;
-        }
-    }
-};
-
-template<typename Callee, typename Caller>
-auto operator|(Callee callee, Caller caller)
-{
-    if constexpr (std::is_base_of_v<HigherOrderFunction, Caller>)
-    {
-        return [callee, caller](){
-          return caller(callee);
-        };
-    }
-    else
-    {
-        return [callee, caller](auto const&... arg) { return caller(callee(arg...)); };
-    }
-}
-
-
-}
-
+#include "funcomp.h"
 
 namespace csv2xls
 {
@@ -85,8 +35,8 @@ constexpr auto AllOf(Preds... preds){
 }
 
 
-using chaining::operator|;
-using chaining::repeatUntil;
+using funcomp::operator|;
+using funcomp::repeatUntil;
 
 enum class Status{Break, Ok, EndOfStream};
 namespace Domain
@@ -179,14 +129,14 @@ using ChainingAdaptors::init;
 auto isEndOfBuffer = [](EndOfBuffer){
   return true;
 };
-auto isEndOfStreamType = [](EndOfStream){
+auto isEndOfStream = [](EndOfStream){
   return true;
 };
 
-auto isRowLimit (OutputRowLimit output_row_limit)
+auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
 {
     return [output_row_limit](Row row) {
-        return row.isGreaterEqual(output_row_limit);
+        return (output_row_limit)? row.isGreaterEqual(output_row_limit.value()):false;
     };
 }
 
@@ -199,13 +149,14 @@ auto matchesOneOf(ARGS... args)
 }
 
 
-OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, OutputRowLimit output_row_limit, std::istream& stream)
+OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, Parameter const& parameter, std::istream& stream)
 {
-    auto readCell = [&buffer]{ return read(buffer, CsvSeparator(';'));};
+    auto const readCell = [&]{ return read(buffer, parameter.csv_separator);};
+    auto const noCells  = matchesOneOf(isEndOfBuffer, isEndOfStream, isRowLimit(parameter.output_row_limit));
 
     ( readCell
         | appendToOutputDoc(output_doc)
-        | repeatUntil(matchesOneOf(isEndOfBuffer, isEndOfStreamType, isRowLimit(output_row_limit)))
+        | repeatUntil(noCells)
         | init(buffer)
         | fill(buffer, stream)
         | repeatUntil(isEitherOf(Status::Break, Status::EndOfStream))
