@@ -28,12 +28,10 @@ struct Buffer
     }
 };
 
-struct EndOfLine{};
+struct EndOfBuffer{std::optional<CellContent> unfinished_cell;};
+struct EndOfLine{CellContent cell;};
 struct EndOfStream{};
-struct EndOfBuffer
-{
-    std::optional<CellContent> unfinished_cell;
-};
+
 using CsvType = std::variant<CellContent, EndOfLine, EndOfBuffer, EndOfStream>;
 
 CsvType read(Buffer& buffer, CsvSeparator csv_separator);

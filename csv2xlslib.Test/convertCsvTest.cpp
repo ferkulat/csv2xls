@@ -53,8 +53,9 @@ namespace ConvertCsvTest{
 
         Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file()
         {
-            file << "1111;2222;3333\n";
-            file << "dog;cat;duck\n";
+            file << ";2222;3333\n";
+            file << "dog;cat;\n";
+            file << ";shark;bird\n";
             file << "milk;tea;coffee";
         }
     };
@@ -72,12 +73,13 @@ namespace ConvertCsvTest{
     {
         Buffer buffer(10);
         auto outfile = OutFile(OutputRowLimit(3), OutputColumnLimit(4),data);
-        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, OutputRowLimit(3), file);
-        REQUIRE(data.size() == 3 );
+        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, OutputRowLimit(4), file);
+        REQUIRE(data.size() == 4 );
         using ROW = std::vector<std::string>;
-        REQUIRE(data[0] == ROW{"1111","2222","3333"});
-        REQUIRE(data[1] == ROW{"dog","cat","duck"});
-        REQUIRE(data[2] == ROW{"milk","tea","coffee"});
+        REQUIRE(data[0] == ROW{"","2222","3333"});
+        REQUIRE(data[1] == ROW{"dog","cat",""});
+        REQUIRE(data[2] == ROW{"","shark","bird"});
+        REQUIRE(data[3] == ROW{"milk","tea","coffee"});
 
     }
 }

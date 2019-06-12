@@ -83,10 +83,12 @@ constexpr auto AllOf(Preds... preds){
       return (... && preds(value));
     };
 }
+
+
 using chaining::operator|;
 using chaining::repeatUntil;
 
-enum class ChainStatus{Break, Ok, EndOfStream};
+enum class Status{Break, Ok, EndOfStream};
 namespace Domain
 {
 
@@ -95,7 +97,7 @@ auto appendToOutputDoc(OutputDoc& output_doc, CsvType csv_type)
     using R = std::variant<Row, Column, EndOfBuffer, EndOfStream>;
     return MatchType(csv_type
               , [&](CellContent cell) -> R { return output_doc.appendCell(cell); }
-              , [&](EndOfLine       ) -> R { return output_doc.newLine(); }
+              , [&](EndOfLine   eol ) -> R { output_doc.appendCell(eol.cell);return output_doc.newLine(); }
               , [ ](auto anything   ) -> R { return anything; }
               );
 }
@@ -104,7 +106,7 @@ auto appendToOutputDoc(OutputDoc& output_doc, CsvType csv_type)
 auto fill(Buffer& buffer, std::istream& csv_input)
 {
     if (!csv_input.good())
-        return false;
+        return Status::EndOfStream;
 
     auto const bytes_left    = buffer.end - buffer.mem.get();
     auto const bytes_to_read = ConvertTo<long>(buffer.m_size) - bytes_left;
@@ -118,7 +120,7 @@ auto fill(Buffer& buffer, std::istream& csv_input)
         *buffer.end = '\0';
         ++(buffer.end);
     }
-    return true;
+    return Status::Ok;
 }
 
 auto init(Buffer& buffer, EndOfBuffer eob)
@@ -134,6 +136,7 @@ auto init(Buffer& buffer, EndOfBuffer eob)
     {
         buffer.end = buffer.mem.get();
     }
+    return Status::Ok;
 }
 
 }
@@ -149,10 +152,8 @@ auto appendToOutputDoc(OutputDoc& output_doc)
 
 auto fill(Buffer& buffer, std::istream& csv_input)
 {
-    return [&](ChainStatus status) {
-        return (status == ChainStatus::Break)? ChainStatus::Break:
-               (status == ChainStatus::EndOfStream)? ChainStatus::EndOfStream:
-               (Domain::fill(buffer, csv_input)) ? ChainStatus::Ok : ChainStatus::EndOfStream;
+    return [&](Status status) {
+        return (status == Status::Ok )? Domain::fill(buffer, csv_input): status;
     };
 }
 
@@ -160,10 +161,10 @@ auto init (Buffer& buffer)
 {
   return [&](std::variant<Row, Column, EndOfBuffer, EndOfStream> status){
       return MatchType(status
-              ,[&](EndOfBuffer eob){Domain::init(buffer, eob);return ChainStatus::Ok;}
-              ,[ ](EndOfStream    ){return ChainStatus::EndOfStream;}
-              ,[ ](Row            ){return ChainStatus::Break;}
-              ,[ ](auto           ){return ChainStatus::Ok;}
+              ,[&](EndOfBuffer eob){return Domain::init(buffer, eob);}
+              ,[ ](EndOfStream    ){return Status::EndOfStream;}
+              ,[ ](Row            ){return Status::Break;}
+              ,[ ](auto           ){return Status::Ok;}
               );
   };
 }
@@ -207,7 +208,7 @@ OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, OutputRowLimit output
         | repeatUntil(matchesOneOf(isEndOfBuffer, isEndOfStreamType, isRowLimit(output_row_limit)))
         | init(buffer)
         | fill(buffer, stream)
-        | repeatUntil(isEitherOf(ChainStatus::Break, ChainStatus::EndOfStream))
+        | repeatUntil(isEitherOf(Status::Break, Status::EndOfStream))
     )();
     return output_doc;
 

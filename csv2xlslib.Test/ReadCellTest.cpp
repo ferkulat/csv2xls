@@ -16,6 +16,10 @@ bool operator==(EndOfBuffer const& c1, EndOfBuffer const& c2)
 {
     return (c1.unfinished_cell == c2.unfinished_cell);
 }
+bool operator==(EndOfLine const& c1, EndOfLine const& c2)
+{
+    return (c1.cell == c2.cell);
+}
 namespace ReadCellTest
 {
 
@@ -57,8 +61,8 @@ TEST_CASE("Given the last cell in buffer with new line returns EndOfBuffer with 
 
     strncpy(buffer.mem.get(), content, buffer.m_size);
 
-    auto const actual   = std::get<CellContent>(read(buffer, CsvSeparator(';')));
-    auto const expected = CellContent{buffer.mem.get() + 12, 4};
+    auto const actual   = std::get<EndOfLine>(read(buffer, CsvSeparator(';')));
+    auto const expected = EndOfLine{CellContent{buffer.mem.get() + 12, 4}};
 
     REQUIRE(actual == expected);
 }
@@ -71,8 +75,8 @@ TEST_CASE(R"(Given the last cell in buffer with \r\n returns EndOfBuffer with th
 
     strncpy(buffer.mem.get(), content, buffer.m_size);
 
-    auto const actual   = std::get<CellContent>(read(buffer, CsvSeparator(';')));
-    auto const expected = CellContent{buffer.mem.get() + 12, 4};
+    auto const actual   = std::get<EndOfLine>(read(buffer, CsvSeparator(';')));
+    auto const expected = EndOfLine{CellContent{buffer.mem.get() + 12, 4}};
 
     REQUIRE(actual == expected);
 }
@@ -115,15 +119,10 @@ TEST_CASE("Given a cell ending with \n, returns Cell, but the next read returns 
     strncpy(buffer.mem.get(), content, buffer.m_size);
 
     {
-        auto const actual   = std::get<CellContent>(read(buffer, CsvSeparator(';')));
-        auto const expected = CellContent{buffer.mem.get() + 6, 5};
+        auto const actual   = std::get<EndOfLine>(read(buffer, CsvSeparator(';')));
+        auto const expected = EndOfLine{CellContent{buffer.mem.get() + 6, 5}};
 
         REQUIRE(actual == expected);
-    }
-    {
-        auto const actual = read(buffer, CsvSeparator(';'));
-
-        REQUIRE(std::holds_alternative<EndOfLine>(actual));
     }
 }
 

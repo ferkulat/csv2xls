@@ -30,13 +30,8 @@ CsvType read(Buffer& buffer, CsvSeparator csv_separator)
             if (*current_position == '\n')
             {
                 auto const length = cellLengthForLineEnd(start, current_position);
-                if (length)
-                {
-                    buffer.current_position = current_position;
-                    return CellContent{start, length};
-                }
                 buffer.current_position = current_position + 1;
-                return EndOfLine{};
+                return EndOfLine{CellContent{start, length}};
             }
             if (*current_position == '\0')
             {
