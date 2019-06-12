@@ -38,6 +38,16 @@ CsvType read(Buffer& buffer, CsvSeparator csv_separator)
                 buffer.current_position = current_position + 1;
                 return EndOfLine{};
             }
+            if (*current_position == '\0')
+            {
+                auto const length = cellLengthForLineEnd(start, current_position);
+                if (length)
+                {
+                    buffer.current_position = current_position;
+                    return CellContent{start, length};
+                }
+                return EndOfStream{};
+            }
             if (*current_position == '"')
             {
                 buffer.quoted = '"';

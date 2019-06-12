@@ -14,7 +14,7 @@ struct Buffer
 {
     explicit Buffer(size_t size_)
         :m_size(size_)
-        ,mem(std::make_unique<char[]>(size_))
+        ,mem(std::make_unique<char[]>(size_ + 1))
         ,end(mem.get())
         ,current_position(mem.get())
         {}
@@ -29,11 +29,12 @@ struct Buffer
 };
 
 struct EndOfLine{};
+struct EndOfStream{};
 struct EndOfBuffer
 {
     std::optional<CellContent> unfinished_cell;
 };
-using CsvType = std::variant<CellContent, EndOfLine, EndOfBuffer>;
+using CsvType = std::variant<CellContent, EndOfLine, EndOfBuffer, EndOfStream>;
 
 CsvType read(Buffer& buffer, CsvSeparator csv_separator);
 }

@@ -69,6 +69,14 @@ constexpr auto EitherOf(Preds... preds){
     };
 }
 
+
+template<typename... T>
+constexpr auto isEitherOf(T... t){
+    return [t...](auto const& value) {
+      return (... || (t == value));
+    };
+}
+
 template<typename... Preds>
 constexpr auto AllOf(Preds... preds){
     return [preds...](auto const& value) {
@@ -78,60 +86,60 @@ constexpr auto AllOf(Preds... preds){
 using chaining::operator|;
 using chaining::repeatUntil;
 
+enum class ChainStatus{Break, Ok, EndOfStream};
 namespace Domain
 {
 
 auto appendToOutputDoc(OutputDoc& output_doc, CsvType csv_type)
 {
-    using R = std::variant<Row, Column, EndOfBuffer>;
+    using R = std::variant<Row, Column, EndOfBuffer, EndOfStream>;
     return MatchType(csv_type
               , [&](CellContent cell) -> R { return output_doc.appendCell(cell); }
               , [&](EndOfLine       ) -> R { return output_doc.newLine(); }
-              , [ ](EndOfBuffer eob ) -> R { return eob; }
+              , [ ](auto anything   ) -> R { return anything; }
               );
 }
 
+
 auto fill(Buffer& buffer, std::istream& csv_input)
 {
-    if(!csv_input.good())
-    {
-        char * end = buffer.end;
-        *end = '\n';
-        ++buffer.end;
+    if (!csv_input.good())
         return false;
+
+    auto const bytes_left    = buffer.end - buffer.mem.get();
+    auto const bytes_to_read = ConvertTo<long>(buffer.m_size) - bytes_left;
+
+    csv_input.read(buffer.end, bytes_to_read);
+
+    auto const bytes_read = csv_input.gcount();
+    buffer.end += bytes_read;
+    if (bytes_read < bytes_to_read)
+    {
+        *buffer.end = '\0';
+        ++(buffer.end);
     }
-
-    auto const bytes_left        = buffer.end - buffer.mem.get();
-    auto const max_bytes_to_read = ConvertTo<long>(buffer.m_size) - bytes_left;
-    auto * const buffer_end      = buffer.mem.get() + bytes_left;
-    csv_input.read(buffer_end, max_bytes_to_read);
-
-    buffer.end = buffer_end + csv_input.gcount();
     return true;
 }
 
-
 auto init(Buffer& buffer, EndOfBuffer eob)
 {
-        buffer.current_position = buffer.mem.get();
-        if (eob.unfinished_cell)
-        {
-            auto const cell = eob.unfinished_cell.value();
-            strncpy(buffer.current_position, cell.start, cell.length);
-            buffer.end = buffer.current_position + cell.length;
-        }
-        else
-        {
-            buffer.end = buffer.mem.get();
-        }
+    buffer.current_position = buffer.mem.get();
+    if (eob.unfinished_cell)
+    {
+        auto const cell = eob.unfinished_cell.value();
+        strncpy(buffer.current_position, cell.start, cell.length);
+        buffer.end = buffer.current_position + cell.length;
+    }
+    else
+    {
+        buffer.end = buffer.mem.get();
+    }
 }
 
 }
 
 namespace ChainingAdaptors
 {
-enum class ChainStatus{Break, Ok, EndOfStream};
-
 auto appendToOutputDoc(OutputDoc& output_doc)
 {
     return [&output_doc](CsvType csv_type) {
@@ -143,18 +151,20 @@ auto fill(Buffer& buffer, std::istream& csv_input)
 {
     return [&](ChainStatus status) {
         return (status == ChainStatus::Break)? ChainStatus::Break:
+               (status == ChainStatus::EndOfStream)? ChainStatus::EndOfStream:
                (Domain::fill(buffer, csv_input)) ? ChainStatus::Ok : ChainStatus::EndOfStream;
     };
 }
 
 auto init (Buffer& buffer)
 {
-  return [&](std::variant<Row, Column, EndOfBuffer> status){
+  return [&](std::variant<Row, Column, EndOfBuffer, EndOfStream> status){
       return MatchType(status
-                      ,[&](EndOfBuffer eob){Domain::init(buffer, eob);return ChainStatus::Ok;}
-                      ,[ ](Row             ){return ChainStatus::Break;}
-                      ,[ ](auto            ){return ChainStatus::Ok;}
-                      );
+              ,[&](EndOfBuffer eob){Domain::init(buffer, eob);return ChainStatus::Ok;}
+              ,[ ](EndOfStream    ){return ChainStatus::EndOfStream;}
+              ,[ ](Row            ){return ChainStatus::Break;}
+              ,[ ](auto           ){return ChainStatus::Ok;}
+              );
   };
 }
 
@@ -163,22 +173,13 @@ auto init (Buffer& buffer)
 using ChainingAdaptors::appendToOutputDoc;
 using ChainingAdaptors::fill;
 using ChainingAdaptors::init;
-using ChainingAdaptors::ChainStatus;
 
-auto isEndOfStream = [](ChainingAdaptors::ChainStatus  chain_status){
-  return chain_status == ChainingAdaptors::ChainStatus::EndOfStream;
-};
-auto isEmpty(Buffer& buffer)
-{
-    return [&](auto&){
-        return buffer.empty();
-    };
-}
+
 auto isEndOfBuffer = [](EndOfBuffer){
   return true;
 };
-auto isBreak = [](ChainingAdaptors::ChainStatus  chain_status){
-  return chain_status == ChainingAdaptors::ChainStatus::Break;
+auto isEndOfStreamType = [](EndOfStream){
+  return true;
 };
 
 auto isRowLimit (OutputRowLimit output_row_limit)
@@ -199,14 +200,14 @@ auto matchesOneOf(ARGS... args)
 
 OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, OutputRowLimit output_row_limit, std::istream& stream)
 {
-    auto readCellFrom = [&buffer]{ return read(buffer, CsvSeparator(';'));};
+    auto readCell = [&buffer]{ return read(buffer, CsvSeparator(';'));};
 
-    ( readCellFrom
+    ( readCell
         | appendToOutputDoc(output_doc)
-        | repeatUntil(matchesOneOf(isEndOfBuffer, isRowLimit(output_row_limit)))
+        | repeatUntil(matchesOneOf(isEndOfBuffer, isEndOfStreamType, isRowLimit(output_row_limit)))
         | init(buffer)
         | fill(buffer, stream)
-        | repeatUntil(EitherOf(isBreak, AllOf(isEndOfStream, isEmpty(buffer))))
+        | repeatUntil(isEitherOf(ChainStatus::Break, ChainStatus::EndOfStream))
     )();
     return output_doc;
 
