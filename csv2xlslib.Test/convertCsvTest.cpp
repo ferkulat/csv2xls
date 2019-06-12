@@ -46,18 +46,39 @@ namespace ConvertCsvTest{
         std::vector<std::vector<std::string>>& data;
     };
 
-    TEST_CASE("lol")
+    struct Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file
     {
         std::stringstream file;
-        file << "1   ;2  ;  3 \n";
-        file << "dog ;cat;duck\n";
-        file << "milk;tea;coffee";
         std::vector<std::vector<std::string>> data;
+
+        Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file()
+        {
+            file << "1111;2222;3333\n";
+            file << "dog;cat;duck\n";
+            file << "milk;tea;coffee";
+        }
+    };
+    TEST_CASE_METHOD(Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file, "and a row limit of 2")
+    {
         Buffer buffer(1024);
         auto outfile = OutFile(OutputRowLimit(2), OutputColumnLimit(4),data);
         auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, OutputRowLimit(2), file);
         REQUIRE(data.size() == 2 );
+        REQUIRE(data[0].size() == 3);
+        REQUIRE(data[1].size() == 3);
     }
 
+    TEST_CASE_METHOD(Given_a_Csv_file_with_3_lines_and_no_newline_at_end_of_file, "and a row limit of 3")
+    {
+        Buffer buffer(10);
+        auto outfile = OutFile(OutputRowLimit(3), OutputColumnLimit(4),data);
+        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, OutputRowLimit(3), file);
+        REQUIRE(data.size() == 3 );
+        using ROW = std::vector<std::string>;
+        REQUIRE(data[0] == ROW{"1111","2222","3333"});
+        REQUIRE(data[1] == ROW{"dog","cat","duck"});
+        REQUIRE(data[2] == ROW{"milk","tea","coffee"});
+
+    }
 }
 }
