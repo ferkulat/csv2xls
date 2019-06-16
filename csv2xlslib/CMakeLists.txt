@@ -1,6 +1,4 @@
 add_library(csv2xlslib
-        csv.cpp
-        csv.hpp
         default_values.h
         parsecmd.cpp
         parsecmd.hpp
@@ -29,9 +27,9 @@ target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )
 target_include_directories(csv2xlslib SYSTEM PRIVATE ${CMAKE_PREFIX_PATH}/include/xlslib)
 message("CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID}" )
 if( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
-	target_link_libraries(csv2xlslib xlslib csv -static)
+	target_link_libraries(csv2xlslib xlslib -static)
 elseif(I_USE_MINGW)
-    target_link_libraries(csv2xlslib xlslib csv iconv -static)
+    target_link_libraries(csv2xlslib xlslib iconv -static)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
-    target_link_libraries(csv2xlslib xlslib csv stdc++fs -static)
+    target_link_libraries(csv2xlslib xlslib stdc++fs -static)
 endif()

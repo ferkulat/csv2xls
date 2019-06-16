@@ -2,7 +2,6 @@
 #include "XlsWorkBook.hpp"
 #include "conversion.h"
 #include "readHeadLine.hpp"
-#include <csv.h>
 #include "Helpers.h"
 #include <sstream>
 #include "convertCsv.h"
@@ -13,7 +12,7 @@
 namespace csv2xls
 {
 
-    auto OutFileGenerator(Config const& config)
+    auto XlsFileGenerator(Config const& config)
     {
         return[&](){
             return XlsWorkBook(config.xls_sheet_name);
@@ -23,8 +22,8 @@ namespace csv2xls
     template<typename NumberGen>
     auto makeOutputDoc(NumberGen number_gen)
     {
-        return [num_gen = std::move(number_gen)](Config const& config){
-            return OutputDoc(OutFileGenerator(config)(), num_gen());
+        return [num_gen = std::move(number_gen)](auto file_gen ) {
+            return OutputDoc(file_gen(), num_gen());
         };
     }
 
@@ -55,7 +54,6 @@ namespace csv2xls
                 return WriteStatus::Error;
 
             return WriteStatus::Ok;
-
         };
     }
 
@@ -78,8 +76,7 @@ namespace csv2xls
                                 |repeatUntil(isEitherOf(WriteStatus::Empty, WriteStatus::Error))
                                 ;
 
-
-        return (convertWith(config) == WriteStatus::Error)? 1:0;
+        return (convertWith(XlsFileGenerator(config)) == WriteStatus::Error)? 1:0;
     }
 
     FileNotOpen::FileNotOpen(char const *what)
