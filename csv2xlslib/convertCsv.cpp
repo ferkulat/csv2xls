@@ -37,6 +37,8 @@ constexpr auto AllOf(Preds... preds){
 
 using funcomp::operator|;
 using funcomp::repeatUntil;
+using funcomp::Do;
+
 
 enum class Status{Break, Ok, EndOfStream};
 namespace Domain
@@ -93,7 +95,7 @@ auto init(Buffer& buffer, EndOfBuffer eob)
 
 namespace ChainingAdaptors
 {
-auto appendToOutputDoc(OutputDoc& output_doc)
+auto appendTo(OutputDoc& output_doc)
 {
     return [&output_doc](CsvType csv_type) {
         return Domain::appendToOutputDoc(output_doc, csv_type);
@@ -102,8 +104,8 @@ auto appendToOutputDoc(OutputDoc& output_doc)
 
 auto fill(Buffer& buffer, std::istream& csv_input)
 {
-    return [&](Status status) {
-        return (status == Status::Ok )? Domain::fill(buffer, csv_input): status;
+    return [&](Status ) {
+        return  Domain::fill(buffer, csv_input);
     };
 }
 
@@ -121,10 +123,9 @@ auto init (Buffer& buffer)
 
 }
 
-using ChainingAdaptors::appendToOutputDoc;
+using ChainingAdaptors::appendTo;
 using ChainingAdaptors::fill;
 using ChainingAdaptors::init;
-
 
 auto isEndOfBuffer = [](EndOfBuffer){
   return true;
@@ -139,7 +140,7 @@ auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
         return (output_row_limit)? row.isGreaterEqual(output_row_limit.value()):false;
     };
 }
-
+auto isOk = [](Status status){return status == Status::Ok;};
 template <typename... ARGS>
 auto matchesOneOf(ARGS... args)
 {
@@ -151,16 +152,17 @@ auto matchesOneOf(ARGS... args)
 
 OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, Parameter const& parameter, std::istream& stream)
 {
-    auto const readCell = [&]{ return read(buffer, parameter.csv_separator);};
     auto const noCells  = matchesOneOf(isEndOfBuffer, isEndOfStream, isRowLimit(parameter.output_row_limit));
 
-    ( readCell
-        | appendToOutputDoc(output_doc)
-        | repeatUntil(noCells)
-        | init(buffer)
-        | fill(buffer, stream)
-        | repeatUntil(isEitherOf(Status::Break, Status::EndOfStream))
-    )();
+    auto myfun = read
+                    | appendTo(output_doc)
+                    | repeatUntil(noCells)
+                    | init(buffer)
+                    | Do(fill(buffer, stream)).If(isOk)
+                    | repeatUntil(isEitherOf(Status::Break, Status::EndOfStream))
+                    ;
+
+    myfun(buffer, parameter.csv_separator);
     return output_doc;
 
 // jedes mal ein neues OutputDoc erzeugen?

@@ -46,20 +46,15 @@ namespace funcompTest
         }
     };
 
-    template<typename Callee, typename Caller>
-    auto operator>>=(Callee callee, Caller caller)
+    template <typename Callee, typename Caller> auto operator>>=(Callee callee, Caller caller)
     {
         if constexpr (std::is_base_of_v<funcomp::HigherOrderFunction, Caller>)
         {
-
-            return [hof = caller(callee)](auto &&... arg) {
-                return hof(arg...);
-            };
+            return [hof = caller(callee)](auto&&... arg) { return hof(arg...); };
         }
-        else{
-            return [callee, caller](auto &&... arg) {
-                return caller(callee(arg...));
-            };
+        else
+        {
+            return [callee, caller](auto&&... arg) { return caller(callee(arg...)); };
         }
     }
 
