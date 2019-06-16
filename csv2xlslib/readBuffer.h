@@ -12,13 +12,13 @@ namespace csv2xls{
 
 struct Buffer
 {
-    explicit Buffer(size_t size_)
+    explicit Buffer(InputBufferSize size_)
         :m_size(size_)
-        ,mem(std::make_unique<char[]>(size_ + 1))
+        ,mem(std::make_unique<char[]>(static_cast<size_t>(size_.Get() + 1)))
         ,end(mem.get())
         ,current_position(mem.get())
         {}
-    size_t m_size;
+    InputBufferSize m_size;
     std::unique_ptr<char[]> mem;
     char * end;
     char* current_position;

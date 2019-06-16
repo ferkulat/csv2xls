@@ -1,6 +1,7 @@
 ---
 Language:        Cpp
 # BasedOnStyle:  LLVM
+AllowAllArgumentsOnNextLine: true
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: true
@@ -36,7 +37,7 @@ BraceWrapping:
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
-BreakBeforeBinaryOperators: None
+BreakBeforeBinaryOperators: All
 BreakBeforeBraces: Allman                            #I like some vertical space between if(..) expression and its statement(s)
 BreakBeforeInheritanceComma: true
 BreakInheritanceList: BeforeColon

@@ -50,7 +50,7 @@ auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
         return EndOfStream{};
 
     auto const bytes_left    = buffer.end - buffer.mem.get();
-    auto const bytes_to_read = ConvertTo<long>(buffer.m_size) - bytes_left;
+    auto const bytes_to_read = buffer.m_size.Get() - bytes_left;
 
     csv_input.read(buffer.end, bytes_to_read);
 
