@@ -116,14 +116,6 @@ auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
         return (output_row_limit)? row.isGreaterEqual(output_row_limit.value()):false;
     };
 }
-template <typename... ARGS>
-auto matchesOneOf(ARGS... args)
-{
-     return [args...](auto input){
-         return  MatchType(input, args..., [](auto ){return false;});
-     };
-}
-
 
 OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, Parameter const& parameter, std::istream& stream)
 {

@@ -16,4 +16,12 @@ constexpr auto MatchType(V&& variant, Os... overloads)
     return std::visit(overloaded{overloads...}, std::forward<V>(variant));
 }
 
+template <typename... ARGS>
+auto matchesOneOf(ARGS... args)
+{
+    return [args...](auto input){
+        return  MatchType(input, args..., [](auto ){return false;});
+    };
+}
+
 #endif //CSV2XLS_MATCHVARIANTTYPE_H
