@@ -42,9 +42,7 @@ using funcomp::repeatUntil;
 struct Ok{};
 namespace Domain
 {
-
-    using ParseResult = std::variant<Row, EndOfStream, Ok>;
-
+using ParseResult = std::variant<Row, EndOfStream, Ok>;
 
 auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
 {
@@ -66,31 +64,49 @@ auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
     return Ok{};
 }
 
-    auto init(Buffer& buffer, EndOfBuffer eob)
+auto fillWith(std::istream& csv_input)
+{
+    return [&](Buffer& buffer)
     {
-        buffer.current_position = buffer.mem.get();
-        if (eob.unfinished_cell)
-        {
-            auto const cell = eob.unfinished_cell.value();
-            strncpy(buffer.current_position, cell.start, cell.length);
-            buffer.end = buffer.current_position + cell.length;
-        }
-        else
-        {
-            buffer.end = buffer.mem.get();
-        }
-    }
+        return fill(buffer, csv_input);
+    };
+}
 
-    auto appendToOutputDoc(Buffer& buffer, std::istream& csv_input, OutputDoc& output_doc, CsvType csv_type)
+auto CopyCellToStartOf(Buffer& buffer, EndOfBuffer eob)->Buffer&
+{
+    buffer.current_position = buffer.mem.get();
+    if (eob.unfinished_cell)
     {
-        using R = ParseResult;
-        return MatchType(csv_type
-                , [&](CellContent cell) -> R { output_doc.appendCell(cell); return Ok{}; }
-                , [&](EndOfLine   eol ) -> R { output_doc.appendCell(eol.cell);return output_doc.newLine(); }
-                , [&](EndOfBuffer eob ) -> R { init(buffer, eob); return fill(buffer, csv_input);}
-                , [ ](EndOfStream eos ) -> R { return eos; }
-        );
+        auto const cell = eob.unfinished_cell.value();
+        strncpy(buffer.current_position, cell.start, cell.length);
+        buffer.end = buffer.current_position + cell.length;
     }
+    else
+    {
+        buffer.end = buffer.mem.get();
+    }
+    return buffer;
+}
+
+auto CopyCellToStartOf (Buffer& buffer)
+{
+    return [&](EndOfBuffer eob)->Buffer&
+    {
+        return CopyCellToStartOf(buffer, eob);
+    };
+}
+
+template<typename PrepareBuffer>
+auto appendToOutputDoc(PrepareBuffer& prepareBuffer, OutputDoc& output_doc, CsvType csv_type)
+{
+    using R = ParseResult;
+    return MatchType(csv_type
+            , [&](CellContent cell) -> R { output_doc.appendCell(cell); return Ok{}; }
+            , [&](EndOfLine   eol ) -> R { output_doc.appendCell(eol.cell);return output_doc.newLine(); }
+            , [&](EndOfBuffer eob ) -> R { return prepareBuffer(eob);}
+            , [ ](EndOfStream eos ) -> R { return eos; }
+    );
+}
 
 }
 
@@ -98,17 +114,16 @@ namespace ChainingAdaptors
 {
 auto appendTo(Buffer& buffer, std::istream& csv_input, OutputDoc& output_doc)
 {
-    return [&](CsvType csv_type) {
-        return Domain::appendToOutputDoc(buffer, csv_input, output_doc, csv_type);
+    auto prepareBuffer = Domain::CopyCellToStartOf(buffer)|Domain::fillWith(csv_input);
+    return [prepareBuffer,&output_doc](CsvType csv_type) {
+        return Domain::appendToOutputDoc(prepareBuffer, output_doc, csv_type);
     };
 }
-
-
 }
 
-    auto isEndOfStream = [](EndOfStream){
-        return true;
-    };
+auto isEndOfStream = [](EndOfStream){
+    return true;
+};
 
 auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
 {
@@ -124,15 +139,11 @@ OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, Parameter const& para
         return ChainingAdaptors::appendTo(buffer, stream, output);
     };
 
-    auto myfun = read
-                    | appendTo(output_doc)
-                    | repeatUntil(matchesOneOf(isEndOfStream,isRowLimit(parameter.output_row_limit)))
-                    ;
+    auto parse = read | appendTo(output_doc)
+                      | repeatUntil(matchesOneOf(isEndOfStream,isRowLimit(parameter.output_row_limit)))
+                      ;
 
-    myfun(buffer, parameter.csv_separator);
+    parse(buffer, parameter.csv_separator);
     return output_doc;
-
-// jedes mal ein neues OutputDoc erzeugen?
-
 }
 }
