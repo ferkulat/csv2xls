@@ -37,21 +37,19 @@ constexpr auto AllOf(Preds... preds){
 
 using funcomp::operator|;
 using funcomp::repeatUntil;
-using funcomp::Do;
 
 
-struct Break{};
 struct Ok{};
 namespace Domain
 {
 
-    using ParseResult = std::variant<Row, Column, Break, Ok>;
+    using ParseResult = std::variant<Row, EndOfStream, Ok>;
 
 
 auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
 {
     if (!csv_input.good())
-        return Break{};
+        return EndOfStream{};
 
     auto const bytes_left    = buffer.end - buffer.mem.get();
     auto const bytes_to_read = ConvertTo<long>(buffer.m_size) - bytes_left;
@@ -87,10 +85,10 @@ auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
     {
         using R = ParseResult;
         return MatchType(csv_type
-                , [&](CellContent cell) -> R { return output_doc.appendCell(cell); }
+                , [&](CellContent cell) -> R { output_doc.appendCell(cell); return Ok{}; }
                 , [&](EndOfLine   eol ) -> R { output_doc.appendCell(eol.cell);return output_doc.newLine(); }
                 , [&](EndOfBuffer eob ) -> R { init(buffer, eob); return fill(buffer, csv_input);}
-                , [ ](EndOfStream     ) -> R { return Break{}; }
+                , [ ](EndOfStream eos ) -> R { return eos; }
         );
     }
 
@@ -108,7 +106,7 @@ auto appendTo(Buffer& buffer, std::istream& csv_input, OutputDoc& output_doc)
 
 }
 
-    auto isBreak = [](Break){
+    auto isEndOfStream = [](EndOfStream){
         return true;
     };
 
@@ -136,7 +134,7 @@ OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, Parameter const& para
 
     auto myfun = read
                     | appendTo(output_doc)
-                    | repeatUntil(matchesOneOf(isBreak,isRowLimit(parameter.output_row_limit)))
+                    | repeatUntil(matchesOneOf(isEndOfStream,isRowLimit(parameter.output_row_limit)))
                     ;
 
     myfun(buffer, parameter.csv_separator);
