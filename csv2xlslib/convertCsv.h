@@ -17,6 +17,6 @@ struct Parameter
     CsvSeparator     csv_separator;
 };
 OutputDoc
-convertCsv(OutputDoc output_doc, Buffer& buffer, Parameter const& parameter, std::istream& stream);
+convertCsv(Buffer& buffer, Parameter const& parameter, std::istream& stream, OutputDoc output_doc);
 }
 #endif //CSV2XLS_CONVERTCSV_H

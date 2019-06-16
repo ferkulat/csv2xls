@@ -132,7 +132,7 @@ auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
     };
 }
 
-OutputDoc convertCsv(OutputDoc output_doc, Buffer& buffer, Parameter const& parameter, std::istream& stream)
+OutputDoc convertCsv(Buffer& buffer, Parameter const& parameter, std::istream& stream, OutputDoc output_doc)
 {
     auto appendTo = [&buffer, &stream](OutputDoc& output)
     {

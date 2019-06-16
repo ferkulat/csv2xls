@@ -63,7 +63,7 @@ namespace ConvertCsvTest{
         Parameter parameter = {OutputRowLimit(2), CsvSeparator(';')};
         Buffer buffer(InputBufferSize(1024));
         auto outfile = OutFile(OutputRowLimit(2), OutputColumnLimit(4),data);
-        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, parameter, file);
+        auto const actual = convertCsv(buffer, parameter, file, OutputDoc(OutFile(outfile)));
         REQUIRE(data.size() == 2 );
         REQUIRE(data[0].size() == 3);
         REQUIRE(data[1].size() == 3);
@@ -74,7 +74,7 @@ namespace ConvertCsvTest{
         Parameter parameter = {OutputRowLimit(4), CsvSeparator(';')};
         Buffer buffer(InputBufferSize(10));
         auto outfile = OutFile(OutputRowLimit(3), OutputColumnLimit(4),data);
-        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, parameter, file);
+        auto const actual = convertCsv(buffer, parameter, file, OutputDoc(OutFile(outfile)));
         REQUIRE(data.size() == 4 );
         using ROW = std::vector<std::string>;
         REQUIRE(data[0] == ROW{"","2222","3333"});
@@ -88,7 +88,7 @@ namespace ConvertCsvTest{
         Parameter parameter = {std::nullopt, CsvSeparator(';')};
         Buffer buffer(InputBufferSize(10));
         auto outfile = OutFile(OutputRowLimit(3), OutputColumnLimit(4),data);
-        auto const actual = convertCsv(OutputDoc(OutFile(outfile)), buffer, parameter, file);
+        auto const actual = convertCsv(buffer, parameter, file, OutputDoc(OutFile(outfile)));
         REQUIRE(data.size() == 4 );
         using ROW = std::vector<std::string>;
         REQUIRE(data[0] == ROW{"","2222","3333"});
