@@ -75,7 +75,7 @@ namespace funcomp{
         }
         else
         {
-            return [callee, caller](auto&&... arg) { return caller(callee(arg...)); };
+            return [callee_=std::move(callee), caller](auto&&... arg) { return caller(callee_(arg...)); };
         }
     }
 
