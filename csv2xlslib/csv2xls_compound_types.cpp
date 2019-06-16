@@ -13,7 +13,7 @@ std::string toString(DigitCount digit_count, FileNumber file_number)
     return numstream.str();
 }
 
-auto OutputFileName::Get() const -> Path
+auto OutputFileName::Get(FileNumber file_number) const -> Path
 {
     auto const tail = (file_number == FileNumber(0))? extension.string()
                                                     : toString(digit_count, file_number) + extension.string();

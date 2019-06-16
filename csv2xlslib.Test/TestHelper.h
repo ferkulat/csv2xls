@@ -4,11 +4,11 @@
 
 #ifndef CSV2XLS_TESTHELPER_H
 #define CSV2XLS_TESTHELPER_H
-#include <XlsFile.hpp>
 #include <csv2xls_compound_types.h>
 #include <csv2xls_types.h>
 #include <memory>
 #include <optional>
+#include "default_values.h"
 namespace csv2xls::Testing
 {
 

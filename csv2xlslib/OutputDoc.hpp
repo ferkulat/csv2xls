@@ -17,27 +17,29 @@ class OutputDoc
 {
   public:
     template <typename T>
-    explicit OutputDoc(T && x)
+    explicit OutputDoc(T && x, FileNumber file_number_)
         : self_(new doc_type<T>(std::forward<T>(x)))
         ,output_column_limit(self_->columnLimit())
+        ,m_file_number(file_number_)
     {
+        RowAfterClearSheet();
     }
     OutputDoc(OutputDoc && x)=default;
     Row RowAfterClearSheet();
 
-    int writeInto(OutputFileName const& out_put_file);
+    int writeInto(OutputFileName const& out_put_file)const;
     void setHeadLine(HeadLineType const& head_line);
     Column appendCell(CellContent cell_content);
     Row newLine();
+    bool isEmpty()const;
   private:
-    bool isEmpty();
     class concept_t
     {
       public:
         virtual ~concept_t() = default;
 
         virtual void clearSheet()                = 0;
-        virtual int  writeInto(OutputFileName const& out_put_file)             = 0;
+        virtual int  writeInto(OutputFileName const& out_put_file, FileNumber file_number) const = 0;
         virtual void setCell(Row row, Column column, CellContent cell_content) = 0;
         virtual auto columnLimit()-> std::optional<OutputColumnLimit>          = 0;
     };
@@ -54,9 +56,9 @@ class OutputDoc
             x.clearSheet();
         }
 
-        int writeInto(OutputFileName const& output_file_name) override
+        int writeInto(OutputFileName const& output_file_name, FileNumber file_number) const override
         {
-            return x.writeInto(output_file_name);
+            return x.writeInto(output_file_name, file_number);
         }
 
         void setCell(Row row, Column column, CellContent cell_content) override
@@ -78,6 +80,7 @@ class OutputDoc
     Column m_column = Column(0);
     std::optional<OutputColumnLimit> output_column_limit;
     HeadLineType   m_headline;
+    FileNumber m_file_number = FileNumber(0);
 
 };
 }

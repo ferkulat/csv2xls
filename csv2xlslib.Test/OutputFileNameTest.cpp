@@ -36,25 +36,22 @@ TEST_CASE("numbering")
 
     SECTION("Given a number with more than set in digit_count, there will be no leading zeros")
     {
-        output_file_name.file_number = FileNumber(429496729);
         output_file_name.digit_count = DigitCount(4);
 
-        REQUIRE("input429496729.XLS" == output_file_name.Get());
+        REQUIRE("input429496729.XLS" == output_file_name.Get(FileNumber(429496729)));
     }
 
     SECTION("Given a number with less than set in digit_count, there will be leading zeros")
     {
-        output_file_name.file_number = FileNumber(429496729);
         output_file_name.digit_count = DigitCount(10);
 
-        REQUIRE("input0429496729.XLS" == output_file_name.Get());
+        REQUIRE("input0429496729.XLS" == output_file_name.Get(FileNumber(429496729)));
     }
 
     SECTION("Given a file number of 0, no number is added to the file name")
     {
-        output_file_name.file_number = FileNumber(0);
         output_file_name.digit_count = DigitCount(10);
-        REQUIRE("input.XLS" == output_file_name.Get());
+        REQUIRE("input.XLS" == output_file_name.Get(FileNumber(0)));
     }
 }
 }

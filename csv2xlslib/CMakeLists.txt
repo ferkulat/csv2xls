@@ -1,6 +1,4 @@
 add_library(csv2xlslib
-        callback.cpp
-        callback.hpp
         csv.cpp
         csv.hpp
         default_values.h
@@ -10,11 +8,8 @@ add_library(csv2xlslib
         parseCsvFile.hpp
         readHeadLine.cpp
         readHeadLine.hpp
-        XlsFile.cpp
-        XlsFile.hpp
         XlsWorkBook.cpp
         XlsWorkBook.hpp
-        callback.hpp
         conversion.h
         version.h
         OutputDoc.hpp

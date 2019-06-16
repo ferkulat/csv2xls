@@ -16,6 +16,7 @@ namespace csv2xls
     constexpr auto MIN_CSV_BUFFER_SIZE       = InputBufferSize(1);
     constexpr auto DEFAULT_XLS_DIGIT_COUNT   = DigitCount(4);
     constexpr auto MAX_XLS_DIGIT_COUNT       = DigitCount(10);
+    constexpr auto XLS_MAX_COLUMNS           = OutputColumnLimit(255);
 }
 
 #endif

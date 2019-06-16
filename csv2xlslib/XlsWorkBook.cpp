@@ -31,13 +31,14 @@ struct XlsWorkBook::Impl{
         : xls_sheet_name(xls_sheet_name_)
     {}
     std::unique_ptr<xlslib_core::workbook> wbook;
-    xlslib_core::worksheet* wsheet;
+    xlslib_core::worksheet* wsheet = nullptr;
     XlsSheetName xls_sheet_name;
 };
 
 void XlsWorkBook::clearSheet()
 {
-    this->pimpl->wbook  = std::make_unique<xlslib_core::workbook>();
+    this->pimpl->wbook.reset();
+    this->pimpl->wbook = std::make_unique<xlslib_core::workbook>();
     this->pimpl->wsheet = this->pimpl->wbook->sheet(pimpl->xls_sheet_name.Get());
 }
 
@@ -46,23 +47,25 @@ void XlsWorkBook::setCell(Row row, Column column, CellContent cell_content)
     this->pimpl->wsheet->label(row.Get(), column.Get(), std::string(cell_content.start, cell_content.length));
 }
 
-int XlsWorkBook::writeInto(OutputFileName const& output_file_name)
+int XlsWorkBook::writeInto(OutputFileName const& output_file_name, FileNumber file_number)const
 {
-    return this->pimpl->wbook->Dump(output_file_name.Get().string());
+    return this->pimpl->wbook->Dump(output_file_name.Get(file_number).string());
 }
+
 auto XlsWorkBook::columnLimit()-> std::optional<OutputColumnLimit>
 {
     return OutputColumnLimit(256);
 }
 XlsWorkBook::XlsWorkBook(XlsSheetName const& xls_sheet_name)
-    : pimpl(new Impl(xls_sheet_name), &PimplDeleter)
+    : pimpl(new Impl(xls_sheet_name))
 {
 }
 
 XlsWorkBook::~XlsWorkBook() {}
-void XlsWorkBook::PimplDeleter(Impl* p)
-{
-    delete p;
-}
 
+XlsWorkBook::XlsWorkBook(XlsWorkBook && workbook)
+    :pimpl(nullptr)
+{
+    pimpl.reset( workbook.pimpl.release());
+}
 }

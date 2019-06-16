@@ -34,18 +34,17 @@ class XlsWorkBook
 public:
     XlsWorkBook(XlsSheetName const& xls_sheet_name);
     ~XlsWorkBook();
-    XlsWorkBook(XlsWorkBook && workbook) = default;
+    XlsWorkBook(XlsWorkBook && workbook);
     void clearSheet();
 
-    int writeInto(OutputFileName const& output_file_name);
+    int writeInto(OutputFileName const& output_file_name, FileNumber file_number)const;
 
     void setCell( Row row, Column column,
                   CellContent cell_content);
     auto columnLimit()-> std::optional<OutputColumnLimit>;
 private:
     struct Impl;
-    static void PimplDeleter(Impl*p);
-    std::unique_ptr<Impl, void(*)(Impl*)>  pimpl;
+    std::unique_ptr<Impl>  pimpl;
 
 };
 }

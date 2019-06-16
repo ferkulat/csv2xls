@@ -4,8 +4,10 @@
 #include "TestHelper.h"
 #include <catch.hpp>
 #include <parseCsvFile.hpp>
+#include "OutputDoc.hpp"
 namespace csv2xls
 {
+    /*
 namespace parseCsvStreamTest
 {
 std::string createCSV(Row row_count, Column column_count)
@@ -79,4 +81,5 @@ TEST_CASE_METHOD(Given_an_input_file_with_headline,
 
 
 }
+     */
 }

@@ -2,7 +2,6 @@
 // Created by marcel on 5/31/19.
 //
 #include "MatchVariantType.h"
-#include "XlsFile.hpp"
 #include "conversion.h"
 #include "csv2xls_compound_types.h"
 #include "readBuffer.h"

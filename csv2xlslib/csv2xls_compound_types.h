@@ -13,9 +13,8 @@ struct OutputFileName
 {
     Path       name_no_extension;
     Path       extension;
-    FileNumber file_number = FileNumber(0);
     DigitCount digit_count = DEFAULT_XLS_DIGIT_COUNT;
-    auto       Get() const -> Path;
+    auto       Get(FileNumber file_number) const -> Path;
 };
 struct Config
 {

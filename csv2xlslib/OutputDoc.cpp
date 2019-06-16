@@ -19,19 +19,18 @@ Row OutputDoc::RowAfterClearSheet()
     return m_row;
 }
 
-int OutputDoc::writeInto(OutputFileName const& out_put_file)
+int OutputDoc::writeInto(OutputFileName const& out_put_file) const
 {
     if(isEmpty())
         return 0;
-
-    return self_->writeInto(out_put_file);
+    return self_->writeInto(out_put_file, m_file_number);
 }
 void OutputDoc::setHeadLine(HeadLineType const& head_line)
 {
     m_headline = head_line;
 }
 
-bool OutputDoc::isEmpty()
+bool OutputDoc::isEmpty()const
 {
     return (m_headline.size())
             ? (m_row == Row(1))&&(m_column == Column(0))
