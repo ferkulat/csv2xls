@@ -19,11 +19,11 @@ Row OutputDoc::RowAfterClearSheet()
     return m_row;
 }
 
-int OutputDoc::writeInto(OutputFileName const& out_put_file) const
+int OutputDoc::writeInto(OutputFileName const& out_put_file, FileNumber file_number) const
 {
     if(isEmpty())
         return 0;
-    return self_->writeInto(out_put_file, m_file_number);
+    return self_->writeInto(out_put_file, file_number);
 }
 void OutputDoc::setHeadLine(HeadLineType const& head_line)
 {

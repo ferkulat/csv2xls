@@ -17,17 +17,16 @@ class OutputDoc
 {
   public:
     template <typename T>
-    explicit OutputDoc(T && x, FileNumber file_number_)
+    explicit OutputDoc(T && x)
         : self_(new doc_type<T>(std::forward<T>(x)))
         ,output_column_limit(self_->columnLimit())
-        ,m_file_number(file_number_)
     {
         RowAfterClearSheet();
     }
     OutputDoc(OutputDoc && x)=default;
     Row RowAfterClearSheet();
 
-    int writeInto(OutputFileName const& out_put_file)const;
+    int writeInto(OutputFileName const& out_put_file, FileNumber file_number)const;
     void setHeadLine(HeadLineType const& head_line);
     Column appendCell(CellContent cell_content);
     Row newLine();
@@ -80,8 +79,6 @@ class OutputDoc
     Column m_column = Column(0);
     std::optional<OutputColumnLimit> output_column_limit;
     HeadLineType   m_headline;
-    FileNumber m_file_number = FileNumber(0);
-
 };
 }
 

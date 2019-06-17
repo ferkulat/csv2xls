@@ -93,6 +93,7 @@ namespace ChainingAdaptors
 auto appendTo(Buffer& buffer, std::istream& csv_input, OutputDoc& output_doc)
 {
     auto prepareBuffer = Domain::CopyCellToStartOf(buffer)|Domain::fillWith(csv_input);
+
     return [prepareBuffer,&output_doc](CsvType csv_type) {
         return Domain::appendToOutputDoc(prepareBuffer, output_doc, csv_type);
     };

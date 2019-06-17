@@ -1,7 +1,6 @@
 ---
 Language:        Cpp
 # BasedOnStyle:  LLVM
-AllowAllArgumentsOnNextLine: true
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: true

@@ -23,7 +23,7 @@ namespace ConvertCsvTest{
             //data.clear();
         };
 
-        int writeInto(OutputFileName const& /*output_file_name*/, FileNumber){return 1;}
+        int writeInto(OutputFileName const& /*output_file_name*/, FileNumber)const{return 1;}
 
         void setCell( Row row, Column column,
                       CellContent cell_content)
