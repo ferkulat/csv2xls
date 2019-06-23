@@ -8,14 +8,12 @@
 #include <Skills.h>
 #include "convertCsv.h"
 #include "funcomp.h"
+#include "Helpers.h"
 
 namespace csv2xls
 {
-
-
 using funcomp::operator|;
 using funcomp::repeatUntil;
-
 
 struct Ok{};
 namespace Domain
@@ -100,10 +98,6 @@ auto appendTo(Buffer& buffer, std::istream& csv_input, OutputDoc& output_doc)
 }
 }
 
-auto isEndOfStream = [](EndOfStream){
-    return true;
-};
-
 auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
 {
     return [output_row_limit](Row row) {
@@ -119,7 +113,7 @@ OutputDoc convertCsv(Buffer& buffer, Parameter const& parameter, std::istream& s
     };
 
     auto parse = read | appendTo(output_doc)
-                      | repeatUntil(matchesOneOf(isEndOfStream,isRowLimit(parameter.output_row_limit)))
+                      | repeatUntil(matchesOneOf(isType<EndOfStream>{},isRowLimit(parameter.output_row_limit)))
                       ;
 
     parse(buffer, parameter.csv_separator);

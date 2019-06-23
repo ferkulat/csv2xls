@@ -36,6 +36,13 @@ public:
         return value++;
     }
 };
+template<typename T>
+struct isType
+{
+    constexpr auto operator()(T const&)const{
+        return true;
+    }
+};
 
 
 #endif //CSV2XLS_HELPERS_H
