@@ -18,7 +18,6 @@ namespace csv2xls
         };
     }
 
-
     auto makeOutputDoc=[](auto file_gen ) {
             return OutputDoc(file_gen());
     };
@@ -54,7 +53,6 @@ namespace csv2xls
         };
     }
 
-
     int parseCsvFile(Config const& config)
     {
         using funcomp::operator|;
@@ -79,7 +77,4 @@ namespace csv2xls
     FileNotOpen::FileNotOpen(char const *what)
             : runtime_error(what) {}
 
-    char_buf_t::char_buf_t(InputBufferSize size_)
-            : size(size_)
-            ,mem(std::make_unique<char[]>(ConvertTo<size_t>(size_.Get()))) {}
 }
