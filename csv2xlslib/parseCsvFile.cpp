@@ -26,11 +26,11 @@ namespace csv2xls
         return [headline   = std::move(headline_to_move),
                 parameter_ = std::move(parameter)
                ](OutputDoc output_doc){
-            std::stringstream csv_input(headline);
-            auto buffer = Buffer(parameter_.input_buffer_size);
 
             if(parameter_.input_has_head_line.Get())
             {
+                std::stringstream csv_input(headline);
+                auto buffer = Buffer(parameter_.input_buffer_size);
                 output_doc.set(parameter_.input_has_head_line);
                 return convertCsv(buffer, parameter_, csv_input, std::move(output_doc));
             }
