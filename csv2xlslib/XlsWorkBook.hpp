@@ -35,7 +35,6 @@ public:
     XlsWorkBook(XlsSheetName const& xls_sheet_name);
     ~XlsWorkBook();
     XlsWorkBook(XlsWorkBook && workbook);
-    void clearSheet();
 
     int writeInto(OutputFileName const& output_file_name, FileNumber file_number)const;
 
@@ -43,6 +42,7 @@ public:
                   CellContent cell_content);
     auto columnLimit()-> std::optional<OutputColumnLimit>;
 private:
+    void clearSheet();
     struct Impl;
     std::unique_ptr<Impl>  pimpl;
 

@@ -56,9 +56,11 @@ auto XlsWorkBook::columnLimit()-> std::optional<OutputColumnLimit>
 {
     return OutputColumnLimit(256);
 }
+
 XlsWorkBook::XlsWorkBook(XlsSheetName const& xls_sheet_name)
     : pimpl(new Impl(xls_sheet_name))
 {
+    clearSheet();
 }
 
 XlsWorkBook::~XlsWorkBook() {}

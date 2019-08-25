@@ -5,13 +5,6 @@
 #include "OutputDoc.hpp"
 namespace csv2xls
 {
-Row OutputDoc::RowAfterClearSheet()
-{
-    self_->clearSheet();
-    m_column = Column(0);
-    m_row    = Row(0);
-    return m_row;
-}
 
 int OutputDoc::writeInto(OutputFileName const& out_put_file, FileNumber file_number) const
 {

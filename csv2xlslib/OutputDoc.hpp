@@ -21,10 +21,8 @@ class OutputDoc
         : self_(new doc_type<T>(std::forward<T>(x)))
         ,output_column_limit(self_->columnLimit())
     {
-        RowAfterClearSheet();
     }
     OutputDoc(OutputDoc && x)=default;
-    Row RowAfterClearSheet();
 
     int writeInto(OutputFileName const& out_put_file, FileNumber file_number)const;
     void set(InputHasHeadLine input_has_head_line);
@@ -37,7 +35,6 @@ class OutputDoc
       public:
         virtual ~concept_t() = default;
 
-        virtual void clearSheet()                = 0;
         virtual int  writeInto(OutputFileName const& out_put_file, FileNumber file_number) const = 0;
         virtual void setCell(Row row, Column column, CellContent cell_content) = 0;
         virtual auto columnLimit()-> std::optional<OutputColumnLimit>          = 0;
@@ -48,11 +45,6 @@ class OutputDoc
         doc_type(T x_)
             : x(std::move(x_))
         {
-        }
-
-        void clearSheet() override
-        {
-            x.clearSheet();
         }
 
         int writeInto(OutputFileName const& output_file_name, FileNumber file_number) const override
