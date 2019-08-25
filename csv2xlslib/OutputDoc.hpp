@@ -70,7 +70,7 @@ class OutputDoc
     Row m_row = Row(0);
     Column m_column = Column(0);
     std::optional<OutputColumnLimit> output_column_limit;
-    InputHasHeadLine m_input_has_head_line;
+    InputHasHeadLine m_input_has_head_line = InputHasHeadLine{false};
 };
 }
 
