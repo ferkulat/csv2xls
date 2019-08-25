@@ -87,9 +87,7 @@ namespace csv2xls
         auto csv_input    = openCsvFile(config.csv_file_name);
         auto buffer       = Buffer(config.input_buffer_size);
         auto writeFile    = writeIntoFile(config.output_file_name, EndlessRange(FileNumber(0)));
-        auto convert      = [&](std::optional<OutputDoc> output_doc){
-                               return convertCsv(buffer, parameter, csv_input, std::move(output_doc));
-                            };
+        auto convert      = std::bind(convertCsv, std::ref(buffer), parameter, std::ref(csv_input), std::placeholders::_1);
         auto addHeadLine  = addHeadLineFrom(parameter, csv_input);
         auto isEmptyOrErr = isEitherOf(WriteStatus::Empty, WriteStatus::Error);
         auto convertWith  = makeOutputDoc|addHeadLine|convert|writeFile|repeatUntil(isEmptyOrErr);
