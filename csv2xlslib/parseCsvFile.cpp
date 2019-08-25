@@ -57,8 +57,7 @@ namespace csv2xls
 
     enum class WriteStatus {Ok, Empty, Error};
 
-    template<typename NumGen>
-    auto writeIntoFile (OutputFileName output_file_name, NumGen num_gen)
+    auto writeIntoFile (OutputFileName output_file_name, EndlessRange<FileNumber> num_gen)
     {
         return [=](std::optional<OutputDoc> output_doc){
             if (!output_doc || output_doc->isEmpty())
