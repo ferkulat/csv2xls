@@ -71,11 +71,15 @@ namespace funcomp{
     {
         if constexpr (std::is_base_of_v<funcomp::HigherOrderFunction, Caller>)
         {
-            return [hof = caller(callee)](auto&&... arg) { return hof(arg...); };
+            return [hof = caller(callee)](auto&&... arg) {
+                return hof(std::forward<decltype(arg)>(arg)...);
+            };
         }
         else
         {
-            return [callee_=std::move(callee), caller](auto&&... arg) { return caller(callee_(arg...)); };
+            return [callee_=std::move(callee), caller](auto&&... arg) {
+                return caller(callee_(std::forward<decltype(arg)>(arg)...));
+            };
         }
     }
 
