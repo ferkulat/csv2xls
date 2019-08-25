@@ -18,7 +18,6 @@ add_library(csv2xlslib
         MatchVariantType.h
         readBuffer.h
         readBuffer.cpp
-        convertCsv.cpp
         convertCsv.h
         funcomp.h
         Helpers.h

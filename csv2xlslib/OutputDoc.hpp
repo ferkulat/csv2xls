@@ -11,7 +11,6 @@
 #include <string>
 namespace csv2xls
 {
-using HeadLineType = std::vector<std::string>;
 
 class OutputDoc
 {
