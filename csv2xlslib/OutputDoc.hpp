@@ -27,7 +27,7 @@ class OutputDoc
     Row RowAfterClearSheet();
 
     int writeInto(OutputFileName const& out_put_file, FileNumber file_number)const;
-    void setHeadLine(HeadLineType const& head_line);
+    void set(InputHasHeadLine input_has_head_line);
     Column appendCell(CellContent cell_content);
     Row newLine();
     bool isEmpty()const;
@@ -78,7 +78,7 @@ class OutputDoc
     Row m_row = Row(0);
     Column m_column = Column(0);
     std::optional<OutputColumnLimit> output_column_limit;
-    HeadLineType   m_headline;
+    InputHasHeadLine m_input_has_head_line;
 };
 }
 

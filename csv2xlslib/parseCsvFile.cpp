@@ -29,10 +29,12 @@ namespace csv2xls
             std::stringstream csv_input(headline);
             auto buffer = Buffer(parameter_.input_buffer_size);
 
-          return (parameter_.input_has_head_line.Get())
-                    ?convertCsv(buffer, parameter_, csv_input, std::move(output_doc))
-                    :std::optional<OutputDoc>(std::move(output_doc));
-//            return output_doc;
+            if(parameter_.input_has_head_line.Get())
+            {
+                output_doc.set(parameter_.input_has_head_line);
+                return convertCsv(buffer, parameter_, csv_input, std::move(output_doc));
+            }
+            return std::optional<OutputDoc>(std::move(output_doc));
         };
     }
     auto makeOutputDoc=[](auto file_gen ) {

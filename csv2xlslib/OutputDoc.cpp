@@ -10,12 +10,6 @@ Row OutputDoc::RowAfterClearSheet()
     self_->clearSheet();
     m_column = Column(0);
     m_row    = Row(0);
-    if (m_headline.size())
-    {
-        for(auto const& column : m_headline )
-            appendCell(CellContent(column.c_str(), column.size()));
-        newLine();
-    }
     return m_row;
 }
 
@@ -25,14 +19,14 @@ int OutputDoc::writeInto(OutputFileName const& out_put_file, FileNumber file_num
         return 0;
     return self_->writeInto(out_put_file, file_number);
 }
-void OutputDoc::setHeadLine(HeadLineType const& head_line)
+void OutputDoc::set(InputHasHeadLine input_has_head_line)
 {
-    m_headline = head_line;
+    m_input_has_head_line = input_has_head_line;
 }
 
 bool OutputDoc::isEmpty()const
 {
-    return (m_headline.size())
+    return (m_input_has_head_line.Get())
             ? (m_row == Row(1))&&(m_column == Column(0))
             : (m_row == Row(0))&&(m_column == Column(0));
 }
