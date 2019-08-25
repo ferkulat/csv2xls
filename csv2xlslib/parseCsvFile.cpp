@@ -61,9 +61,7 @@ namespace csv2xls
     auto writeIntoFile (OutputFileName output_file_name, NumGen num_gen)
     {
         return [=](std::optional<OutputDoc> output_doc){
-            if (!output_doc)
-                return WriteStatus::Empty;
-            if(output_doc->isEmpty())
+            if (!output_doc || output_doc->isEmpty())
                 return WriteStatus::Empty;
 
             auto const result = output_doc->writeInto(output_file_name, num_gen());
