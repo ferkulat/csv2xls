@@ -126,10 +126,10 @@ convertCsv(Buffer& buffer, Parameter const& parameter, std::istream& stream, std
     {
         return ChainingAdaptors::appendTo(buffer, stream, output);
     };
-
+    auto thereIsNothingToParse = matchesOneOf(isType<EndOfStream>{},isRowLimit(parameter.output_row_limit));
     auto parse = read
                  | appendTo(*output_doc)
-                 | repeatUntil(matchesOneOf(isType<EndOfStream>{},isRowLimit(parameter.output_row_limit)))
+                 | repeatUntil(thereIsNothingToParse)
     ;
 
     if (output_doc)
