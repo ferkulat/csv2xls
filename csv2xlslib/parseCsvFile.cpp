@@ -91,9 +91,8 @@ namespace csv2xls
                                return convertCsv(buffer, parameter, csv_input, std::move(output_doc));
                             };
         auto addHeadLine  = addHeadLineFrom(parameter, csv_input);
-        auto csv2doc      = makeOutputDoc|addHeadLine|convert;
         auto isEmptyOrErr = isEitherOf(WriteStatus::Empty, WriteStatus::Error);
-        auto convertWith  = csv2doc|writeFile|repeatUntil(isEmptyOrErr);
+        auto convertWith  = makeOutputDoc|addHeadLine|convert|writeFile|repeatUntil(isEmptyOrErr);
 
         return (convertWith(XlsFileGenerator(config)) == WriteStatus::Error)? 1:0;
     }
