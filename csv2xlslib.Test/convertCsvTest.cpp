@@ -60,7 +60,7 @@ namespace ConvertCsvTest{
     };
     TEST_CASE_METHOD(Given_a_Csv_file_with_4_lines_and_no_newline_at_end_of_file, "and a row limit of 2")
     {
-        Parameter parameter = {OutputRowLimit(2), CsvSeparator(';')};
+        Parameter parameter = {OutputRowLimit(2), CsvSeparator(';'), InputBufferSize(1024), InputHasHeadLine(false)};
         Buffer buffer(InputBufferSize(1024));
         auto outfile = OutFile(OutputRowLimit(2), OutputColumnLimit(4),data);
         auto const actual = convertCsv(buffer, parameter, file, OutputDoc(OutFile(outfile)));
@@ -71,7 +71,7 @@ namespace ConvertCsvTest{
 
     TEST_CASE_METHOD(Given_a_Csv_file_with_4_lines_and_no_newline_at_end_of_file, "and a row limit of 4")
     {
-        Parameter parameter = {OutputRowLimit(4), CsvSeparator(';')};
+        Parameter parameter = {OutputRowLimit(4), CsvSeparator(';'), InputBufferSize(1024), InputHasHeadLine(false)};
         Buffer buffer(InputBufferSize(10));
         auto outfile = OutFile(OutputRowLimit(3), OutputColumnLimit(4),data);
         auto const actual = convertCsv(buffer, parameter, file, OutputDoc(OutFile(outfile)));
@@ -85,7 +85,7 @@ namespace ConvertCsvTest{
     }
     TEST_CASE_METHOD(Given_a_Csv_file_with_4_lines_and_no_newline_at_end_of_file, "and no row limit")
     {
-        Parameter parameter = {std::nullopt, CsvSeparator(';')};
+        Parameter parameter = {std::nullopt, CsvSeparator(';'), InputBufferSize(1024), InputHasHeadLine(false)};
         Buffer buffer(InputBufferSize(10));
         auto outfile = OutFile(OutputRowLimit(3), OutputColumnLimit(4),data);
         auto const actual = convertCsv(buffer, parameter, file, OutputDoc(OutFile(outfile)));
