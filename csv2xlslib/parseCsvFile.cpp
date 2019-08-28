@@ -17,19 +17,25 @@ namespace csv2xls
             return XlsWorkBook(config.xls_sheet_name);
         };
     }
-    auto addHeadLineFrom(Parameter parameter, std::fstream &input_stream){
-        std::string headline_to_move;
-        if (parameter.input_has_head_line.Get()){
-            std::getline(input_stream, headline_to_move);
-            headline_to_move.append("\n");
+    auto mayReadHeadLine(Parameter parameter, std::fstream& input_stream){
+        std::optional<std::string> headline;
+        if (parameter.input_has_head_line.Get())
+        {
+            std::string line;
+            std::getline(input_stream, line);
+            line.append("\n");
+            headline = line;
         }
+        return headline;
+    }
+    auto addHeadLineFrom(Parameter parameter, std::optional<std::string> headline_to_move){
         return [headline   = std::move(headline_to_move),
                 parameter_ = std::move(parameter)
                ](OutputDoc output_doc){
 
-            if(parameter_.input_has_head_line.Get())
+            if(headline)
             {
-                std::stringstream csv_input(headline);
+                std::stringstream csv_input(headline.value());
                 auto buffer = Buffer(parameter_.input_buffer_size);
                 output_doc.set(parameter_.input_has_head_line);
                 return convertCsv(buffer, parameter_, csv_input, std::move(output_doc));
@@ -85,9 +91,10 @@ namespace csv2xls
 
         auto csv_input    = openCsvFile(config.csv_file_name);
         auto buffer       = Buffer(config.input_buffer_size);
+        auto headLine     = mayReadHeadLine(parameter, csv_input);
         auto writeFile    = writeIntoFile(config.output_file_name, EndlessRange(FileNumber(0)));
         auto convert      = std::bind(convertCsv, std::ref(buffer), parameter, std::ref(csv_input), std::placeholders::_1);
-        auto addHeadLine  = addHeadLineFrom(parameter, csv_input);
+        auto addHeadLine  = addHeadLineFrom(parameter, headLine);
         auto isEmptyOrErr = isEitherOf(WriteStatus::Empty, WriteStatus::Error);
         auto convertWith  = makeOutputDoc|addHeadLine|convert|writeFile|repeatUntil(isEmptyOrErr);
 
