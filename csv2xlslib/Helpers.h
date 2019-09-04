@@ -31,8 +31,11 @@ class EndlessRange
 {
     mutable T value;
 public:
-    EndlessRange(T start):value(start){}
-    T operator()()const{
+    constexpr EndlessRange(EndlessRange const&)=delete;
+    constexpr EndlessRange(EndlessRange &&)=default;
+    constexpr EndlessRange& operator=(EndlessRange&&)=default;
+    constexpr EndlessRange(T start):value(start){}
+    constexpr T operator()()const{
         return value++;
     }
 };
