@@ -77,20 +77,23 @@ namespace csv2xls
 
     int parseCsvFile(Config const& config)
     {
-        using funcomp::operator|;
-        using funcomp::repeatUntil;
-        using std::placeholders::_1;
-
         if (config.exit_clean) return 0;
 
+        // data
         auto const parameter = Parameter{config.output_row_limit,
                                          config.csv_separator,
                                          config.input_buffer_size,
                                          config.csv_file_has_headline};
 
-        auto csv_input    = openCsvFile(config.csv_file_name);
-        auto buffer       = Buffer(config.input_buffer_size);
-        auto headLine     = mayReadHeadLine(parameter, csv_input);
+        auto       csv_input = openCsvFile(config.csv_file_name);
+        auto       buffer    = Buffer(config.input_buffer_size);
+        auto const headLine  = mayReadHeadLine(parameter, csv_input);
+
+        //composing functions
+        using funcomp::operator|;
+        using funcomp::repeatUntil;
+        using std::placeholders::_1;
+
         auto writeFile    = writeIntoFile(config.output_file_name, EndlessRange(FileNumber(0)));
         auto convert      = std::bind(convertCsv, std::ref(buffer), parameter, std::ref(csv_input), _1);
         auto addHeadLine  = std::bind(addHeadLineFrom, parameter, headLine, _1);
