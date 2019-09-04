@@ -17,6 +17,7 @@ namespace csv2xls
             return XlsWorkBook(config.xls_sheet_name);
         };
     }
+
     auto mayReadHeadLine(Parameter parameter, std::fstream& input_stream){
         std::optional<std::string> headline;
         if (parameter.input_has_head_line.Get())
@@ -28,21 +29,18 @@ namespace csv2xls
         }
         return headline;
     }
-    auto addHeadLineFrom(Parameter parameter, std::optional<std::string> headline_to_move){
-        return [headline   = std::move(headline_to_move),
-                parameter_ = std::move(parameter)
-               ](OutputDoc output_doc){
 
-            if(headline)
-            {
-                std::stringstream csv_input(headline.value());
-                auto buffer = Buffer(parameter_.input_buffer_size);
-                output_doc.set(parameter_.input_has_head_line);
-                return convertCsv(buffer, parameter_, csv_input, std::move(output_doc));
-            }
-            return std::optional<OutputDoc>(std::move(output_doc));
-        };
+    auto addHeadLineFrom(Parameter parameter, std::optional<std::string> headline, OutputDoc output_doc){
+        if(headline)
+        {
+            std::stringstream csv_input(headline.value());
+            auto buffer = Buffer(parameter.input_buffer_size);
+            output_doc.set(parameter.input_has_head_line);
+            return convertCsv(buffer, parameter, csv_input, std::move(output_doc));
+        }
+        return std::optional<OutputDoc>(std::move(output_doc));
     }
+
     auto makeOutputDoc=[](auto file_gen ) {
             return OutputDoc(file_gen());
     };
@@ -63,13 +61,13 @@ namespace csv2xls
 
     enum class WriteStatus {Ok, Empty, Error};
 
-    auto writeIntoFile (OutputFileName output_file_name, EndlessRange<FileNumber> num_gen)
+    auto writeIntoFile (OutputFileName output_file_name_, EndlessRange<FileNumber> num_gen)
     {
-        return [=](std::optional<OutputDoc> output_doc){
+        return [output_file_name= std::move(output_file_name_), num_gen_= std::move(num_gen)](std::optional<OutputDoc> output_doc){
             if (!output_doc || output_doc->isEmpty())
                 return WriteStatus::Empty;
 
-            auto const result = output_doc->writeInto(output_file_name, num_gen());
+            auto const result = output_doc->writeInto(output_file_name, num_gen_());
             if(result)
                 return WriteStatus::Error;
 
@@ -81,6 +79,7 @@ namespace csv2xls
     {
         using funcomp::operator|;
         using funcomp::repeatUntil;
+        using std::placeholders::_1;
 
         if (config.exit_clean) return 0;
 
@@ -93,8 +92,8 @@ namespace csv2xls
         auto buffer       = Buffer(config.input_buffer_size);
         auto headLine     = mayReadHeadLine(parameter, csv_input);
         auto writeFile    = writeIntoFile(config.output_file_name, EndlessRange(FileNumber(0)));
-        auto convert      = std::bind(convertCsv, std::ref(buffer), parameter, std::ref(csv_input), std::placeholders::_1);
-        auto addHeadLine  = addHeadLineFrom(parameter, headLine);
+        auto convert      = std::bind(convertCsv, std::ref(buffer), parameter, std::ref(csv_input), _1);
+        auto addHeadLine  = std::bind(addHeadLineFrom, parameter, headLine, _1);
         auto isEmptyOrErr = isEitherOf(WriteStatus::Empty, WriteStatus::Error);
         auto convertWith  = makeOutputDoc|addHeadLine|convert|writeFile|repeatUntil(isEmptyOrErr);
 
