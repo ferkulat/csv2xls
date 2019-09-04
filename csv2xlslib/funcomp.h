@@ -28,12 +28,12 @@ namespace funcomp{
                 : m_pred(pred)
         {
         }
-        template <typename Callee> auto operator()(Callee callee) const
+        template <typename Callee> auto operator()(Callee&& callee) const
         {
-            return [pred=m_pred, callee](auto &&... args) {
+            return [pred=m_pred, callee_=std::move(callee)](auto &&... args) {
                 while (true)
                 {
-                    auto const result = callee(args...);
+                    auto const result = callee_(args...);
                     if (pred(result))
                         return result;
                 }
@@ -67,18 +67,18 @@ namespace funcomp{
         }
     };
 
-    template <typename Callee, typename Caller> auto operator|(Callee callee, Caller caller)
+    template <typename Callee, typename Caller> auto operator|(Callee&& callee, Caller&& caller)
     {
         if constexpr (std::is_base_of_v<funcomp::HigherOrderFunction, Caller>)
         {
-            return [hof = caller(callee)](auto&&... arg) {
+            return [hof = std::forward<Caller>(caller)(std::forward<Callee>(callee))](auto&&... arg) {
                 return hof(std::forward<decltype(arg)>(arg)...);
             };
         }
         else
         {
-            return [callee_=std::move(callee), caller](auto&&... arg) {
-                return caller(callee_(std::forward<decltype(arg)>(arg)...));
+            return [callee_=std::move(callee), caller_=std::move(caller)](auto&&... arg) {
+                return caller_(callee_(std::forward<decltype(arg)>(arg)...));
             };
         }
     }
