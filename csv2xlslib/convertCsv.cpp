@@ -9,7 +9,6 @@
 #include "Helpers.h"
 namespace csv2xls
 {
-#define __STDC_WANT_LIB_EXT1__ 1
 
 using funcomp::operator|;
 using funcomp::repeatUntil;
@@ -53,11 +52,7 @@ auto CopyCellToStartOf(Buffer& buffer, EndOfBuffer eob)->Buffer&
     if (eob.unfinished_cell)
     {
         auto const cell = eob.unfinished_cell.value();
-#ifdef __STDC_LIB_EXT1__
-        std::strncpy_s(buffer.current_position, cell.start, cell.length);
-#else
-        std::strncpy(buffer.current_position, cell.start, cell.length);
-#endif
+        std::copy(cell.start, cell.start+cell.length, buffer.current_position );
         buffer.end = buffer.current_position + cell.length;
     }
     else
