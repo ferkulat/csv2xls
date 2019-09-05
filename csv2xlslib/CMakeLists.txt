@@ -21,7 +21,7 @@ add_library(csv2xlslib
         convertCsv.h
         funcomp.h
         Helpers.h
-        )
+        convertCsv.cpp)
 target_compile_options( csv2xlslib PUBLIC ${WARNINGOPTS} )
 target_include_directories(csv2xlslib SYSTEM PRIVATE ${CMAKE_PREFIX_PATH}/include/xlslib)
 message("CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID}" )
