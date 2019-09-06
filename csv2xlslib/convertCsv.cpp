@@ -7,6 +7,7 @@
 #include <fstream>
 #include "MatchVariantType.h"
 #include "Helpers.h"
+#include <algorithm>
 namespace csv2xls
 {
 

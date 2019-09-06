@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 #include "readBuffer.h"
-#include <string.h>
+#include <algorithm>
 namespace csv2xls
 {
 bool operator==(CellContent const& c1, CellContent const& c2)
@@ -27,7 +27,7 @@ template<size_t N>
 Buffer createBufferFilledWith(char const (&content)[N], InputBufferSize input_buffer_size){
     auto buffer = Buffer(input_buffer_size);
 
-    auto const count = std::min(static_cast<long int>(N),input_buffer_size.Get());
+    auto const count = std::min(static_cast<InputBufferSize::type>(N),input_buffer_size.Get());
     std::copy(std::cbegin(content), std::cbegin(content)+count, buffer.mem.get());
 
     return buffer;
