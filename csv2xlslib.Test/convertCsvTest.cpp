@@ -35,7 +35,7 @@ namespace ConvertCsvTest{
             if(current_row.size() < column.Get()+1)
                 current_row.resize(column.Get()+1);
 
-            current_row.at(column.Get()) = std::string(cell_content.start, cell_content.length);
+            current_row.at(column.Get()) = std::string(cell_content);
         }
         auto columnLimit()-> std::optional<OutputColumnLimit>
         {

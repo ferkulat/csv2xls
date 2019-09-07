@@ -23,12 +23,19 @@ class DummyWorkBook
     int writeInto(OutputFileName const& /*file_name*/, FileNumber /*file_number*/)
     {
         called_write_to_file++;
+        files.push_back(std::move(cells));
+        cells.clear();
         return 0;
     }
-    void setCell(Row /*row*/, Column /*col*/, CellContent strlabel)
+    void setCell(Row row, Column col, CellContent strlabel)
     {
+        while (cells.size() < row.Get()+1)
+            cells.emplace_back(std::vector<std::string>());
+        while (cells[row.Get()].size() < col.Get())
+            cells[row.Get()].emplace_back("");
+
         called_label++;
-        cells.emplace_back(strlabel.start, strlabel.length);
+        cells[row.Get()].emplace_back(strlabel);
     }
     auto columnLimit() -> std::optional<OutputColumnLimit>
     {
@@ -38,7 +45,8 @@ class DummyWorkBook
     int               called_clear_sheet   = 0;
     int               called_write_to_file = 0;
     int               called_label         = 0;
-    std::vector<std::string> cells;
+    std::vector<std::vector<std::string>> cells;
+    std::vector<std::vector<std::vector<std::string>>> files;
     OutputColumnLimit out_put_column_limit = csv2xls::XLS_MAX_COLUMNS;
 };
 template <typename T> class WrapperWorkBook

@@ -53,8 +53,9 @@ auto CopyCellToStartOf(Buffer& buffer, EndOfBuffer eob)->Buffer&
     if (eob.unfinished_cell)
     {
         auto const cell = eob.unfinished_cell.value();
-        std::copy(cell.start, cell.start+cell.length, buffer.current_position );
-        buffer.end = buffer.current_position + cell.length;
+        std::copy(cell.cbegin(), cell.cend(), buffer.current_position );
+        buffer.end = buffer.current_position + cell.length();
+        buffer.quoted = '\0';
     }
     else
     {

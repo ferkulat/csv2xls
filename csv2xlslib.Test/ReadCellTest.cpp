@@ -7,10 +7,6 @@
 #include <algorithm>
 namespace csv2xls
 {
-bool operator==(CellContent const& c1, CellContent const& c2)
-{
-    return (c1.start == c2.start) && (c1.length == c2.length);
-}
 
 bool operator==(EndOfBuffer const& c1, EndOfBuffer const& c2)
 {

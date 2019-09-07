@@ -44,7 +44,7 @@ void XlsWorkBook::clearSheet()
 
 void XlsWorkBook::setCell(Row row, Column column, CellContent cell_content)
 {
-    this->pimpl->wsheet->label(row.Get(), column.Get(), std::string(cell_content.start, cell_content.length));
+    this->pimpl->wsheet->label(row.Get(), column.Get(), std::string(cell_content));
 }
 
 int XlsWorkBook::writeInto(OutputFileName const& output_file_name, FileNumber file_number)const
