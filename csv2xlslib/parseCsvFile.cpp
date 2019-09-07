@@ -1,13 +1,12 @@
-#include "convertCsv.h"
 #include "parseCsvFile.hpp"
+#include "Helpers.h"
 #include "XlsWorkBook.hpp"
 #include "conversion.h"
-#include "readHeadLine.hpp"
-#include "Helpers.h"
-#include <sstream>
-#include "readBuffer.h"
+#include "convertCsv.h"
 #include "funcomp.h"
-
+#include "readBuffer.h"
+#include <fstream>
+#include <sstream>
 
 namespace csv2xls
 {

@@ -4,8 +4,6 @@ add_library(csv2xlslib
         parsecmd.hpp
         parseCsvFile.cpp
         parseCsvFile.hpp
-        readHeadLine.cpp
-        readHeadLine.hpp
         XlsWorkBook.cpp
         XlsWorkBook.hpp
         conversion.h
