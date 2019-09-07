@@ -13,6 +13,7 @@ size_t cellLengthForLineEnd(char const* const start, char const* const current_p
     }
     return static_cast<size_t>(length1);
 }
+
 CsvType read(Buffer& buffer, CsvSeparator csv_separator)
 {
     auto*       current_position = buffer.current_position;
@@ -20,20 +21,18 @@ CsvType read(Buffer& buffer, CsvSeparator csv_separator)
 
     while ((current_position != buffer.end))
     {
-        if (buffer.quoted == '\0')
-        {
-            if (*current_position == csv_separator.Get())
+            if ((*current_position == csv_separator.Get())&&(buffer.quoted == '\0'))
             {
-                buffer.current_position = current_position + 1;
-                return CellContent{start, static_cast<size_t>(current_position - start)};
+                    buffer.current_position = current_position + 1;
+                    return CellContent{start, static_cast<size_t>(current_position - start)};
             }
-            if (*current_position == '\n')
+            else if (*current_position == '\n')
             {
                 auto const length = cellLengthForLineEnd(start, current_position);
                 buffer.current_position = current_position + 1;
                 return EndOfLine{CellContent{start, length}};
             }
-            if (*current_position == '\0')
+            else if (*current_position == '\0')
             {
                 auto const length = cellLengthForLineEnd(start, current_position);
                 if (length)
@@ -43,18 +42,13 @@ CsvType read(Buffer& buffer, CsvSeparator csv_separator)
                 }
                 return EndOfStream{};
             }
-            if (*current_position == '"')
+            else if (*current_position == '"')
             {
-                buffer.quoted = '"';
+                if (buffer.quoted == '"')
+                    buffer.quoted = '\0';
+                else
+                    buffer.quoted = '"';
             }
-        }
-        else if (buffer.quoted == '"')
-        {
-            if (*current_position == '"')
-            {
-                buffer.quoted = '\0';
-            }
-        }
         ++current_position;
     }
     buffer.current_position = current_position;
