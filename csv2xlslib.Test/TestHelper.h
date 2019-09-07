@@ -20,7 +20,7 @@ class DummyWorkBook
         called_clear_sheet++;
         cells.clear();
     }
-    int writeInto(OutputFileName const& /*file_name*/)
+    int writeInto(OutputFileName const& /*file_name*/, FileNumber /*file_number*/)
     {
         called_write_to_file++;
         return 0;
@@ -55,9 +55,9 @@ template <typename T> class WrapperWorkBook
     {
         wrapped->clearSheet();
     }
-    int writeInto(OutputFileName const& file_name)
+    int writeInto(OutputFileName const& file_name, FileNumber file_number) const
     {
-        return wrapped->writeInto(file_name);
+        return wrapped->writeInto(file_name, file_number);
     }
     void setCell(Row row, Column column, CellContent cell_content)
     {

@@ -1,5 +1,6 @@
 #ifndef PARSE_CSV_FILE_HPP
 #define PARSE_CSV_FILE_HPP
+#include "OutputDoc.hpp"
 #include "parsecmd.hpp"
 
 namespace csv2xls
@@ -20,6 +21,9 @@ namespace csv2xls
 
     int
     parseCsvFile(Config const& options);
+
+    int
+    parseCsvStream(Config const& config, std::istream& csv_input, std::function<OutputDoc()> makeOutputDoc);
 
 }
 #endif

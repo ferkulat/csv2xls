@@ -18,7 +18,7 @@ namespace csv2xls
         };
     }
 
-    auto mayReadHeadLine(Parameter parameter, std::fstream& input_stream){
+    auto mayReadHeadLine(Parameter parameter, std::istream& input_stream){
         std::optional<std::string> headline;
         if (parameter.input_has_head_line.Get())
         {
@@ -41,9 +41,6 @@ namespace csv2xls
         return std::optional<OutputDoc>(std::move(output_doc));
     }
 
-    auto makeOutputDoc=[](auto file_gen ) {
-            return OutputDoc(file_gen());
-    };
 
     std::fstream openCsvFile(InputFile const &file_name)
     {
@@ -75,18 +72,13 @@ namespace csv2xls
         };
     }
 
-    int parseCsvFile(Config const& config)
-    {
-        if (config.exit_clean) return 0;
-
+    int parseCsvStream(Config const& config, std::istream& csv_input, std::function<OutputDoc()> makeOutputDoc){
         // data
+        auto       buffer    = Buffer(config.input_buffer_size);
         auto const parameter = Parameter{config.output_row_limit,
                                          config.csv_separator,
                                          config.input_buffer_size,
                                          config.csv_file_has_headline};
-
-        auto       csv_input = openCsvFile(config.csv_file_name);
-        auto       buffer    = Buffer(config.input_buffer_size);
         auto const headLine  = mayReadHeadLine(parameter, csv_input);
 
         //composing functions
@@ -98,9 +90,23 @@ namespace csv2xls
         auto convert      = std::bind(convertCsv, std::ref(buffer), parameter, std::ref(csv_input), _1);
         auto addHeadLine  = std::bind(addHeadLineFrom, parameter, headLine, _1);
         auto isEmptyOrErr = isEitherOf(WriteStatus::Empty, WriteStatus::Error);
-        auto convertWith  = makeOutputDoc|addHeadLine|convert|writeFile|repeatUntil(isEmptyOrErr);
+        auto conv         = makeOutputDoc|addHeadLine|convert|writeFile|repeatUntil(isEmptyOrErr);
 
-        return (convertWith(XlsFileGenerator(config)) == WriteStatus::Error)? 1:0;
+        return (conv() == WriteStatus::Error)? 1:0;
+    }
+
+    int parseCsvFile(Config const& config)
+    {
+        if (config.exit_clean) return 0;
+
+        auto csv_input = openCsvFile(config.csv_file_name);
+        auto makeOutputDoc=[](auto file_gen ) {
+                return [file_gen](){
+                    return OutputDoc(file_gen());
+                };
+        };
+
+        return parseCsvStream(config, csv_input, makeOutputDoc(XlsFileGenerator(config)));
     }
 
     FileNotOpen::FileNotOpen(char const *what)

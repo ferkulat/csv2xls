@@ -7,7 +7,6 @@
 #include "OutputDoc.hpp"
 namespace csv2xls
 {
-    /*
 namespace parseCsvStreamTest
 {
 std::string createCSV(Row row_count, Column column_count)
@@ -26,6 +25,10 @@ std::string createCSV(Row row_count, Column column_count)
         result.append("\n");
     }
     return result;
+}
+
+auto makeTestOutputFile(std::shared_ptr<Testing::DummyWorkBook>& test_workbook){
+    return [&](){return OutputDoc(Testing::WrapperWorkBook(test_workbook));};
 }
 
 struct Given_an_input_file_without_headline
@@ -53,7 +56,6 @@ struct Given_an_input_file_with_headline
         config.csv_file_has_headline = InputHasHeadLine(true);
         config.csv_file_name         = InputFile("lol");
         config.output_row_limit      = OutputRowLimit(3);
-
     }
 
     virtual ~Given_an_input_file_with_headline() = default;
@@ -64,7 +66,7 @@ TEST_CASE_METHOD(Given_an_input_file_without_headline,
 {
     auto const        csv_file = createCSV(Row(8), Column(3));
     std::stringstream csv_stream(csv_file);
-    parseCsvStream(config, csv_stream, OutputDoc(Testing::WrapperWorkBook(test_workbook)));
+    parseCsvStream(config, csv_stream, makeTestOutputFile(test_workbook));
 
     REQUIRE(3 == test_workbook->called_write_to_file);
 }
@@ -74,12 +76,24 @@ TEST_CASE_METHOD(Given_an_input_file_with_headline,
 {
     auto const        csv_file = createCSV(Row(8), Column(3));
     std::stringstream csv_stream(csv_file);
-    parseCsvStream(config, csv_stream, OutputDoc(Testing::WrapperWorkBook(test_workbook)));
+    parseCsvStream(config, csv_stream, makeTestOutputFile(test_workbook));
 
     REQUIRE(4 == test_workbook->called_write_to_file);
 }
 
+TEST_CASE_METHOD(Given_an_input_file_with_headline,
+" with quoted cells and 8 lines and line limit of 3 then 4 files will be produced")
+{
+auto const        csv_file = std::string(
+R"("col1","col2","col3"
+"1","2","3"
+"4","5","6")"
+);
+std::stringstream csv_stream(csv_file);
+parseCsvStream(config, csv_stream, makeTestOutputFile(test_workbook));
+
+REQUIRE(9 == test_workbook->called_label);
+}
 
 }
-     */
 }
