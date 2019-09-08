@@ -17,7 +17,7 @@ using funcomp::repeatUntil;
 struct Ok{};
 namespace Domain
 {
-using ParseResult = std::variant<Row, EndOfStream, Ok>;
+using ParseResult = std::variant<Column, Row, EndOfStream, Ok>;
 
 auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
 {
@@ -72,15 +72,20 @@ auto CopyCellToStartOf (Buffer& buffer)
     };
 }
 
+auto newLine (OutputDoc& output_doc, EndOfLine eol){
+    output_doc.appendCell(eol.cell);
+    return output_doc.newLine();
+}
+
 template<typename PrepareBuffer>
 auto appendToOutputDoc(PrepareBuffer& prepareBuffer, OutputDoc& output_doc, CsvType csv_type)
 {
     using R = ParseResult;
     return MatchType(csv_type
-        , [&](CellContent cell) -> R { output_doc.appendCell(cell); return Ok{}; }
-        , [&](EndOfLine   eol ) -> R { output_doc.appendCell(eol.cell);return output_doc.newLine(); }
+        , [&](CellContent cell) -> R { return output_doc.appendCell(cell);}
+        , [&](EndOfLine   eol ) -> R { return newLine(output_doc, eol);}
         , [&](EndOfBuffer eob ) -> R { return prepareBuffer(eob);}
-        , [&](EndOfStream eos ) -> R { prepareBuffer(EndOfBuffer{});return eos; }
+        , [&](EndOfStream eos ) -> R { return eos; }
     );
 }
 
