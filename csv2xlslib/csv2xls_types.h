@@ -24,7 +24,7 @@ TYPE_SAFE(XlsSheetName, std::string)
 TYPE_SAFE(DigitCount, std::uint8_t)
 TYPE_SAFE(InputFile, Path)
 
-using OutputRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutRowLimit,
+using OutputRowLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutputRowLimit,
                                                  skilled_type::Equality,
                                                  skilled_type::Relativity>;
 
@@ -34,18 +34,26 @@ using Row = skilled_type::SkilledType<std::uint32_t, struct TypeTagRow,
                                       skilled_type::Equality,
                                       skilled_type::Relativity>;
 
-using OutPutColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutPutColumnLimit>;
+using OutputColumnLimit = skilled_type::SkilledType<std::uint32_t, struct TypeTagOutputColumnLimit>;
 
 using Column = skilled_type::SkilledType<std::uint32_t, struct TypeTagColumn,
-                                         ComparableWith<OutPutColumnLimit>::templ,
+                                         ComparableWith<OutputColumnLimit>::templ,
                                          skilled_type::Incrementability,
-                                         skilled_type::Equality>;
+                                         skilled_type::Equality,
+                                         skilled_type::Relativity>;
 
-using CellContent = skilled_type::SkilledType<std::string, struct TypeTagCellContent>;
+using CellContent = std::string_view;
 using FileNumber = skilled_type::SkilledType<int, struct TypeTagFileNumber,
                                              skilled_type::Incrementability,
                                              skilled_type::Equality>;
 
 #undef TYPE_SAFE
+
+class BufferTooSmall : public std::logic_error
+{
+  public:
+    explicit BufferTooSmall(std::string const& what): logic_error(what) {}
+};
+
 }
 #endif //CSV2XLS_CSV2XLS_TYPES_H

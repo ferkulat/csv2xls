@@ -29,22 +29,22 @@
 namespace csv2xls
 {
 
-class xls_workbook
+class XlsWorkBook
 {
 public:
-    xls_workbook();
-    ~xls_workbook();
-    xls_workbook(xls_workbook && workbook) = default;
-    void clearSheet(XlsSheetName const& sheet_name);
+    XlsWorkBook(XlsSheetName const& xls_sheet_name);
+    ~XlsWorkBook();
+    XlsWorkBook(XlsWorkBook && workbook);
 
-    int writeInto(OutputFileName const& out_put_file);
+    int writeInto(OutputFileName const& output_file_name, FileNumber file_number)const;
 
     void setCell( Row row, Column column,
-                  CellContent const& cell_content);
+                  CellContent cell_content);
+    auto columnLimit()-> std::optional<OutputColumnLimit>;
 private:
+    void clearSheet();
     struct Impl;
-    static void PimplDeleter(Impl*p);
-    std::unique_ptr<Impl, void(*)(Impl*)>  pimpl;
+    std::unique_ptr<Impl>  pimpl;
 
 };
 }
