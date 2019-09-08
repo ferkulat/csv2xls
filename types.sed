@@ -1,0 +1,6 @@
+s/skilled_type::SkilledType<unsigned int, csv2xls::TypeTagColumn, csv2xls::ComparableWith<skilled_type::SkilledType<unsigned int, csv2xls::TypeTagOutputColumnLimit> >::templ, skilled_type::Incrementability, skilled_type::Equality, skilled_type::Relativity>/Column/g;
+s/skilled_type::SkilledType<unsigned int, csv2xls::TypeTagRow, csv2xls::ComparableWith<skilled_type::SkilledType<unsigned int, csv2xls::TypeTagOutputRowLimit, skilled_type::Equality, skilled_type::Relativity> >::templ, skilled_type::Incrementability, skilled_type::Equality, skilled_type::Relativity>/Row/g;
+s/std::variant<std::basic_string_view<char, std::char_traits<char> >, csv2xls::EndOfLine, csv2xls::EndOfBuffer, csv2xls::EndOfStream>/CsvType/g;
+s/std::variant<Column, Row, csv2xls::EndOfStream, csv2xls::Ok>/ParseResult/g;
+s/CheckedCmd::CheckedCmdTypesafe::Typesafe<char, csv2xls::TypeTagCsvSeparator>/CsvSeparator/g;
+s/skilled_type::SkilledType<unsigned int, csv2xls::TypeTagOutputRowLimit, skilled_type::Equality, skilled_type::Relativity>/OutputRowLimit/g;
