@@ -15,8 +15,6 @@ using funcomp::operator|;
 using funcomp::repeatUntil;
 
 struct Ok{};
-namespace Domain
-{
 using ParseResult = std::variant<Column, Row, EndOfStream, Ok>;
 
 auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
@@ -77,7 +75,7 @@ auto newLine (OutputDoc& output_doc, EndOfLine eol){
     return output_doc.newLine();
 }
 
-auto appendToOutputDoc(std::function<ParseResult (EndOfBuffer)> const& prepareBuffer, OutputDoc& output_doc, CsvType csv_type)
+auto append(std::function<ParseResult (EndOfBuffer)> const& prepareBuffer, OutputDoc& output_doc, CsvType csv_type)
 {
     using R = ParseResult;
     return MatchType(csv_type
@@ -86,8 +84,6 @@ auto appendToOutputDoc(std::function<ParseResult (EndOfBuffer)> const& prepareBu
         , [&](EndOfBuffer eob ) -> R { return prepareBuffer(eob);}
         , [&](EndOfStream eos ) -> R { return eos; }
     );
-}
-
 }
 
 auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
@@ -107,8 +103,8 @@ convertCsv(Buffer& buffer, Parameter const& parameter, std::istream& stream, std
 
     if (output_doc)
     {
-        auto prepareBuffer         = Domain::CopyCellToStartOf(buffer) | Domain::fillWith(stream);
-        auto appendToOutputDoc     = std::bind(Domain::appendToOutputDoc, prepareBuffer, std::ref(*output_doc), _1);
+        auto prepareBuffer         = CopyCellToStartOf(buffer) | fillWith(stream);
+        auto appendToOutputDoc     = std::bind(append, prepareBuffer, std::ref(*output_doc), _1);
         auto thereIsNothingToParse = matchesOneOf(isType<EndOfStream>{}, isRowLimit(parameter.output_row_limit));
         auto parse                 = read | appendToOutputDoc | repeatUntil(thereIsNothingToParse);
 

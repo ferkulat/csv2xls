@@ -3,7 +3,7 @@
 //
 #include "TestHelper.h"
 #include <catch.hpp>
-#include <parseCsvFile.hpp>
+#include <parseCsvStream.hpp>
 #include "OutputDoc.hpp"
 namespace csv2xls
 {
@@ -84,32 +84,30 @@ TEST_CASE_METHOD(Given_an_input_file_with_headline,
 TEST_CASE_METHOD(Given_an_input_file_with_headline,
 " with quoted cells and 8 lines and line limit of 3 then 4 files will be produced")
 {
-auto const        csv_file = std::string(
-R"("col1";"col2";"col3"
-"1";"2";"3"
-"4";"5";"6")"
-);
-std::stringstream csv_stream(csv_file);
-parseCsvStream(config, csv_stream, makeTestOutputFile(test_workbook));
+    auto const csv_file =  std::string(R"("col1";"col2";"col3")") + "\n"
+                         + std::string(R"("1";"2";"3")")          + "\n"
+                         + std::string(R"("4";"5";"6")")          + "\n";
 
-REQUIRE(1 == test_workbook->files.size());
-REQUIRE(3 == test_workbook->files[0].size());
+    std::stringstream csv_stream(csv_file);
+    parseCsvStream(config, csv_stream, makeTestOutputFile(test_workbook));
+
+    REQUIRE(1 == test_workbook->files.size());
+    REQUIRE(3 == test_workbook->files[0].size());
 }
 
 TEST_CASE_METHOD(Given_an_input_file_with_headline,
 " with quoted empty cells and 8 lines and line limit of 3 then 4 files will be produced")
 {
     config.input_buffer_size = InputBufferSize(10);
-auto const        csv_file = std::string(
-    R"("col1";"col2";"col3"
-"1";"2";"3"
-"4";"";"6")"
-);
-std::stringstream csv_stream(csv_file);
-parseCsvStream(config, csv_stream, makeTestOutputFile(test_workbook));
+    auto const csv_file      =  std::string(R"("col1";"col2";"col3")") + "\n"
+                              + std::string(R"("1";"2";"3")")          + "\n"
+                              + std::string(R"("4";"";"6")")           + "\n";
 
-REQUIRE(1 == test_workbook->files.size());
-REQUIRE(3 == test_workbook->files[0].size());
+    std::stringstream csv_stream(csv_file);
+    parseCsvStream(config, csv_stream, makeTestOutputFile(test_workbook));
+
+    REQUIRE(1 == test_workbook->files.size());
+    REQUIRE(3 == test_workbook->files[0].size());
 }
 
 }
