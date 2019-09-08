@@ -51,8 +51,14 @@ CsvType read(Buffer& buffer, CsvSeparator csv_separator)
             }
         ++current_position;
     }
+    auto const unfinished_cell_length = current_position - start;
+    if ( unfinished_cell_length == buffer.m_size.Get())
+    {
+        constexpr auto msg = R"(buffer is too small, consider increasing buffer size by command line option '--BufferSize N' )";
+        throw BufferTooSmall(std::string(msg) + "with N >> " + std::to_string(unfinished_cell_length));
+    }
     buffer.current_position = current_position;
-    auto const length       = static_cast<size_t>(current_position - start);
+    auto const length       = static_cast<size_t>(unfinished_cell_length);
     return (length) ? EndOfBuffer{CellContent{start, length}} : EndOfBuffer{};
 }
 }

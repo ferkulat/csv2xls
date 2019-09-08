@@ -287,8 +287,6 @@ namespace csv2xls
 
     }
 
-
-
     BadCommandLineOption::BadCommandLineOption(std::string const& what)
             : logic_error(what) {}
 }/* -----  end of namespace csv2xls  ----- */

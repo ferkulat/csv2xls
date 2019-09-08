@@ -48,5 +48,12 @@ using FileNumber = skilled_type::SkilledType<int, struct TypeTagFileNumber,
                                              skilled_type::Equality>;
 
 #undef TYPE_SAFE
+
+class BufferTooSmall : public std::logic_error
+{
+  public:
+    explicit BufferTooSmall(std::string const& what): logic_error(what) {}
+};
+
 }
 #endif //CSV2XLS_CSV2XLS_TYPES_H

@@ -82,7 +82,7 @@ TEST_CASE_METHOD(Given_an_input_file_with_headline,
 }
 
 TEST_CASE_METHOD(Given_an_input_file_with_headline,
-" with quoted cells and 8 lines and line limit of 3 then 4 files will be produced")
+" with quoted cells and 3 lines and line limit of 3 then 1 file will be produced")
 {
     auto const csv_file =  std::string(R"("col1";"col2";"col3")") + "\n"
                          + std::string(R"("1";"2";"3")")          + "\n"
@@ -96,7 +96,7 @@ TEST_CASE_METHOD(Given_an_input_file_with_headline,
 }
 
 TEST_CASE_METHOD(Given_an_input_file_with_headline,
-" with quoted empty cells and 8 lines and line limit of 3 then 4 files will be produced")
+" with quoted empty cells and 3 lines and line limit of 3 then 1 file will be produced")
 {
     config.input_buffer_size = InputBufferSize(10);
     auto const csv_file      =  std::string(R"("col1";"col2";"col3")") + "\n"
@@ -108,6 +108,22 @@ TEST_CASE_METHOD(Given_an_input_file_with_headline,
 
     REQUIRE(1 == test_workbook->files.size());
     REQUIRE(3 == test_workbook->files[0].size());
+}
+
+TEST_CASE_METHOD(Given_an_input_file_with_headline,
+" and a buffer of the same size as an unfinished cell, throw a error")
+{
+    // the first cell >"col1"< is as big as the buffer (6 bytes)
+    // the cell terminating ';' is not in there yet and the cell is "unfinished"
+    // copying this unfinished cell to start of buffer
+    // and trying to parse it, would be an endless loop
+    config.input_buffer_size = InputBufferSize(6);
+    auto const csv_file      =  std::string(R"("col1";"col2";"col3")") + "\n"
+                                + std::string(R"("1";"2";"3)")         + "\n"
+                                + std::string(R"("4";"";"6")")         + "\n";
+
+    std::stringstream csv_stream(csv_file);
+    REQUIRE_THROWS_AS(parseCsvStream(config, csv_stream, makeTestOutputFile(test_workbook)), BufferTooSmall) ;
 }
 
 }
