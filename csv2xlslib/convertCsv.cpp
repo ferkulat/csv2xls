@@ -77,8 +77,7 @@ auto newLine (OutputDoc& output_doc, EndOfLine eol){
     return output_doc.newLine();
 }
 
-template<typename PrepareBuffer>
-auto appendToOutputDoc(PrepareBuffer& prepareBuffer, OutputDoc& output_doc, CsvType csv_type)
+auto appendToOutputDoc(std::function<ParseResult (EndOfBuffer)> const& prepareBuffer, OutputDoc& output_doc, CsvType csv_type)
 {
     using R = ParseResult;
     return MatchType(csv_type
@@ -91,18 +90,6 @@ auto appendToOutputDoc(PrepareBuffer& prepareBuffer, OutputDoc& output_doc, CsvT
 
 }
 
-namespace ChainingAdaptors
-{
-auto appendTo(Buffer& buffer, std::istream& csv_input, OutputDoc& output_doc)
-{
-    auto prepareBuffer = Domain::CopyCellToStartOf(buffer)|Domain::fillWith(csv_input);
-
-    return [prepareBuffer,&output_doc](CsvType csv_type) {
-      return Domain::appendToOutputDoc(prepareBuffer, output_doc, csv_type);
-    };
-}
-}
-
 auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
 {
     return [output_row_limit](Row row) {
@@ -113,21 +100,20 @@ auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
 std::optional<OutputDoc>
 convertCsv(Buffer& buffer, Parameter const& parameter, std::istream& stream, std::optional<OutputDoc> output_doc)
 {
+    using std::placeholders::_1;
+
     if (!stream.good()&& buffer.empty())
         return std::nullopt;
 
-    auto appendTo = [&buffer, &stream](OutputDoc& output)
-    {
-      return ChainingAdaptors::appendTo(buffer, stream, output);
-    };
-    auto thereIsNothingToParse = matchesOneOf(isType<EndOfStream>{},isRowLimit(parameter.output_row_limit));
-    auto parse = read
-                 | appendTo(*output_doc)
-                 | repeatUntil(thereIsNothingToParse)
-    ;
-
     if (output_doc)
+    {
+        auto prepareBuffer         = Domain::CopyCellToStartOf(buffer) | Domain::fillWith(stream);
+        auto appendToOutputDoc     = std::bind(Domain::appendToOutputDoc, prepareBuffer, std::ref(*output_doc), _1);
+        auto thereIsNothingToParse = matchesOneOf(isType<EndOfStream>{}, isRowLimit(parameter.output_row_limit));
+        auto parse                 = read | appendToOutputDoc | repeatUntil(thereIsNothingToParse);
+
         parse(buffer, parameter.csv_separator);
+    }
     return output_doc;
 }
 

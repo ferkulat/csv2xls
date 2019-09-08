@@ -40,7 +40,6 @@ namespace csv2xls
         return std::optional<OutputDoc>(std::move(output_doc));
     }
 
-
     std::fstream openCsvFile(InputFile const &file_name)
     {
         std::fstream csv_input(file_name.Get(),
@@ -57,18 +56,16 @@ namespace csv2xls
 
     enum class WriteStatus {Ok, Empty, Error};
 
-    auto writeIntoFile (OutputFileName output_file_name_, EndlessRange<FileNumber> num_gen)
+    auto writeIntoFile (OutputFileName output_file_name, EndlessRange<FileNumber> const& num_gen, std::optional<OutputDoc> output_doc)
     {
-        return [output_file_name= std::move(output_file_name_), num_gen_= std::move(num_gen)](std::optional<OutputDoc> output_doc){
-            if (!output_doc || output_doc->isEmpty())
-                return WriteStatus::Empty;
+        if (!output_doc || output_doc->isEmpty())
+            return WriteStatus::Empty;
 
-            auto const result = output_doc->writeInto(output_file_name, num_gen_());
-            if(result)
-                return WriteStatus::Error;
+        auto const result = output_doc->writeInto(output_file_name, num_gen());
+        if(result)
+            return WriteStatus::Error;
 
-            return WriteStatus::Ok;
-        };
+        return WriteStatus::Ok;
     }
 
     int parseCsvStream(Config const& config, std::istream& csv_input, std::function<OutputDoc()> makeOutputDoc){
@@ -85,13 +82,15 @@ namespace csv2xls
         using funcomp::repeatUntil;
         using std::placeholders::_1;
 
-        auto writeFile    = writeIntoFile(config.output_file_name, EndlessRange(FileNumber(0)));
+        // For chaining functions, functions need to take one parameter only
+        auto writeFile    = std::bind(writeIntoFile, config.output_file_name, EndlessRange(FileNumber(0)), _1);
         auto convert      = std::bind(convertCsv, std::ref(buffer), parameter, std::ref(csv_input), _1);
         auto addHeadLine  = std::bind(addHeadLineFrom, parameter, headLine, _1);
         auto isEmptyOrErr = isEitherOf(WriteStatus::Empty, WriteStatus::Error);
-        auto conv         = makeOutputDoc|addHeadLine|convert|writeFile|repeatUntil(isEmptyOrErr);
 
-        return (conv() == WriteStatus::Error)? 1:0;
+        auto convertCsvToOutputDoc = makeOutputDoc|addHeadLine|convert|writeFile|repeatUntil(isEmptyOrErr);
+
+        return (convertCsvToOutputDoc() == WriteStatus::Error)? 1:0;
     }
 
     int parseCsvFile(Config const& config)
@@ -110,5 +109,4 @@ namespace csv2xls
 
     FileNotOpen::FileNotOpen(char const *what)
             : runtime_error(what) {}
-
 }
