@@ -5,6 +5,7 @@
 #ifndef CSV2XLS_FUNCOMP_H
 #define CSV2XLS_FUNCOMP_H
 #include <type_traits>
+#include <result_type.h>
 
 namespace funcomp{
 
@@ -71,14 +72,30 @@ namespace funcomp{
     {
         if constexpr (std::is_base_of_v<funcomp::HigherOrderFunction, Caller>)
         {
-            return [hof = std::forward<Caller>(caller)(std::forward<Callee>(callee))](auto&&... arg) {
+            return [hof = std::forward<Caller>(caller)(std::forward<Callee>(callee))](auto&&... arg)
+            {
                 return hof(std::forward<decltype(arg)>(arg)...);
             };
         }
         else
         {
             return [callee_=std::move(callee), caller_=std::move(caller)](auto&&... arg) {
-                return caller_(callee_(std::forward<decltype(arg)>(arg)...));
+                if constexpr ((sizeof...(arg) == 1)&&( ... && ( ResultType::is_result_type<decltype(arg)>::value))){
+                    return  ResultType::operator|(ResultType::operator|(std::forward<decltype(arg)>(arg)..., callee_), caller_);
+                }
+                else
+                {
+                    using CalleReturnType = decltype(callee_(std::forward<decltype(arg)>(arg)...));
+
+                    if constexpr (std::is_invocable_v<Caller, CalleReturnType>)
+                    {
+                        return caller_(callee_(std::forward<decltype(arg)>(arg)...));
+                    }
+                    else if constexpr (ResultType::is_result_type<CalleReturnType>::value)
+                    {
+                        return ResultType::operator|(callee_(std::forward<decltype(arg)>(arg)...), caller_);
+                    }
+                }
             };
         }
     }

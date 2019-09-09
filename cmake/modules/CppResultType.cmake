@@ -6,7 +6,7 @@ set(EXTERN_CPPRESULTTYPE_DIR ${EXTERN_DEPENDENCIES_DIR}/cppresulttype)
 FetchContent_Declare(
   cppresulttype
   GIT_REPOSITORY https://github.com/ferkulat/CppResultType.git
-  GIT_TAG        95701767cb3c0f56d134c3cc19a304f8f3b0c2d5
+  GIT_TAG        6de4dfaa2a0d887deeaa6a329a0d2ed77b44280a
   SOURCE_DIR     ${EXTERN_CPPRESULTTYPE_DIR}
 )
 if(NOT cppresulttype_POPULATED)

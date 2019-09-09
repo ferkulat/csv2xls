@@ -22,7 +22,7 @@ class OutputDoc
     {
     }
     OutputDoc(OutputDoc && x)=default;
-
+    OutputDoc& operator=(OutputDoc && other)=default;
     int writeInto(OutputFileName const& out_put_file, FileNumber file_number)const;
     void set(InputHasHeadLine input_has_head_line);
     Column appendCell(CellContent cell_content);
