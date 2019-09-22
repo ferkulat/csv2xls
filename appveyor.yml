@@ -6,7 +6,7 @@ branches:
     - /dev-travis.+/
 
 os:
-  - Visual Studio 2017
+  - Visual Studio 2019
 
 environment:
     matrix:
@@ -54,13 +54,13 @@ matrix:
 # Win32 and x64 are CMake-compatible solution platform names.
 # This allows us to pass %PLATFORM% to CMake -A.
 platform:
-  - Win32
   - x64
+  - Win32
 
 # build Configurations, i.e. Debug, Release, etc.
 configuration:
-  - Debug
   - Release
+#  - Debug
 
 #Cmake will autodetect the compiler, but we set the arch
 before_build:

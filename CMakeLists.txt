@@ -14,7 +14,7 @@ include(warnings)
 include(checkedcmd)
 include(xlslib)
 include(CppSkilledType)
-include(CppResultType)
+include(CppFunComp)
 
 enable_testing()
 

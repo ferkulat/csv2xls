@@ -8,7 +8,7 @@ set(TEST_SOURCE_FILES
         TestHelper.h
         ReadCellTest.cpp
         convertCsvTest.cpp
-        funcompTest.cpp)
+        )
 add_executable(csv2xlslibTest ${TEST_SOURCE_FILES} ${version_file})
 target_link_libraries(csv2xlslibTest csv2xlslib)
 add_test(

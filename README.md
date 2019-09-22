@@ -25,7 +25,7 @@ csv2xls (csv to xls) is a command line utility which converts csv files into one
 ### Prerequisites
 
 - libiconv:   http://ftp.gnu.org/pub/gnu/libiconv/ (Optional to get UTF-8 support)
-- compiler: gcc8, clang6, msvc2017, msvc2019
+- compiler: gcc8, clang6, msvc2019
 - cmake-3.14
 
 ### Building
