@@ -62,8 +62,8 @@ int parseCsvStream(Config const& config, std::istream& csv_input, std::function<
     auto const headLine  = mayReadHeadLine(parameter, csv_input);
 
     // composing functions
-    using funcomp::operator|;
-    using funcomp::repeatUntil;
+    using cppfuncomp::operator|;
+    using cppfuncomp::repeatUntil;
     using std::placeholders::_1;
 
     // For chaining functions, functions need to take one parameter only

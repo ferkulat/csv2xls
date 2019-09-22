@@ -17,7 +17,6 @@ add_library(csv2xlslib
         readBuffer.h
         readBuffer.cpp
         convertCsv.h
-        funcomp.h
         Helpers.h
         convertCsv.cpp
         parseCsvStream.hpp

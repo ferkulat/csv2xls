@@ -11,8 +11,8 @@
 namespace csv2xls
 {
 
-using funcomp::operator|;
-using funcomp::repeatUntil;
+using cppfuncomp::operator|;
+using cppfuncomp::repeatUntil;
 
 struct Ok{};
 using ParseResult = std::variant<Column, Row, EndOfStream, Ok>;
