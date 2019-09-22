@@ -17,7 +17,7 @@ using cppfuncomp::repeatUntil;
 struct Ok{};
 using ParseResult = std::variant<Column, Row, EndOfStream, Ok>;
 
-auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
+auto fill(std::istream& csv_input, Buffer& buffer)-> ParseResult
 {
     if (!csv_input.good())
         return EndOfStream{};
@@ -37,14 +37,6 @@ auto fill(Buffer& buffer, std::istream& csv_input)-> ParseResult
     return Ok{};
 }
 
-auto fillWith(std::istream& csv_input)
-{
-    return [&](Buffer& buffer)
-    {
-      return fill(buffer, csv_input);
-    };
-}
-
 auto CopyCellToStartOf(Buffer& buffer, EndOfBuffer eob)->Buffer&
 {
     buffer.current_position = buffer.mem.get();
@@ -60,14 +52,6 @@ auto CopyCellToStartOf(Buffer& buffer, EndOfBuffer eob)->Buffer&
         buffer.end = buffer.mem.get();
     }
     return buffer;
-}
-
-auto CopyCellToStartOf (Buffer& buffer)
-{
-    return [&](EndOfBuffer eob)->Buffer&
-    {
-      return CopyCellToStartOf(buffer, eob);
-    };
 }
 
 auto newLine (OutputDoc& output_doc, EndOfLine eol){
@@ -86,11 +70,9 @@ auto append(std::function<ParseResult (EndOfBuffer)> const& prepareBuffer, Outpu
     );
 }
 
-auto isRowLimit (std::optional<OutputRowLimit> output_row_limit)
+auto isRowLimit (std::optional<OutputRowLimit> output_row_limit, Row row)
 {
-    return [output_row_limit](Row row) {
-      return (output_row_limit)? row.isGreaterEqual(output_row_limit.value()):false;
-    };
+  return (output_row_limit)? row.isGreaterEqual(output_row_limit.value()):false;
 }
 
 std::optional<OutputDoc>
@@ -103,10 +85,13 @@ convertCsv(Buffer& buffer, Parameter const& parameter, std::istream& stream, std
 
     if (output_doc)
     {
-        auto prepareBuffer         = CopyCellToStartOf(buffer) | fillWith(stream);
-        auto appendToOutputDoc     = std::bind(append, prepareBuffer, std::ref(*output_doc), _1);
-        auto thereIsNothingToParse = matchesOneOf(isType<EndOfStream>{}, isRowLimit(parameter.output_row_limit));
-        auto parse                 = read | appendToOutputDoc | repeatUntil(thereIsNothingToParse);
+        auto reachedRowLimit         = std::bind(isRowLimit, parameter.output_row_limit, _1);
+        auto CopyCellToStartOfBuffer = std::bind(CopyCellToStartOf, std::ref(buffer), _1);
+        auto fillWithStream          = std::bind(fill, std::ref(stream), _1);
+        auto prepareBuffer           = CopyCellToStartOfBuffer | fillWithStream;
+        auto appendToOutputDoc       = std::bind(append, prepareBuffer, std::ref(*output_doc), _1);
+        auto thereIsNothingToParse   = matchesOneOf(isType<EndOfStream>{}, reachedRowLimit);
+        auto parse                   = read | appendToOutputDoc | repeatUntil(thereIsNothingToParse);
 
         parse(buffer, parameter.csv_separator);
     }
