@@ -29,6 +29,7 @@
 #include <cstddef>
 #include <ios>
 #include <sstream>
+#include <limits>
 
 class BadNumericConversion : public std::out_of_range
 {
