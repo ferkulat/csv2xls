@@ -44,9 +44,9 @@ TargetType ConvertTo(SourceType source)
     {
         return source;
     }
-    else if constexpr (!std::is_convertible<SourceType, TargetType>::value)
+    else
     {
-        static_assert("types are not convertible");
+        static_assert(std::is_convertible<SourceType, TargetType>::value, "types are not convertible");
     }
     if constexpr (std::is_signed<TargetType>::value ==
                   std::is_signed<SourceType>::value)
