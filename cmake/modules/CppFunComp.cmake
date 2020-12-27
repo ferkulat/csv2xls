@@ -6,7 +6,7 @@ set(EXTERN_CPPFUNCOMP_DIR ${EXTERN_DEPENDENCIES_DIR}/cppfuncomp)
 FetchContent_Declare(
   cppfuncomp
   GIT_REPOSITORY https://github.com/ferkulat/CppFunComp.git
-  GIT_TAG        28d837b43df9b1813333f3b959f8a987695df4eb
+  GIT_TAG        c5df01509d54572cc7ae317a92cc410baa398fdb
   SOURCE_DIR     ${EXTERN_CPPFUNCOMP_DIR}
 )
 if(NOT cppfuncomp_POPULATED)

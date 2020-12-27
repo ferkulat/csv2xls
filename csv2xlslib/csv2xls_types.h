@@ -6,7 +6,7 @@
 #define CSV2XLS_CSV2XLS_TYPES_H
 
 #include <Skills.h>
-#include <checked_cmd.h>
+#include <checked_cmd/checked_cmd.h>
 #include <filesystem>
 #include <csv2xls_skills.h>
 namespace csv2xls
