@@ -1,3 +1,6 @@
+### Version: 0.4.1
+    * fix #20 by adding an include
+
 ### Version: 0.4.0
 Date:   Sun May 5 11:17:07 2019 +0200
 
