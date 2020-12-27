@@ -1,3 +1,6 @@
+### Version: 0.4.1
+    * fix #20 by adding an include
+
 ### Version: 0.4.0
     * fix issue #13: switched to cmake and doctest
     * updated man page for option -t
