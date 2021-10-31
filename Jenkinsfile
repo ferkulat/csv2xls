@@ -62,7 +62,9 @@ pipeline {
                                         stage('[Build] build'){
                                             options {timeout(activity: true, time: 120)}
                                             steps{
-                                                bat "cmake --build ."
+                                                dir('b'){
+                                                    bat "cmake --build ."
+                                                }
                                             }
                                         }
                                        stage ('[Build] Generate Coverage report') {
