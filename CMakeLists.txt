@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 project(csv2xls LANGUAGES CXX)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(EXTERN_DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
@@ -29,6 +29,6 @@ add_subdirectory(csv2xlslib)
 add_subdirectory(csv2xlslib.Test )
 add_executable(csv2xls csv2xls.cpp ${version_file})
 target_compile_options( csv2xls PUBLIC ${WARNINGOPTS} )
-target_link_libraries(csv2xls csv2xlslib -static)
+target_link_libraries(csv2xls csv2xlslib )
 
 install(TARGETS csv2xls DESTINATION bin)
