@@ -63,7 +63,8 @@ pipeline {
                                             options {timeout(activity: true, time: 120)}
                                             steps{
                                                 dir('b'){
-                                                    bat "cmake --build ."
+                                                    bat "echo 'do nothing'"
+//                                                    bat "cmake --build ."
                                                 }
                                             }
                                         }
