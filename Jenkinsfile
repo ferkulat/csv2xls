@@ -134,79 +134,79 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Running cppcheck'){
-                            environment{
-                                CPPCHECK_AGENT = "${env.NODE_NAME}_cppcheck_agent_${env.EXECUTOR_NUMBER}"
-                            }
-                            stages{
-                                stage('[Cppcheck] starting agent'){
-                                    steps{
-                                        log_started()
-                                        bat 'docker container ls'
-                                        set_cppcheck_agent_secret()
-                                        sleep(time: 10)
-                                        bat 'docker run -d --name %BUILD_TAG%_CPPCHECK --env CPPCHECK_AGENT_SECRET -v C:/jenkinsagent:C:/jenkinsagent  --cpus=1 -m=4g %DOCKER_IMAGE% java -jar C:/jenkinsagent/agent.jar -jnlpUrl %JENKINS_URL%/computer/%CPPCHECK_AGENT%/jenkins-agent.jnlp -secret %CPPCHECK_AGENT_SECRET% -workDir "C:/jenkins"'
-                                        log_finished()
-                                    }
-                                }
-                                stage('[Cppcheck] Waiting for agent') {
-                                    agent {
-                                        label env.CPPCHECK_AGENT
-                                    }
-                                    stages {
-                                        stage('[Cppcheck] Checking out source') {
-                                            options {timeout(activity: true, time: 60)}
-                                            steps {clone_repositories()}
-                                        } //stage('Checking out source')
-                                        stage('[Cppcheck] Preparing build directory') {
-                                            options {timeout(activity: true, time: 10)}
-                                            steps {prepare_build_directory()}
-                                        } //stage('Preparing build directory')
-                                        stage('[Cppcheck] run cppcheck'){
-                                            options {timeout(activity: true, time: 120)}
-                                            steps{run_cppcheck()}
-                                        }
-                                        stage('[Cppcheck] publish results'){
-                                              steps{
-                                                    log_started()
-                                                    dir('b') {
-                                                        bat 'C:/msys64/msys2_shell.cmd -defterm  -no-start -full-path -here  -c "../docker/fix_paths_in_cppcheckresult.sh cppcheckresult.xml > cppcheckresult_fixed_paths.xml"'
-                                                        bat "xsltproc ../jenkins/cleanup_cppcheck.xsl cppcheckresult_fixed_paths.xml > cppcheckresult_fixed_paths_filtered.xml"
-                                                    }
-                                                    recordIssues enabledForFailure: true, tool: cppCheck(pattern: 'b/cppcheckresult_fixed_paths_filtered.xml')
-                                                    log_finished()
-                                             }
-                                        }
-                                        stage('[Cppcheck] Archiving result'){
-                                            steps{
-                                                log_started()
-                                                dir('b') {
-                                                    archiveArtifacts artifacts: "cppcheckresult.xml"
-                                                }
-                                                log_finished()
-                                            }
-                                        }
-                                    } //stages
-            //						post{
-            //							always{
-            //								dir('b') {
-            //										recordIssues enabledForFailure: true, tool: cppCheck(pattern: 'cppcheckresult.xml')
-            //								}
-            //							}
-            //						}
-                                } //stage('Building stage')
-                            }
-                            post{
-                                always{
-                                    log_started()
-                                    disconnectAgent(env.CPPCHECK_AGENT)
-//                                    bat 'docker container stop %BUILD_TAG%_CPPCHECK'
-//                                    sleep(time: 10)
-                                    bat 'docker container rm  --force  %BUILD_TAG%_CPPCHECK'
-                                    log_finished()
-                                }
-                            }
-                        }
+//                        stage('Running cppcheck'){
+//                            environment{
+//                                CPPCHECK_AGENT = "${env.NODE_NAME}_cppcheck_agent_${env.EXECUTOR_NUMBER}"
+//                            }
+//                            stages{
+//                                stage('[Cppcheck] starting agent'){
+//                                    steps{
+//                                        log_started()
+//                                        bat 'docker container ls'
+//                                        set_cppcheck_agent_secret()
+//                                        sleep(time: 10)
+//                                        bat 'docker run -d --name %BUILD_TAG%_CPPCHECK --env CPPCHECK_AGENT_SECRET -v C:/jenkinsagent:C:/jenkinsagent  --cpus=1 -m=4g %DOCKER_IMAGE% java -jar C:/jenkinsagent/agent.jar -jnlpUrl %JENKINS_URL%/computer/%CPPCHECK_AGENT%/jenkins-agent.jnlp -secret %CPPCHECK_AGENT_SECRET% -workDir "C:/jenkins"'
+//                                        log_finished()
+//                                    }
+//                                }
+//                                stage('[Cppcheck] Waiting for agent') {
+//                                    agent {
+//                                        label env.CPPCHECK_AGENT
+//                                    }
+//                                    stages {
+//                                        stage('[Cppcheck] Checking out source') {
+//                                            options {timeout(activity: true, time: 60)}
+//                                            steps {clone_repositories()}
+//                                        } //stage('Checking out source')
+//                                        stage('[Cppcheck] Preparing build directory') {
+//                                            options {timeout(activity: true, time: 10)}
+//                                            steps {prepare_build_directory()}
+//                                        } //stage('Preparing build directory')
+//                                        stage('[Cppcheck] run cppcheck'){
+//                                            options {timeout(activity: true, time: 120)}
+//                                            steps{run_cppcheck()}
+//                                        }
+//                                        stage('[Cppcheck] publish results'){
+//                                              steps{
+//                                                    log_started()
+//                                                    dir('b') {
+//                                                        bat 'C:/msys64/msys2_shell.cmd -defterm  -no-start -full-path -here  -c "../docker/fix_paths_in_cppcheckresult.sh cppcheckresult.xml > cppcheckresult_fixed_paths.xml"'
+//                                                        bat "xsltproc ../jenkins/cleanup_cppcheck.xsl cppcheckresult_fixed_paths.xml > cppcheckresult_fixed_paths_filtered.xml"
+//                                                    }
+//                                                    recordIssues enabledForFailure: true, tool: cppCheck(pattern: 'b/cppcheckresult_fixed_paths_filtered.xml')
+//                                                    log_finished()
+//                                             }
+//                                        }
+//                                        stage('[Cppcheck] Archiving result'){
+//                                            steps{
+//                                                log_started()
+//                                                dir('b') {
+//                                                    archiveArtifacts artifacts: "cppcheckresult.xml"
+//                                                }
+//                                                log_finished()
+//                                            }
+//                                        }
+//                                    } //stages
+//            //						post{
+//            //							always{
+//            //								dir('b') {
+//            //										recordIssues enabledForFailure: true, tool: cppCheck(pattern: 'cppcheckresult.xml')
+//            //								}
+//            //							}
+//            //						}
+//                                } //stage('Building stage')
+//                            }
+//                            post{
+//                                always{
+//                                    log_started()
+//                                    disconnectAgent(env.CPPCHECK_AGENT)
+////                                    bat 'docker container stop %BUILD_TAG%_CPPCHECK'
+////                                    sleep(time: 10)
+//                                    bat 'docker container rm  --force  %BUILD_TAG%_CPPCHECK'
+//                                    log_finished()
+//                                }
+//                            }
+//                        }
                     }
                 }
             }
