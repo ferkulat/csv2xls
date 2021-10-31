@@ -68,19 +68,19 @@ pipeline {
                                                 }
                                             }
                                         }
-                                       stage ('[Build] Generate Coverage report') {
-                                           steps{generate_coverage_report()}
-                                       }
-                                        stage('[Build] Analyse gcc output'){
-                                            steps{
-                                                recordIssues tool:gcc()
-                                            }
-                                        }
+//                                       stage ('[Build] Generate Coverage report') {
+//                                           steps{generate_coverage_report()}
+//                                       }
+//                                        stage('[Build] Analyse gcc output'){
+//                                            steps{
+//                                                recordIssues tool:gcc()
+//                                            }
+//                                        }
                                        stage('Run static analysis'){
                                         steps{
                                             log_started()
                                             dir('b'){
-                                                bat "codechecker analyze compile_commands.json -o static_analysis_report"
+                                                bat "cmake --build . --target run_static_analysis"
                                                 archiveArtifacts artifacts: "compile_commands.json"
                                             }
                                             log_finished()
@@ -91,7 +91,7 @@ pipeline {
                                         steps{
                                             log_started()
                                             dir('b'){
-                                                bat "codechecker parse static_analysis_report > static_analysis_report.txt"
+                                                bat "cmake --build . --target parse_static_analysis_report"
                                             }
                                             log_finished()
 
