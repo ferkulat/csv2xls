@@ -20,8 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
+# copied from https://github.com/Munkei/munkei-cmake
+
 cmake_minimum_required( VERSION 3.0.0 )
-find_package(Git)
 
 include( CMakeParseArguments )
 
@@ -29,11 +31,11 @@ function( version_from_git )
   # Parse arguments
   set( options OPTIONAL FAST )
   set( oneValueArgs
-    GIT_EXECUTABLE
-    INCLUDE_HASH
-    LOG
-    TIMESTAMP
-    )
+          GIT_EXECUTABLE
+          INCLUDE_HASH
+          LOG
+          TIMESTAMP
+          )
   set( multiValueArgs )
   cmake_parse_arguments( ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
@@ -54,46 +56,46 @@ function( version_from_git )
 
   # Git describe
   execute_process(
-    COMMAND           "${GIT_EXECUTABLE}" describe --always --tags --dirty
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    RESULT_VARIABLE   git_result
-    OUTPUT_VARIABLE   git_describe
-    ERROR_VARIABLE    git_error
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    ERROR_STRIP_TRAILING_WHITESPACE
-    )
+          COMMAND           "${GIT_EXECUTABLE}" describe --always --tags --dirty
+          WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+          RESULT_VARIABLE   git_result
+          OUTPUT_VARIABLE   git_describe
+          ERROR_VARIABLE    git_error
+          OUTPUT_STRIP_TRAILING_WHITESPACE
+          ERROR_STRIP_TRAILING_WHITESPACE
+  )
   if( NOT git_result EQUAL 0 )
     message( FATAL_ERROR
-      "[MunkeiVersionFromGit] Failed to execute Git: ${git_error}"
-      )
+            "[MunkeiVersionFromGit] Failed to execute Git: ${git_error}"
+            )
   endif()
 
   # Get Git tag
   execute_process(
-    COMMAND           "${GIT_EXECUTABLE}" describe --always --tags --abbrev=0
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    RESULT_VARIABLE   git_result
-    OUTPUT_VARIABLE   git_tag
-    ERROR_VARIABLE    git_error
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    ERROR_STRIP_TRAILING_WHITESPACE
-    )
+          COMMAND           "${GIT_EXECUTABLE}" describe --always --tags --abbrev=0
+          WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+          RESULT_VARIABLE   git_result
+          OUTPUT_VARIABLE   git_tag
+          ERROR_VARIABLE    git_error
+          OUTPUT_STRIP_TRAILING_WHITESPACE
+          ERROR_STRIP_TRAILING_WHITESPACE
+  )
   if( NOT git_result EQUAL 0 )
     message( FATAL_ERROR
-      "[MunkeiVersionFromGit] Failed to execute Git: ${git_error}"
-      )
+            "[MunkeiVersionFromGit] Failed to execute Git: ${git_error}"
+            )
   endif()
 
-  if( git_tag MATCHES "^v(0|[1-9][0-9]*)[.](0|[1-9][0-9]*)[.](0|[1-9][0-9]*)(-[.0-9A-Za-z-]+)?([+][.0-9A-Za-z-]+)?$" )
+  if( git_tag MATCHES "^(0|[1-9][0-9]*)[.](0|[1-9][0-9]*)[.](0|[1-9][0-9]*)([A-Za-z-]+)?([+][.0-9A-Za-z-]+)?$" )
     set( version_major "${CMAKE_MATCH_1}" )
     set( version_minor "${CMAKE_MATCH_2}" )
     set( version_patch "${CMAKE_MATCH_3}" )
     set( identifiers   "${CMAKE_MATCH_4}" )
     set( metadata      "${CMAKE_MATCH_5}" )
   else()
-    message( FATAL_ERROR
-      "[MunkeiVersionFromGit] Git tag isn't valid semantic version: [${git_tag}]"
-      )
+    message( DEBUG
+            "[MunkeiVersionFromGit] Git tag isn't valid semantic version: [${git_tag}]"
+            )
   endif()
 
   if( "${git_tag}" STREQUAL "${git_describe}" )
@@ -110,14 +112,15 @@ function( version_from_git )
   set( semver  ${version} )
 
   # Identifiers
-  if( identifiers MATCHES ".+" )
-    string( SUBSTRING "${identifiers}" 1 -1 identifiers )
-    set( semver "${semver}-${identifiers}")
-  endif()
+  #  if( ${identifiers} MATCHES ".+" )
+  #    message("identifiers --->${identifiers}<---")
+  #    string( SUBSTRING "${identifiers}" 1 -1 identifiers )
+  #    set( semver "${semver}-${identifiers}")
+  #  endif()
 
   # Metadata
   # TODO Split and join (add Git hash inbetween)
-  if( metadata MATCHES ".+" )
+  if( ${metadata} MATCHES ".+" )
     string( SUBSTRING "${metadata}" 1 -1 metadata )
     # Split
     string( REPLACE "." ";" metadata "${metadata}" )
@@ -140,37 +143,30 @@ function( version_from_git )
   # Join
   string( REPLACE ";" "." metadata "${metadata}" )
 
-  if( metadata MATCHES ".+" )
+  if( ${metadata} MATCHES ".+" )
     set( semver "${semver}+${metadata}")
   endif()
 
   # Log the results
   if( ARG_LOG )
     message( STATUS
-      "[MunkeiVersionFromGit] Version: ${version}
+            "[MunkeiVersionFromGit] Version: ${version}
      Git tag:     [${git_tag}]
      Git hash:    [${git_hash}]
      Decorated:   [${git_describe}]
      Identifiers: [${identifiers}]
      Metadata:    [${metadata}]
      SemVer:      [${semver}]"
-      )
+            )
   endif( ARG_LOG )
 
   # Set parent scope variables
   set( GIT_TAG       ${git_tag}       PARENT_SCOPE )
+  set( GIT_DESCRIBE  ${git_describe}  PARENT_SCOPE )
   set( SEMVER        ${semver}        PARENT_SCOPE )
   set( VERSION       ${version}       PARENT_SCOPE )
   set( VERSION_MAJOR ${version_major} PARENT_SCOPE )
   set( VERSION_MINOR ${version_minor} PARENT_SCOPE )
   set( VERSION_PATCH ${version_patch} PARENT_SCOPE )
-  set( GIT_DESCRIBE  ${git_describe}  PARENT_SCOPE )
 
 endfunction( version_from_git )
-version_from_git(
-        LOG       ON
-        TIMESTAMP "%Y%m%d%H%M%S"
-)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/version.cpp.in
-        ${CMAKE_CURRENT_BINARY_DIR}/version.cpp)
-set(version_file "${CMAKE_CURRENT_BINARY_DIR}/version.cpp")
