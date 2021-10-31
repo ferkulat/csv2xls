@@ -54,7 +54,7 @@ function( version_from_git )
 
   # Git describe
   execute_process(
-    COMMAND           "${GIT_EXECUTABLE}" describe --tags --dirty
+    COMMAND           "${GIT_EXECUTABLE}" describe --always --tags --dirty
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     RESULT_VARIABLE   git_result
     OUTPUT_VARIABLE   git_describe
@@ -70,7 +70,7 @@ function( version_from_git )
 
   # Get Git tag
   execute_process(
-    COMMAND           "${GIT_EXECUTABLE}" describe --tags --abbrev=0
+    COMMAND           "${GIT_EXECUTABLE}" describe --always --tags --abbrev=0
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     RESULT_VARIABLE   git_result
     OUTPUT_VARIABLE   git_tag
