@@ -109,7 +109,7 @@ pipeline {
                                        stage('report static analysis'){
                                         steps{
                                             log_started()
-                                                recordIssues tool:codeChecker(pattern: 'b/static_analysis_report.txt', name: 'Codechecker')
+                                                recordIssues tool:analysisParser('code-checker')(pattern: 'b/static_analysis_report.txt', name: 'Codechecker')
                                             log_finished()
 
                                         }
