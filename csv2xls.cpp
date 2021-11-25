@@ -31,10 +31,7 @@
 int main(int argc, char *argv[])
 {
 
-    unsigned int d=12;
-    if (d < 12){
-        std::cout << "lol";
-    }
+    std::cout << 12/argc;
     try
     {
         return csv2xls::parseCsvFile(csv2xls::parse_commandline(argc, argv));
