@@ -30,8 +30,8 @@
 
 int main(int argc, char *argv[])
 {
-
-    std::cout << 12/argc;
+    auto b = std::move(argc);
+    std::cout << 12/argc+b;
     try
     {
         return csv2xls::parseCsvFile(csv2xls::parse_commandline(argc, argv));
